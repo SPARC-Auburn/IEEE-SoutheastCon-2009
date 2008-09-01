@@ -81,10 +81,10 @@ sio_close(PyObject *self, PyObject *args)
 {
 	int *fd;
 	
-	if(!PyArg_ParseTuple(args, "i", &fd))
-		return NULL;
+	//if(!PyArg_ParseTuple(args, "i", &fd))
+	//	return NULL;
 	
-	close(*fd);
+	//close(*fd);
 	
 	return NULL;
 }
