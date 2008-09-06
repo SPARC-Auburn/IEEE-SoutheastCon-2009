@@ -5,7 +5,7 @@ import serial
 
 
 
-def simple(self):
+def simple():
 	sio = serial.Serial("/dev/ttyACM0")
 	sio.timeout = 2
 	sio.write("G00076800\r")
@@ -32,4 +32,26 @@ def trimmed():
 		data = sio.read(1564)
 		sio.flushInput()
 
-trimmed()
+def granual():
+	sio = serial.Serial("/dev/ttyACM0")
+	sio.timeout = 2
+	
+	sio.write("G00076800\r")
+	sio.readline()
+	sio.readline()
+	
+	line1 = sio.read()
+	line2 = sio.read()
+	while((line1 != '\n') or (line2 != '\n')):
+		if(not((line1 == '0') and (line2 == 'C'))):
+			if(line1 != '\n'):
+				print line1,
+			if(line2 != '\n'):
+				print line2,
+			print ' ',
+		line1 = sio.read()
+		line2 = sio.read()
+	sio.close()
+
+#trimmed()
+granual()
