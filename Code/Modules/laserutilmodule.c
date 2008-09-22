@@ -24,15 +24,15 @@ laserutil_scan(PyObject *self, PyObject *args) {
 	if(fd == NULL)
 		return NULL;
 	if(start == NULL)
-		start = 0;
+		*start = 0;
 	if(stop == NULL)
-		stop = 768;
+		*stop = 768;
 	if(step == NULL)
-		step = 0;
+		*step = 0;
 	
 	
 	// Check for errors.
-	if(start > 768 || stop > 768 || step > (stop - start) || step > 99)
+	if(*start > 768 || *stop > 768 || *step > (*stop - *start) || *step > 99)
 		return NULL;
 	
 	// Create the command
@@ -43,23 +43,23 @@ laserutil_scan(PyObject *self, PyObject *args) {
 	command[9] = '\r';
 	
 	// Write the command
-	n = write(fd, &command, 10);
+	int n = write(*fd, &command, 10);
 	
 	// Read in the result
-	char buffer[(((stop-start)%step)+1)*2];
-	int result[((stop-start)%step)+1];
+	char buffer[(((*stop-*start)%*step)+1)*2];
+	int result[((*stop-*start)%*step)+1];
 	char tl, th;
 	
 	// Burn the beginning response
 	int i;
 	for(i = 12; i > 0; i--)
-		read(fd, &tl, 1);
+		read(*fd, &tl, 1);
 	
 	// Begin reading
 	for(i = 0; 1; i++) {
-		read(fd, &tl, 1);
+		read(*fd, &tl, 1);
 		if(tl == '\n') {
-			read(fd, &tl, 1);
+			read(*fd, &tl, 1);
 			if(tl == '\n') {
 				break;
 			}
