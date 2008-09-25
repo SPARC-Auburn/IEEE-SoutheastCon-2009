@@ -17,4 +17,4 @@ class Laser(serial.Serial):
 	You can perform any function on it that you can perform on a serial object as well as, scan()."""
 	def scan(self, start = "000", finish = "768", step = "00"):
 		# Check input
-		
+		pass
