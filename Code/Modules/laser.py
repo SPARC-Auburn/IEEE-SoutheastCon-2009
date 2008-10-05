@@ -71,7 +71,7 @@ class Laser(serial.Serial):
 			return self.scan(start, stop, step)
 		return []
 
-	def clear():
+	def clear(self):
 		"""This function clears all input/output buffers from the serial device."""
 		time.sleep(.01)
 		self.flushOutput()
