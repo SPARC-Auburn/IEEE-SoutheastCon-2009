@@ -14,6 +14,9 @@ class Laser(serial.Serial):
 		serial.Serial.__init__(self, serialPort)
 		self.timeout = .001
 		self.baudrate = 115200
+		# Prime the LRF (this is done because of first read errors using a low timeout time)
+		self.write('S\r')
+		self.clear()
 		
 	def scan(self, start = "000", stop = "768", step = "00"):
 		"""This function will scan from start to stop, returning a reading for every step number of scans.
@@ -70,4 +73,6 @@ class Laser(serial.Serial):
 
 	def clear():
 		"""This function clears all input/output buffers from the serial device."""
-		pass
+		time.sleep(.01)
+		self.flushOutput()
+		self.flushInput()
