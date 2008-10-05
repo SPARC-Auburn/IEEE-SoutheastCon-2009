@@ -16,7 +16,7 @@ class Laser(serial.Serial):
 		self.timeout = .001
 		self.baudrate = 115200
 		# Prime the LRF (this is done because of first read errors using a low timeout time)
-		self.write('S\r')
+		self.write('G00076800\r')
 		self.clear()
 		
 	def scan(self, start = "000", stop = "768", step = "00"):
