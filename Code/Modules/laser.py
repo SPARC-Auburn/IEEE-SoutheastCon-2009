@@ -12,7 +12,7 @@ class Laser(serial.Serial):
 	def __init__(self, serialPort):
         	"""Calls the Serial __init__ and then sets timeout and other default options"""
 		serial.Serial.__init__(self, serialPort)
-		self.timeout = 0
+		self.timeout = .001
 		self.baudrate = 115200
 		
 	def scan(self, start = "000", stop = "768", step = "00"):
@@ -41,15 +41,15 @@ class Laser(serial.Serial):
 			# While we haven't reached the end of the line
 			i = 0
 			while (line[i] != '\n'):
-				dist = (ord(line[i]) - 48)*64
+				dist = (ord(line[i]) - 48) << 6
 				i += 1
 				dist += ord(line[i]) - 48
 				i += 1
 				result.append(dist)
 			line = self.readline()
 			
-			# Return the resulting list of distances
-			return result
+		# Return the resulting list of distances
+		return result
 
 
 	def safe_scan(self, start = "000", stop = "768", step = "00"):
