@@ -1,4 +1,5 @@
 import serial
+import time
 
 class Laser(serial.Serial):
 	"""Laser class, extends serial so you can use it like a serial port.
