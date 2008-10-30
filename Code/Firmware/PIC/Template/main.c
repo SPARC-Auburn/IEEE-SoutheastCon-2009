@@ -4,6 +4,7 @@
 
 #include <p18cxxx.h>
 #include "Main.h"
+#include "i2c.h"
 
 #pragma config OSC = IRCIO67,WDT = OFF, MCLRE = OFF
 
