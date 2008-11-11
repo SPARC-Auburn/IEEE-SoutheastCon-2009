@@ -1,66 +1,54 @@
 # ! /usr/bin/python
 
-import serial
+# Add the relative Module folder to the path.
+import sys
+sys.path.append("../Modules/")
+
 import time
+import os
+from logging import *
+import ConfigParser
+import laser
 
-
-
-
-
-def simple():
-	sio = serial.Serial("/dev/ttyACM0")
-	sio.timeout = 2
-	sio.write("G00076800\r")
+def logger_init():
+	global logger
+	# Create logger
+	logger = getLogger("laser_test")
+	logger.setLevel(DEBUG)
+	# Create Stream Handler
+	ch = StreamHandler()
+	ch.setLevel(DEBUG)
+	# Create formatter
+	formatter = Formatter("%(asctime)s>%(levelname)s: %(message)s")
+	# Add recursively
+	ch.setFormatter(formatter)
+	logger.addHandler(ch)
 	
-	line = sio.readline()
-	while (line != ''):
-		print line
-		line = sio.readline()
+
+def cfg_init():
+	global logger, cfg
+	"""Initializes the configurations by either opening \
+	an existing config file or by creating one by from defaults.
 	
-	sio.close()
+	The configuration file is called laser_test.conf and can be edited """
+	cfg = ConfigParser.ConfigParser()
+	if os.path.isfile('laser_test.conf'):
+		logger.debug("Using existing laser_test.conf file.")
+		cfg.read('laser_test.conf')
+	else:
+		# Generate default config file.
+		logger.info("Generating laser_test.conf from defaults.")
+		cfg.add_section('Laser Range Finder')
+		cfg.set('Laser Range Finder', 'port', "/dev/ttyACM0")
+		cfg.set('Laser Range Finder', 'baud', 115200)
+		cfg.write(open('laser_test.conf', "w"))
 
+# Initing logger
+logger_init()
 
-def trimmed():
-	sio = serial.Serial("/dev/ttyACM0")
-	sio.timeout = 2
+# Initing configurations
+cfg_init()
 
-	for i in range(0,10):
-		print i,
-		sio.write("G00076800\r")
-		
-		sio.readline()
-		sio.readline()
-		
-		data = sio.read(1564)
-		sio.flushInput()
+lrf = laser.Laser(cfg.get('Laser Range Finder', 'port'))
+print lrf.scan()
 
-def granual():
-	sio = serial.Serial("/dev/ttyACM0")
-	sio.timeout = 2
-	
-	for x in range(0,10):	
-		sio.write("G00076800\r")
-		sio.readline()
-		sio.readline()
-		time1 = time.time()
-		line1 = sio.read()
-		line2 = sio.read()
-		while((line1 != '\n') or (line2 != '\n')):
-			if(not((line1 == '0') and (line2 == 'C'))):
-				if(line1 != '\n'):
-#					print line1,
-					pass
-				if(line2 != '\n'):
-#					print line2,
-					pass
-#				print ' ',
-				pass
-			line1 = sio.read()
-			line2 = sio.read()
-#		print
-		print "Test",x,":",(time.time()-time1)*1000,"milliseconds."
-	sio.close()
-
-#trimmed()
-granual()
-#simple()
