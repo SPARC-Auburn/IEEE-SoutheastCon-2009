@@ -32,6 +32,9 @@ and functions related to controlling the Sabertooth 2x10 motor controllers.'''
 	def move(self, speed=1.0, direction=0.0):
 		pass
 	
+	def dec2hex(self, dec):
+		return ('%X' % dec).decode("hex")
+	
 	def drive(self, motor="both", speed=1.0):
 		'''Drives the motors.  'motor' can be Left, Right, or Both.  'speed' can be between -1.0 and 0.0 inclusively.'''
 		#Make sure that the speed is range and that the motor command is valid
@@ -49,8 +52,8 @@ and functions related to controlling the Sabertooth 2x10 motor controllers.'''
 		
 		#Convert the dec to Hex
 		if speed is not '\x00':
-			speedr = dec2hex(speed)
-			speedl = dec2hex(speed + 127)
+			speedr = self.dec2hex(speed)
+			speedl = self.dec2hex(speed + 127)
 			
 		#If the swap motors flag is on swap values
 		if self.swap_motors:
@@ -66,7 +69,4 @@ and functions related to controlling the Sabertooth 2x10 motor controllers.'''
 			sio.write(speedl)
 		else:
 			sio.write(speedr)
-		
-	def dec2hex(self, dec):
-		return ('%X' % dec).decode("hex")
 		
