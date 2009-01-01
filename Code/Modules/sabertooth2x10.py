@@ -35,12 +35,12 @@ and functions related to controlling the Sabertooth 2x10 motor controllers.'''
 	def dec2hex(self, dec):
 		return ('%X' % dec).decode("hex")
 	
-	def drive(self, motor="both", speed=1.0):
+	def drive(self, motor='both', speed=1.0):
 		'''Drives the motors.  'motor' can be Left, Right, or Both.  'speed' can be between -1.0 and 0.0 inclusively.'''
 		#Make sure that the speed is range and that the motor command is valid
 		if speed < -1.0 or speed > 1.0:
 			print "Must provide speed between -1.0 and 1.0" ### USE LOGGING HERE
-		if motor != 'both' or motor != 'left' or motor != 'right':
+		if motor != 'both' and motor != 'left' and motor != 'right':
 			print "Invalid motor option. Use: both or left or right" ### USE LOGGING HERE
 		
 		#Take care of the special 0 speed case
@@ -54,7 +54,7 @@ and functions related to controlling the Sabertooth 2x10 motor controllers.'''
 		if speed is not '\x00':
 			speedr = self.dec2hex(speed)
 			#Prevent roll over
-			if speed is 127:
+			if speed is 129:
 				speed = speed - 1
 			speedl = self.dec2hex(speed + 127)
 			
