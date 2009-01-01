@@ -53,6 +53,9 @@ and functions related to controlling the Sabertooth 2x10 motor controllers.'''
 		#Convert the dec to Hex
 		if speed is not '\x00':
 			speedr = self.dec2hex(speed)
+			#Prevent roll over
+			if speed is 127:
+				speed = speed - 1
 			speedl = self.dec2hex(speed + 127)
 			
 		#If the swap motors flag is on swap values
