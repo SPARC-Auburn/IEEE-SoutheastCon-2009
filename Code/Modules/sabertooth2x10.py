@@ -37,7 +37,7 @@ and functions related to controlling the Sabertooth 2x10 motor controllers.'''
 		#Make sure that the speed is range and that the motor command is valid
 		if speed < -1.0 or speed > 1.0:
 			print "Must provide speed between -1.0 and 1.0" ### USE LOGGING HERE
-		if motor != 'both' or motor != 'left' or motor != 'right'
+		if motor != 'both' or motor != 'left' or motor != 'right':
 			print "Invalid motor option. Use: both or left or right" ### USE LOGGING HERE
 		
 		#Take care of the special 0 speed case
