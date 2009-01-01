@@ -66,10 +66,10 @@ and functions related to controlling the Sabertooth 2x10 motor controllers.'''
 		
 		#Send the command to the motor(s)
 		if motor is 'both':
-			sio.write(speedl)
-			sio.write(speedr)
+			self.sio.write(speedl)
+			self.sio.write(speedr)
 		elif motor is 'left':
-			sio.write(speedl)
+			self.sio.write(speedl)
 		else:
-			sio.write(speedr)
+			self.sio.write(speedr)
 		
