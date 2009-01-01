@@ -48,7 +48,7 @@ and functions related to controlling the Sabertooth 2x10 motor controllers.'''
 			speed = '\x00'
 		#Figure out the speed command, then execute to the correct motor.
 		else:
-			speed = (speed * 64) + 65
+			speed = int(speed * 64) + 65
 		
 		#Convert the dec to Hex
 		if speed is not '\x00':
