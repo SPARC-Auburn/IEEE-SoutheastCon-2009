@@ -38,7 +38,7 @@ and functions related to controlling the Sabertooth 2x10 motor controllers.'''
 			hex = '0'+hex
 		return hex.decode("hex")
 
-	def drive_right(self, speed=1.0):
+	def right(self, speed=1.0):
 		if speed < -1.0 or speed > 1.0:
 			print "Must provide speed between -1.0 and 1.0" ### USE LOGGING HERE
 			return
@@ -48,13 +48,13 @@ and functions related to controlling the Sabertooth 2x10 motor controllers.'''
 			speed = 1
 		#Check to see if the motors are swapped.
 		if self.swap_motors:
-			speed + 127
+			speed = speed + 127
 		#Convert the speed to hex
 		speed = self.dec2hex(speed)
 		#Send the command
 		self.serial.write(speed)
 		
-	def drive_left(self, speed=1.0):
+	def left(self, speed=1.0):
 		if speed < -1.0 or speed > 1.0:
 			print "Must provide speed between -1.0 and 1.0" ### USE LOGGING HERE
 			return
@@ -64,18 +64,19 @@ and functions related to controlling the Sabertooth 2x10 motor controllers.'''
 			speed = 1
 		#Check to see if the motors are swapped.
 		if not self.swap_motors:
-			speed + 127
+			speed = speed + 127
 		#Convert the speed to hex
 		speed = self.dec2hex(speed)
 		#Send the command
 		self.serial.write(speed)
 	
-	def drive_both(self, speed=1.0):
+	def both(self, speed=1.0):
 		#If speed is 0 then send the stop all command
 		if speed is 0:
 			self.serial.write('\x00')
-		drive_right(speed)
-		drive_left(speed)
+			return
+		self.drive_right(speed)
+		self.drive_left(speed)
 	
 #	def drive(self, motor='both', speed=1.0):
 #		'''Drives the motors.  'motor' can be Left, Right, or Both.  'speed' can be between -1.0 and 0.0 inclusively.'''
