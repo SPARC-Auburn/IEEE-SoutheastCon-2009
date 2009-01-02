@@ -27,12 +27,15 @@ class Robot:
 
 
 
-if __name__ == "__main__":
-	# Handle Configurations
-	try:
-		filename == None
-	except NameError:
-		filename = "Configurations/robot.cfg"
-	else:
-		print "Using non default config file:", filename
-	config = ConfigObj(filename)
+
+# Handle Configurations
+try:
+	filename
+except NameError:
+	filename = "Configurations/robot.cfg"
+else:
+	print "Using non default config file:", filename
+config = ConfigObj(filename)
+
+
+print "Robot.py has been loaded."

@@ -46,9 +46,11 @@ and functions related to controlling the Sabertooth 2x10 motor controllers.'''
 		#Make sure that the speed is not 0.
 		if speed is 0:
 			speed = 1
-		#Check to see if the motors are swapped.
+		#Check to see if the motors are swapped, one needs to be offset 127 and the other needs to not go to 128.
 		if self.swap_motors:
 			speed = speed + 127
+		elif speed is 128:
+			speed = 127
 		#Convert the speed to hex
 		speed = self.dec2hex(speed)
 		#Send the command
@@ -65,6 +67,8 @@ and functions related to controlling the Sabertooth 2x10 motor controllers.'''
 		#Check to see if the motors are swapped.
 		if not self.swap_motors:
 			speed = speed + 127
+		elif speed is 128:
+			speed = 127
 		#Convert the speed to hex
 		speed = self.dec2hex(speed)
 		#Send the command
