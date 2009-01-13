@@ -3,8 +3,10 @@
 //************************************************************************************************
 
 #include <p18cxxx.h>
-#include "Main.h"
+#include "main.h"
 #include "i2c.h"
+#include "usart.h"
+#include "serial.h"
 
 #pragma config OSC = IRCIO67,WDT = OFF, MCLRE = ON
 
@@ -20,6 +22,13 @@ void low_vec (void)
 {
    _asm goto low_isr _endasm
 }
+
+#pragma udata BUFFER
+#define TERMINAL_BUFFER 200
+unsigned char sample[TERMINAL_BUFFER];
+unsigned int sampleCount,b;
+
+
 #pragma code
 
 //***************************************************************************************************************
@@ -46,30 +55,56 @@ void low_isr (void)
 
 void main (void)
 {
-	Init();
-	
+	unsigned char c;
+
+	init();
+	//WriteUSART(0x11);
+	putrsUSART("\x0D\x0A");
+	while(BusyUSART());
+	WriteUSART('>');
+	b =0;
 	while(1)
 	{
-		IdleI2C();                      // ensure module is idle
-  		StartI2C();                     // initiate START condition
-  		while ( SSPCON2bits.SEN );      // wait until start condition is over
-  		WriteI2C('a');
-  		IdleI2C();
-  		StopI2C();                      // send STOP condition
- 		while ( SSPCON2bits.PEN );      // wait until stop condition is over 
-	}	
-
+		if(DataRdyUSART()){
+			c=ReadUSART();	
+			
+			switch(c){
+				case 0x0A:
+				case 0x0D:
+					putrsUSART("\x0D\x0A");
+					if(b==0){
+						putrsUSART("000 SYNTAX ERROR\x0D\x0A");
+					}
+					WriteUSART('>');
+					b=0;
+					break;
+				case 0x08:
+					if(b>0)b--;
+					WriteUSART(c);
+					break;
+				default:
+					sample[b]=c;
+					b++;	
+					if(b==TERMINAL_BUFFER){
+						putrsUSART("099 TERMINAL BUFFER OVERFLOW\x0D\x0A");
+						b=0;
+					}
+					break;
+			}
+		}
+	}					
 }
 
 
 //************************************************************
 //							Functions
 //************************************************************
-int Init (void) 
+int init (void) 
 {	
 	Init_Oscillator();
-	Init_Interrupts();
+//	Init_Interrupts();
 	Init_I2C();
+	Init_USART();
 	
 	TRISB = 0x00;
 	LATB = 0x01; // Turn on a little status LED;
@@ -97,4 +132,15 @@ void Init_I2C(void)
 	// 19 = 0x13
 	// SSPADD = 19;
 	SSPADD = 27; //This is so I can actually see stuff on my old O-Scope
-}	
+}
+
+void Init_USART(void)
+{
+	OpenUSART(  USART_TX_INT_OFF  &
+            	USART_RX_INT_OFF  &
+            	USART_ASYNCH_MODE &
+            	USART_EIGHT_BIT   &
+            	USART_CONT_RX     &
+            	USART_BRGH_HIGH,
+            	25                );
+}

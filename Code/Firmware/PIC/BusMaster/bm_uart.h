@@ -3,11 +3,6 @@
 
 void InitializeUART(void);
 
-// Hardware Functions
-unsigned char UARTRXRdy(void);
-unsigned char UARTRX(void);
-void UARTTX(char c);
-
 // Helper Functions
 void UARTTXString(char *s);
 void UARTTXBin(unsigned char c);

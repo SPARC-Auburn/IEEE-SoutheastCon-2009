@@ -2,6 +2,7 @@
 #include "bm_uart.h"
 #include "i2c.h"
 #include "command.h"
+#include "usart.h"
 
 #define I2C 1
 
@@ -118,8 +119,8 @@ void ASCII2BYTE(unsigned char b, unsigned char *numberArr){
 unsigned char getMenuReply(unsigned char i){
 	unsigned char c;
 	while(1){
-		while(!UARTRXRdy());
-		c=(UARTRX())-0x31;	//Correct from ASCII
+		while(!DataRdyUSART());
+		c=(ReadUSART())-0x31;	//Correct from ASCII
 		UARTTXString("\x0D\x0A");
 		if(c<i)break;
 		UARTTXString("001 SYNTAX ERROR, TRY AGAIN>");
@@ -139,7 +140,7 @@ void echoByteValue(unsigned char c){
 			UARTTXBin(c);
 			break;
 		case RAW:
-			UARTTX(c);
+			WriteUSART(c);
 			break;
 	}
 }
@@ -148,7 +149,7 @@ void busStartWrite(void){
 	switch(busMode){
 		case I2C:
 			StartI2C();
-			UARTTXString("210 I2C START CONDITION\x0Dx0A");
+			UARTTXString("210 I2C START CONDITION\x0D\x0A");
 			break;
 	}
 }
