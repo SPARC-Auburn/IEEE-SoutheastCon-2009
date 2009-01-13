@@ -128,6 +128,44 @@ class MotorController:
 		hard left and 1.0 is hard right.  Giving speed (x > 0)
 		and direction (r = -1.0 or 1.0) the robot should spin in
 		place left or right respectively.
-		NOT IMPLEMENTED YET!
 		'''
-		pass
+                #Validate the parameters
+		if speed < -1.0 or speed > 1.0:
+                        log.error("Speed given to the move() function must be between -1.0 and 1.0 inclusively.")
+                        return
+                if direction < -1.0 or direction > 1.0:
+                        log.error("Direction given to the move() function must be between -1.0 and 1.0 inclusively.")
+                        return
+		#First calculate the speed of each motor then send the commands
+                #Account for speed
+                leftSpeed = speed
+                rightSpeed = speed
+                #Account for direction
+                leftSpeed = leftSpeed + direction
+                rightSpeed = rightSpeed - direction
+                #Account for going over 1.0 or under -1.0
+                if leftSpeed < -1.0:
+                        leftSpeed = -1.0
+                if leftSpeed > 1.0:
+                        leftSpeed = 1.0
+                if rightSpeed < -1.0:
+                        rightSpeed = -1.0
+                if rightSpeed > 1.0:
+                        rightSpeed = 1.0
+                #Send the commands
+                self.left(leftSpeed)
+                self.right(rightSpeed)
+                return
+
+
+
+
+
+
+
+
+
+
+
+
+		
