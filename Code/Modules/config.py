@@ -9,6 +9,8 @@
 from configobj import ConfigObj
 from validate import Validator
 
+global config
+
 def init(configFile):
 	global config
 	config = ConfigObj(configFile)

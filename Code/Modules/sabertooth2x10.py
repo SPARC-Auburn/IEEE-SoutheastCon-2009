@@ -24,32 +24,26 @@ TODO:
 # Imports #
 # PySerial
 from serial import Serial
+import logging
+import config
 
+log = logging.getLogger('Sabertooth')
 
 class MotorController:
 	'''
 	This is the class that contains all data and functions 
 	related to controlling the Sabertooth 2x10 motor controllers.
 	'''
-	def __init__(self, serial="/dev/ttyS0"):
+	def __init__(self, serial=''):
 		'''
 		Constructor - 'serial' is the unix serial address that the
 		controller is connected to.
 		'''
+		global configs
+		configs = config.get_config('Sabertooth2x10')
+		serial = configs['serial_port']
 		self.serial = Serial(serial)
 		self.swap_motors = False
-		
-	def move(self, speed=1.0, direction=0.0):
-		'''
-		Drives both motors at a given speed <-1.0 ... 1.0> and
-		augments the speed to each motor based on direction
-		<-1.0 ... 1.0>.  Direction 0 is straght ahead, -1.0 is
-		hard left and 1.0 is hard right.  Giving speed (x > 0)
-		and direction (r = -1.0 or 1.0) the robot should spin in
-		place left or right respectively.
-		NOT IMPLEMENTED YET!
-		'''
-		pass
 	
 	def dec2hex(self, dec):
 		'''
@@ -65,13 +59,14 @@ class MotorController:
 		Drives the right motor at a given speed between -1.0 and 1.0.
 		'''
 		if speed < -1.0 or speed > 1.0:
-			print "Must provide speed between -1.0 and 1.0" ### USE LOGGING HERE
+			log.error("Must provide speed between -1.0 and 1.0")
 			return
 		speed = int(speed * 64) + 64
 		#Make sure that the speed is not 0.
 		if speed is 0:
 			speed = 1
-		#Check to see if the motors are swapped, one needs to be offset 127 and the other needs to not go to 128.
+		#Check to see if the motors are swapped, one needs to be 
+		#offset 127 and the other needs to not go to 128.
 		if self.swap_motors:
 			speed = speed + 127
 		elif speed is 128:
@@ -86,7 +81,7 @@ class MotorController:
 		Drives the left motor at a given speed between -1.0 and 1.0.
 		'''
 		if speed < -1.0 or speed > 1.0:
-			print "Must provide speed between -1.0 and 1.0" ### USE LOGGING HERE
+			log.error("Must provide speed between -1.0 and 1.0")
 			return
 		speed = int(speed * 64) + 64
 		#Make sure that the speed is not 0.
@@ -115,3 +110,15 @@ class MotorController:
 			return
 		self.drive_right(speed)
 		self.drive_left(speed)
+		
+	def move(self, speed=1.0, direction=0.0):
+		'''
+		Drives both motors at a given speed <-1.0 ... 1.0> and
+		augments the speed to each motor based on direction
+		<-1.0 ... 1.0>.  Direction 0 is straght ahead, -1.0 is
+		hard left and 1.0 is hard right.  Giving speed (x > 0)
+		and direction (r = -1.0 or 1.0) the robot should spin in
+		place left or right respectively.
+		NOT IMPLEMENTED YET!
+		'''
+		pass
