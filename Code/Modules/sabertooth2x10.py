@@ -17,17 +17,23 @@
 '''
 Module for controlling a sabertooth2x10 motor controller.
 TODO: 
- * Implement logging.
  * Implement move().
 '''
 
 # Imports #
 # PySerial
-from serial import Serial
+try:
+        from serial import Serial
+except Exception as e:
+        print "Serial cannot be imported, you may need to install it:", e
 import logging
 import config
 
 log = logging.getLogger('Sabertooth')
+
+def init():
+        global configs
+        configs = config.get_config('Sabertooth2x10')
 
 class MotorController:
 	'''
@@ -40,9 +46,12 @@ class MotorController:
 		controller is connected to.
 		'''
 		global configs
-		configs = config.get_config('Sabertooth2x10')
 		serial = configs['serial_port']
-		self.serial = Serial(serial)
+		try:
+                        self.serial = Serial(serial)
+                except Exception as e:
+                        log.error("Unable to connect to the motor controller on port %s.  The motor controller will not function.  See error bellow." % serial)
+                        log.error("%s" % e)
 		self.swap_motors = False
 	
 	def dec2hex(self, dec):

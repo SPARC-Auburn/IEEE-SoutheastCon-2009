@@ -71,6 +71,7 @@ config.init(configFile)
 
 # Initialize modules #
 # Sabertooth2x10
+saber.init()
 global mc
 mc = saber.MotorController()
 
