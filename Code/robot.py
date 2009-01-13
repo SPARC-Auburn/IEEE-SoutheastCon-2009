@@ -12,30 +12,42 @@ sys.path.append("Libraries")
 sys.path.append("Modules")
 
 # Imports #
-# ConfigObj
-from configobj import ConfigObj
-from validate import Validator
+import sys
+#print "arguments", sys.argv
 # Logging
-#from logger import *  # Logging is not working yet.
-
-# Robot #
-class Robot:
-	pass
+import logging
+import logging.config
+# Config
+import config
 
 # Functions #
+# These functions should be mostly 'pass through' functions.
+# Which basically means that it allows functions to be called
+# directly as opposed to library.function in the brain.py.
+# This will be the case so long as you do:
+# from robot import *
 
 
 
-
-
-# Handle Configurations
+# Start logging
 try:
-	filename
+	loggingConfigFile
+	print_non_default = True
 except NameError:
-	filename = "Configurations/robot.cfg"
-else:
-	print "Using non default config file:", filename
-config = ConfigObj(filename)
+	loggingConfigFile = 'Configurations/logging.cfg'
+	print_non_default = False
+logging.config.fileConfig(loggingConfigFile)
+log = logging.getLogger('Robot')
+if print_non_default:
+	log.info("Using non default logging config file: %s" % loggingConfigFile)
 
+# Start Configurations
+try:
+	configFile
+	log.info("Using non default config file: %s" % configFile)
+except NameError:
+	configFile = 'Configurations/robot.cfg'
+config.init(configFile)
 
-print "Robot.py has been loaded."
+# Done
+log.info("Robot.py has been loaded.")
