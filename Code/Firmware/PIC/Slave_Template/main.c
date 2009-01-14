@@ -2,9 +2,11 @@
 //	Node:		Generic Template
 //************************************************************************************************
 
-#include <p18cxxx.h>
-#include "Main.h"
+#include "main.h"
 #include "i2c.h"
+#include "init.h"
+#include "serial.h"
+#include "hardware.h"
 
 #pragma config OSC = IRCIO67,WDT = OFF, MCLRE = OFF
 
@@ -20,7 +22,9 @@ void low_vec (void)
 {
    _asm goto low_isr _endasm
 }
+
 #pragma code
+volatile unsigned char pointer;
 
 //***************************************************************************************************************
 //							high_isr
@@ -38,6 +42,13 @@ void high_isr(void)
 #pragma interruptlow low_isr
 void low_isr (void)
 {	
+	if(SSPSTATbits.R_W == 0){
+		SSPBUF = 0x30;	
+	} else {
+		pointer = SSPBUF;
+	}	
+	PIR1bits.SSPIF =0;
+		
 }
 
 //***************************************************************************************************************
@@ -46,29 +57,17 @@ void low_isr (void)
 
 void main (void)
 {
-
+	unsigned char c;
+	pointer = 0;
+	Init();
+	TXString("\x0D\x0A");		// Put out a new line
+	TXChar('>');	
+	
+	while(1){
+		if(RXReady()){
+			TXChar(pointer);
+			c = RXChar();
+		}	
+	}		
 
 }
-
-
-//************************************************************
-//							Functions
-//************************************************************
-int Init (void) 
-{	
-	Init_Oscillator();
-	Init_Interrupts();
-	return 1;
-}
-
-void Init_Oscillator(void)
-{
-	OSCCON = 0b01110000; //configure PIC to primary oscillator block at 8MHz
-}
-
-void Init_Interrupts(void)
-{	
-	INTCONbits.GIEL = 1; //low priority interrupts enabler
-	INTCONbits.GIEH = 1; //high priority interrupt enabler
-	RCONbits.IPEN = 1; //enable high priority and low priority interrupts
-}	

@@ -1,24 +1,43 @@
-#include <p18cxxx.h>
+#include "hardware.h"
 #include "serial.h"
-#include "usart.h"
+
+char RXReady(void){
+	if(PIR1bits.RCIF)
+		return 1;
+	return 0;
+}
+
+char RXChar(void){
+	char c;
+	c = RCREG;
+	return c;
+}	
+
+void TXChar(char c){
+	TXREG = c;
+	while(!TXSTAbits.TRMT);
+}
+
+void TXString(const rom char *s){
+	do{
+		TXChar(*s);
+	} while( *s++);	
+}		
 
 void TXBin(unsigned char c){
 	unsigned char i,j;
 	j=0b10000000;
 
-	putrsUSART("0b");
+	TXString("0b");
 
 	for(i=0;i<8;i++){
 		if(c&j){
-			while(BusyUSART());
-			WriteUSART('1');
+			TXChar('1');
 		}else{
-			while(BusyUSART());
-			WriteUSART('0');
+			TXChar('0');
 		}
 		j>>=1;
 	}
-
 }
 
 void TXDec(unsigned char c){
@@ -26,16 +45,14 @@ void TXDec(unsigned char c){
 	
 	b = c;
 	if(b/100){
-		while(BusyUSART());
-		WriteUSART(b/100+'0');
+		TXChar(b/100+'0');
 	}
 	b = b - (b/100) * 100;
 	if(b/10){
-		while(BusyUSART());
-		WriteUSART(b/10+'0');
+		TXChar(b/10+'0');
 	}
 	b = b - (b/10) * 10;
-	WriteUSART(b + '0');
+	TXChar(b + '0');
 }
 
 const unsigned char HEXASCII[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
@@ -43,11 +60,9 @@ const unsigned char HEXASCII[]={'0','1','2','3','4','5','6','7','8','9','A','B',
 void TXHex(unsigned int c){
 	unsigned int b;
 	
-	putrsUSART("0x");
+	TXString("0x");
 	b = (c >> 4) & 0x0F;
-	while(BusyUSART());
-	WriteUSART(HEXASCII[b]);
+	TXChar(HEXASCII[b]);
 	b = c & 0x0F;
-	while(BusyUSART());
-	WriteUSART(HEXASCII[b]);
+	TXChar(HEXASCII[b]);
 }
