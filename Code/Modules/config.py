@@ -6,6 +6,9 @@
 #  Copyright (c) 2009 Auburn University. All rights reserved.
 #
 
+import sys
+sys.path.append('../Libraries')
+
 from configobj import ConfigObj
 from validate import Validator
 

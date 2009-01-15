@@ -46,9 +46,28 @@ def both(speed):
 def move(speed, direction):
 	mc.move(speed, direction)
 
+# Logging Related Functions
 def debug(msg):
 	brain_log.debug(msg)
 
+def info(msg):
+	brain_log.info(msg)
+
+def warning(msg):
+	brain_log.warning(msg)
+	
+def error(msg):
+	brain_log.error(msg)
+	
+def critical(msg):
+	brain_log.critical(msg)
+	
+# Misc Functions
+def shutdown():
+	pass
+
+
+# Initilization #
 # Start logging
 try:
 	loggingConfigFile
@@ -58,6 +77,7 @@ except NameError:
 	print_non_default = False
 logging.config.fileConfig(loggingConfigFile)
 log = logging.getLogger('Robot')
+brain_log = logging.getLogger('Brain')
 if print_non_default:
 	log.info("Using non default logging config file: %s" % loggingConfigFile)
 
