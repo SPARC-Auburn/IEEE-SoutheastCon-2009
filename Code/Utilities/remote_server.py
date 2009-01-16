@@ -28,6 +28,10 @@ def loop():
 	while True:
 		(data, addr) = soc.recvfrom( 1024 )
 		debug("Recieved Pack from %s: %s" % (addr, data))
+		p = data.partition(' ')
+		speed = float(p[0])
+		direction = float(p[2])
+		move(speed, direction)
 		
 try:
 	loop()
