@@ -6,8 +6,8 @@
 int Init (void) 
 {	
 	Init_Oscillator();
-	//Init_Interrupts();
 	Init_I2C();
+	Init_Interrupts();
 	Init_USART();
 	
 	TRISB = 0x00;
@@ -22,9 +22,9 @@ void Init_Oscillator(void)
 
 void Init_Interrupts(void)
 {	
+	RCONbits.IPEN = 1; //enable high priority and low priority interrupts
 	INTCONbits.GIEL = 1; //low priority interrupts enabler
 	INTCONbits.GIEH = 1; //high priority interrupt enabler
-	RCONbits.IPEN = 1; //enable high priority and low priority interrupts
 }	
 
 void Init_I2C(void)
@@ -38,7 +38,7 @@ void Init_I2C(void)
 		// SSPADD = 19;
 		SSPADD = 27; //This is so I can actually see stuff on my old O-Scope
 	#endif
-	SSPCON2bits.SEN = 1;
+	//SSPCON2bits.SEN = 1;
 	OpenI2C(SLAVE_7,SLEW_OFF);
 	SSPADD = 0x10;
 	PIR1bits.SSPIF = 0; 

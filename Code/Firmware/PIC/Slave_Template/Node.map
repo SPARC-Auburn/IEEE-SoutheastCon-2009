@@ -1,5 +1,5 @@
 MPLINK 4.22, Linker
-Linker Map File - Created Sat Jan 17 15:32:21 2009
+Linker Map File - Created Sat Jan 17 16:38:50 2009
 
                                  Section Info
                   Section       Type    Address   Location Size(Bytes)
@@ -26,16 +26,16 @@ Linker Map File - Created Sat Jan 17 15:32:21 2009
             .code_c018i.o       code   0x000018    program   0x000000
                    .cinit    romdata   0x00001e    program   0x00001a
            .code_serial.o       code   0x000038    program   0x00024a
-             .code_main.o       code   0x000282    program   0x000162
-            .code_queue.o       code   0x0003e4    program   0x0000aa
-             .code_init.o       code   0x00048e    program   0x0000a6
-               _cinit_scn       code   0x000534    program   0x00009e
-         .code_i2c_open.o       code   0x0005d2    program   0x000036
-             _startup_scn       code   0x000608    program   0x00001c
-         .code_fxd0808u.o       code   0x000624    program   0x00001c
-                    .code       code   0x000640    program   0x00000e
-        .idata_serial.o_i    romdata   0x00064e    program   0x000010
-         .idata_queue.o_i    romdata   0x00065e    program   0x000006
+             .code_main.o       code   0x000282    program   0x000170
+            .code_queue.o       code   0x0003f2    program   0x0000aa
+             .code_init.o       code   0x00049c    program   0x0000a6
+               _cinit_scn       code   0x000542    program   0x00009e
+         .code_i2c_open.o       code   0x0005e0    program   0x000036
+             _startup_scn       code   0x000616    program   0x00001c
+         .code_fxd0808u.o       code   0x000632    program   0x00001c
+                    .code       code   0x00064e    program   0x00000e
+        .idata_serial.o_i    romdata   0x00065c    program   0x000010
+         .idata_queue.o_i    romdata   0x00066c    program   0x000006
     .config_300001_main.o    romdata   0x300001    program   0x000001
     .config_300003_main.o    romdata   0x300003    program   0x000001
     .config_300005_main.o    romdata   0x300005    program   0x000001
@@ -81,66 +81,66 @@ Linker Map File - Created Sat Jan 17 15:32:21 2009
                                Start         End      
                            ---------   ---------      
                             0x000000    0x000016      
-                            0x000018    0x000663      
+                            0x000018    0x000671      
                             0x300001    0x300001      
                             0x300003    0x300003      
                             0x300005    0x300005      
-            1638 out of 99352 program addresses used, program memory utilization is 1%
+            1652 out of 99352 program addresses used, program memory utilization is 1%
 
 
 
                               Symbols - Sorted by Name
                      Name    Address   Location    Storage File                     
                 ---------  ---------  ---------  --------- ---------                
-                 FXD0808U   0x000624    program     extern C:\MCC18\src\traditional\math\fxd0808u.c
-                     Init   0x00048e    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\init.c
-                 Init_I2C   0x0004b0    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\init.c
-          Init_Interrupts   0x0004a8    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\init.c
-          Init_Oscillator   0x0004a2    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\init.c
-               Init_USART   0x0004e0    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\init.c
-                  OpenI2C   0x0005d2    program     extern C:\MCC18\src\pmc_common\i2c\i2c_open.c
-                   RXChar   0x000046    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\serial.c
-                  RXReady   0x000038    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\serial.c
-                    TXBin   0x0000ba    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\serial.c
-                   TXChar   0x000062    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\serial.c
-                    TXDec   0x00012a    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\serial.c
-                    TXHex   0x0001de    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\serial.c
-                 TXString   0x00007c    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\serial.c
+                 FXD0808U   0x000632    program     extern C:\MCC18\src\traditional\math\fxd0808u.c
+                     Init   0x00049c    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\init.c
+                 Init_I2C   0x0004c0    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\init.c
+          Init_Interrupts   0x0004b8    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\init.c
+          Init_Oscillator   0x0004b2    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\init.c
+               Init_USART   0x0004ee    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\init.c
+                  OpenI2C   0x0005e0    program     extern C:\MCC18\src\pmc_common\i2c\i2c_open.c
+                   RXChar   0x000046    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\serial.c
+                  RXReady   0x000038    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\serial.c
+                    TXBin   0x0000ba    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\serial.c
+                   TXChar   0x000062    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\serial.c
+                    TXDec   0x00012a    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\serial.c
+                    TXHex   0x0001de    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\serial.c
+                 TXString   0x00007c    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\serial.c
        ___return_lbl00000   0x000004    program     static                          
-       ___return_lbl00000   0x00063e    program     static                          
+       ___return_lbl00000   0x00064c    program     static                          
        ___return_lbl00000   0x00000c    program     static                          
-       ___return_lbl00001   0x000622    program     static                          
+       ___return_lbl00001   0x000630    program     static                          
        ___return_lbl00001   0x00001c    program     static                          
-       ___return_lbl00002   0x0005d0    program     static                          
-               __config_0   0x300001    program     static C:\SVN\Code\Firmware\PIC\Slave_Template\main.c
-               __config_1   0x300003    program     static C:\SVN\Code\Firmware\PIC\Slave_Template\main.c
-               __config_2   0x300005    program     static C:\SVN\Code\Firmware\PIC\Slave_Template\main.c
+       ___return_lbl00002   0x0005de    program     static                          
+               __config_0   0x300001    program     static C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\main.c
+               __config_1   0x300003    program     static C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\main.c
+               __config_2   0x300005    program     static C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\main.c
                    __init   0x000006    program     extern C:\MCC18\src\traditional\stdclib\__init.c
-               __string_0   0x000014    program     static C:\SVN\Code\Firmware\PIC\Slave_Template\serial.c
-               __string_0   0x00000e    program     static C:\SVN\Code\Firmware\PIC\Slave_Template\main.c
-               __string_1   0x000011    program     static C:\SVN\Code\Firmware\PIC\Slave_Template\serial.c
-            __zero_memory   0x000640    program     extern C:\MCC18\src\traditional\proc\p18F4685.asm
-                _do_cinit   0x000534    program     extern C:\MCC18\src\traditional\startup\c018i.c
+               __string_0   0x000014    program     static C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\serial.c
+               __string_0   0x00000e    program     static C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\main.c
+               __string_1   0x000011    program     static C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\serial.c
+            __zero_memory   0x00064e    program     extern C:\MCC18\src\traditional\proc\p18F4685.asm
+                _do_cinit   0x000542    program     extern C:\MCC18\src\traditional\startup\c018i.c
                    _entry   0x000000    program     extern C:\MCC18\src\traditional\startup\c018i.c
-                 _startup   0x000608    program     extern C:\MCC18\src\traditional\startup\c018i.c
-               clear_loop   0x000646    program     static C:\MCC18\src\traditional\proc\p18F4685.asm
-                copy_loop   0x0005a6    program     static                          
-            copy_one_byte   0x0005ac    program     static                          
-                     done   0x0005d0    program     static                          
-             done_copying   0x0005ba    program     static                          
-                  endloop   0x00063a    program     static                          
-                 high_isr   0x000282    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\main.c
-                 high_vec   0x000008    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\main.c
-             isQueueEmpty   0x0003e4    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\queue.c
-              isQueueFull   0x000400    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\queue.c
-                     loop   0x000618    program     static                          
-                     loop   0x00062c    program     static                          
-                  low_isr   0x000294    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\main.c
-                  low_vec   0x000018    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\main.c
-                     main   0x000394    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\main.c
-                 popQueue   0x000462    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\queue.c
-                pushQueue   0x000418    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\queue.c
-                     test   0x00054e    program     static                          
+                 _startup   0x000616    program     extern C:\MCC18\src\traditional\startup\c018i.c
+               clear_loop   0x000654    program     static C:\MCC18\src\traditional\proc\p18F4685.asm
+                copy_loop   0x0005b4    program     static                          
+            copy_one_byte   0x0005ba    program     static                          
+                     done   0x0005de    program     static                          
+             done_copying   0x0005c8    program     static                          
+                  endloop   0x000648    program     static                          
+                 high_isr   0x000282    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\main.c
+                 high_vec   0x000008    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\main.c
+             isQueueEmpty   0x0003f2    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\queue.c
+              isQueueFull   0x00040e    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\queue.c
+                     loop   0x000626    program     static                          
+                     loop   0x00063a    program     static                          
+                  low_isr   0x00036c    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\main.c
+                  low_vec   0x000018    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\main.c
+                     main   0x000392    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\main.c
+                 popQueue   0x000470    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\queue.c
+                pushQueue   0x000426    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\queue.c
+                     test   0x00055c    program     static                          
                    ADCON0   0x000fc2       data     extern C:\MCC18\src\traditional\proc\p18F4685.asm
                ADCON0bits   0x000fc2       data     extern C:\MCC18\src\traditional\proc\p18F4685.asm
                    ADCON1   0x000fc1       data     extern C:\MCC18\src\traditional\proc\p18F4685.asm
@@ -424,7 +424,7 @@ Linker Map File - Created Sat Jan 17 15:32:21 2009
                      FSR2   0x000fd9       data     extern C:\MCC18\src\traditional\proc\p18F4685.asm
                     FSR2H   0x000fda       data     extern C:\MCC18\src\traditional\proc\p18F4685.asm
                     FSR2L   0x000fd9       data     extern C:\MCC18\src\traditional\proc\p18F4685.asm
-                 HEXASCII   0x000080       data     extern C:\SVN\Code\Firmware\PIC\Slave_Template\serial.c
+                 HEXASCII   0x000080       data     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\serial.c
                   HLVDCON   0x000fd2       data     extern C:\MCC18\src\traditional\proc\p18F4685.asm
               HLVDCONbits   0x000fd2       data     extern C:\MCC18\src\traditional\proc\p18F4685.asm
                     INDF0   0x000fef       data     extern C:\MCC18\src\traditional\proc\p18F4685.asm
@@ -900,17 +900,17 @@ Linker Map File - Created Sat Jan 17 15:32:21 2009
                   __REMB1   0x000002       data     extern C:\MCC18\src\traditional\math\aarg.asm
                   __REMB2   0x000001       data     extern C:\MCC18\src\traditional\math\aarg.asm
                   __REMB3   0x000000       data     extern C:\MCC18\src\traditional\math\aarg.asm
-                  __tmp_0   0x000010       data     static C:\SVN\Code\Firmware\PIC\Slave_Template\serial.c
-                  __tmp_0   0x000010       data     static C:\SVN\Code\Firmware\PIC\Slave_Template\init.c
-                    count   0x00009a       data     extern C:\SVN\Code\Firmware\PIC\Slave_Template\queue.c
+                  __tmp_0   0x000010       data     static C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\serial.c
+                  __tmp_0   0x000010       data     static C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\init.c
+                    count   0x00009a       data     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\queue.c
                 curr_byte   0x000093       data     static C:\MCC18\src\traditional\startup\c018i.c
                curr_entry   0x000095       data     static C:\MCC18\src\traditional\startup\c018i.c
                  data_ptr   0x000097       data     static C:\MCC18\src\traditional\startup\c018i.c
-                     left   0x00009c       data     extern C:\SVN\Code\Firmware\PIC\Slave_Template\queue.c
-                  pointer   0x0000a0       data     extern C:\SVN\Code\Firmware\PIC\Slave_Template\main.c
+                     left   0x00009c       data     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\queue.c
+                  pointer   0x0000a0       data     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\main.c
                      prom   0x000090       data     static C:\MCC18\src\traditional\startup\c018i.c
-             queue_buffer   0x000060       data     extern C:\SVN\Code\Firmware\PIC\Slave_Template\queue.c
-                    right   0x00009e       data     extern C:\SVN\Code\Firmware\PIC\Slave_Template\queue.c
+             queue_buffer   0x000060       data     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\queue.c
+                    right   0x00009e       data     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\queue.c
 
 
 
@@ -920,52 +920,52 @@ Linker Map File - Created Sat Jan 17 15:32:21 2009
                    _entry   0x000000    program     extern C:\MCC18\src\traditional\startup\c018i.c
        ___return_lbl00000   0x000004    program     static                          
                    __init   0x000006    program     extern C:\MCC18\src\traditional\stdclib\__init.c
-                 high_vec   0x000008    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\main.c
+                 high_vec   0x000008    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\main.c
        ___return_lbl00000   0x00000c    program     static                          
-               __string_0   0x00000e    program     static C:\SVN\Code\Firmware\PIC\Slave_Template\main.c
-               __string_1   0x000011    program     static C:\SVN\Code\Firmware\PIC\Slave_Template\serial.c
-               __string_0   0x000014    program     static C:\SVN\Code\Firmware\PIC\Slave_Template\serial.c
-                  low_vec   0x000018    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\main.c
+               __string_0   0x00000e    program     static C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\main.c
+               __string_1   0x000011    program     static C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\serial.c
+               __string_0   0x000014    program     static C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\serial.c
+                  low_vec   0x000018    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\main.c
        ___return_lbl00001   0x00001c    program     static                          
-                  RXReady   0x000038    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\serial.c
-                   RXChar   0x000046    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\serial.c
-                   TXChar   0x000062    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\serial.c
-                 TXString   0x00007c    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\serial.c
-                    TXBin   0x0000ba    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\serial.c
-                    TXDec   0x00012a    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\serial.c
-                    TXHex   0x0001de    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\serial.c
-                 high_isr   0x000282    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\main.c
-                  low_isr   0x000294    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\main.c
-                     main   0x000394    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\main.c
-             isQueueEmpty   0x0003e4    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\queue.c
-              isQueueFull   0x000400    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\queue.c
-                pushQueue   0x000418    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\queue.c
-                 popQueue   0x000462    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\queue.c
-                     Init   0x00048e    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\init.c
-          Init_Oscillator   0x0004a2    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\init.c
-          Init_Interrupts   0x0004a8    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\init.c
-                 Init_I2C   0x0004b0    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\init.c
-               Init_USART   0x0004e0    program     extern C:\SVN\Code\Firmware\PIC\Slave_Template\init.c
-                _do_cinit   0x000534    program     extern C:\MCC18\src\traditional\startup\c018i.c
-                     test   0x00054e    program     static                          
-                copy_loop   0x0005a6    program     static                          
-            copy_one_byte   0x0005ac    program     static                          
-             done_copying   0x0005ba    program     static                          
-                     done   0x0005d0    program     static                          
-       ___return_lbl00002   0x0005d0    program     static                          
-                  OpenI2C   0x0005d2    program     extern C:\MCC18\src\pmc_common\i2c\i2c_open.c
-                 _startup   0x000608    program     extern C:\MCC18\src\traditional\startup\c018i.c
-                     loop   0x000618    program     static                          
-       ___return_lbl00001   0x000622    program     static                          
-                 FXD0808U   0x000624    program     extern C:\MCC18\src\traditional\math\fxd0808u.c
-                     loop   0x00062c    program     static                          
-                  endloop   0x00063a    program     static                          
-       ___return_lbl00000   0x00063e    program     static                          
-            __zero_memory   0x000640    program     extern C:\MCC18\src\traditional\proc\p18F4685.asm
-               clear_loop   0x000646    program     static C:\MCC18\src\traditional\proc\p18F4685.asm
-               __config_0   0x300001    program     static C:\SVN\Code\Firmware\PIC\Slave_Template\main.c
-               __config_1   0x300003    program     static C:\SVN\Code\Firmware\PIC\Slave_Template\main.c
-               __config_2   0x300005    program     static C:\SVN\Code\Firmware\PIC\Slave_Template\main.c
+                  RXReady   0x000038    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\serial.c
+                   RXChar   0x000046    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\serial.c
+                   TXChar   0x000062    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\serial.c
+                 TXString   0x00007c    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\serial.c
+                    TXBin   0x0000ba    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\serial.c
+                    TXDec   0x00012a    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\serial.c
+                    TXHex   0x0001de    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\serial.c
+                 high_isr   0x000282    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\main.c
+                  low_isr   0x00036c    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\main.c
+                     main   0x000392    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\main.c
+             isQueueEmpty   0x0003f2    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\queue.c
+              isQueueFull   0x00040e    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\queue.c
+                pushQueue   0x000426    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\queue.c
+                 popQueue   0x000470    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\queue.c
+                     Init   0x00049c    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\init.c
+          Init_Oscillator   0x0004b2    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\init.c
+          Init_Interrupts   0x0004b8    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\init.c
+                 Init_I2C   0x0004c0    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\init.c
+               Init_USART   0x0004ee    program     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\init.c
+                _do_cinit   0x000542    program     extern C:\MCC18\src\traditional\startup\c018i.c
+                     test   0x00055c    program     static                          
+                copy_loop   0x0005b4    program     static                          
+            copy_one_byte   0x0005ba    program     static                          
+             done_copying   0x0005c8    program     static                          
+                     done   0x0005de    program     static                          
+       ___return_lbl00002   0x0005de    program     static                          
+                  OpenI2C   0x0005e0    program     extern C:\MCC18\src\pmc_common\i2c\i2c_open.c
+                 _startup   0x000616    program     extern C:\MCC18\src\traditional\startup\c018i.c
+                     loop   0x000626    program     static                          
+       ___return_lbl00001   0x000630    program     static                          
+                 FXD0808U   0x000632    program     extern C:\MCC18\src\traditional\math\fxd0808u.c
+                     loop   0x00063a    program     static                          
+                  endloop   0x000648    program     static                          
+       ___return_lbl00000   0x00064c    program     static                          
+            __zero_memory   0x00064e    program     extern C:\MCC18\src\traditional\proc\p18F4685.asm
+               clear_loop   0x000654    program     static C:\MCC18\src\traditional\proc\p18F4685.asm
+               __config_0   0x300001    program     static C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\main.c
+               __config_1   0x300003    program     static C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\main.c
+               __config_2   0x300005    program     static C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\main.c
                  __AARGB7   0x000000       data     extern C:\MCC18\src\traditional\math\aarg.asm
                   __REMB3   0x000000       data     extern C:\MCC18\src\traditional\math\aarg.asm
                  __AARGB6   0x000001       data     extern C:\MCC18\src\traditional\math\aarg.asm
@@ -987,18 +987,18 @@ Linker Map File - Created Sat Jan 17 15:32:21 2009
                      SIGN   0x00000e       data     extern C:\MCC18\src\traditional\math\cmath18.asm
                 __FPFLAGS   0x00000f       data     extern C:\MCC18\src\traditional\math\cmath18.asm
             __FPFLAGSbits   0x00000f       data     extern C:\MCC18\src\traditional\math\cmath18.asm
-                  __tmp_0   0x000010       data     static C:\SVN\Code\Firmware\PIC\Slave_Template\serial.c
-                  __tmp_0   0x000010       data     static C:\SVN\Code\Firmware\PIC\Slave_Template\init.c
-             queue_buffer   0x000060       data     extern C:\SVN\Code\Firmware\PIC\Slave_Template\queue.c
-                 HEXASCII   0x000080       data     extern C:\SVN\Code\Firmware\PIC\Slave_Template\serial.c
+                  __tmp_0   0x000010       data     static C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\serial.c
+                  __tmp_0   0x000010       data     static C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\init.c
+             queue_buffer   0x000060       data     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\queue.c
+                 HEXASCII   0x000080       data     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\serial.c
                      prom   0x000090       data     static C:\MCC18\src\traditional\startup\c018i.c
                 curr_byte   0x000093       data     static C:\MCC18\src\traditional\startup\c018i.c
                curr_entry   0x000095       data     static C:\MCC18\src\traditional\startup\c018i.c
                  data_ptr   0x000097       data     static C:\MCC18\src\traditional\startup\c018i.c
-                    count   0x00009a       data     extern C:\SVN\Code\Firmware\PIC\Slave_Template\queue.c
-                     left   0x00009c       data     extern C:\SVN\Code\Firmware\PIC\Slave_Template\queue.c
-                    right   0x00009e       data     extern C:\SVN\Code\Firmware\PIC\Slave_Template\queue.c
-                  pointer   0x0000a0       data     extern C:\SVN\Code\Firmware\PIC\Slave_Template\main.c
+                    count   0x00009a       data     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\queue.c
+                     left   0x00009c       data     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\queue.c
+                    right   0x00009e       data     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\queue.c
+                  pointer   0x0000a0       data     extern C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\main.c
                  RXF6SIDH   0x000d60       data     extern C:\MCC18\src\traditional\proc\p18F4685.asm
              RXF6SIDHbits   0x000d60       data     extern C:\MCC18\src\traditional\proc\p18F4685.asm
              RXF6SIDLbits   0x000d61       data     extern C:\MCC18\src\traditional\proc\p18F4685.asm

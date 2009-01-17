@@ -34,15 +34,6 @@ volatile unsigned char pointer;
 #pragma interrupt high_isr
 void high_isr(void)
 {
-}
-
-//***************************************************************************************************************
-//							low_isr
-//***************************************************************************************************************
-
-#pragma interruptlow low_isr
-void low_isr (void)
-{	
 	if(PIR1bits.SSPIF){		// If - SSP Module (I2C)
 		unsigned char c;
 		if(SSPSTATbits.R_W){	// If - Read from slave
@@ -65,12 +56,20 @@ void low_isr (void)
 			}
 		}
 		PIR1bits.SSPIF = 0;		// Clear SSP Module Interrupt
-		SSPCON1bits.CKP = 0;	// Release I2C Clock	
+		//SSPCON1bits.CKP = 0;	// Release I2C Clock	
 	} 
 	else {				// Else - Bus Collision (I2C) 
 		PIR2bits.BCLIF = 0; 	// Clear Bus Collision Flag
 	}	
+}
 
+//***************************************************************************************************************
+//							low_isr
+//***************************************************************************************************************
+
+#pragma interruptlow low_isr
+void low_isr (void)
+{	
 }
 
 //***************************************************************************************************************
@@ -79,8 +78,7 @@ void low_isr (void)
 
 void main (void)
 {
-	unsigned char c;s
-	pointer = 0;
+	unsigned char c;
 	Init();
 	TXString("\x0D\x0A");		// Put out a new line
 	TXChar('>');	
