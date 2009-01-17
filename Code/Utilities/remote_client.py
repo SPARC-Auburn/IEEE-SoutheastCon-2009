@@ -11,10 +11,11 @@ from time import sleep, gmtime, strftime
 import pygame
 import pygame.event
 
-SERVER_IP = '127.0.0.1'
+SERVER_IP = '192.168.1.101'
 PORT_NUMBER = 5000
 SENSITIVITY = .1
-DEAD_ZONE = .1
+DEAD_ZONE = .2
+THROTTLE = 0
 
 soc = socket( AF_INET, SOCK_DGRAM )
 
@@ -42,6 +43,7 @@ def loop():
 				move = str(speed)+" "+str(direction)
 				print move
 				soc.sendto(move, (SERVER_IP, PORT_NUMBER))
+				sleep(THROTTLE)
 		except AttributeError:
 			pass
 
