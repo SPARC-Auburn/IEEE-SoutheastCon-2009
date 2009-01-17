@@ -1,3 +1,5 @@
+#!/usr/bin/python -i 
+
 #
 #  robot.py
 #  
