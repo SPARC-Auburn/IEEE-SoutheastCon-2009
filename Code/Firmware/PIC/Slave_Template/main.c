@@ -7,6 +7,7 @@
 #include "init.h"
 #include "serial.h"
 #include "hardware.h"
+#include "queue.h"
 
 #pragma config OSC = IRCIO67,WDT = OFF, MCLRE = OFF
 
@@ -42,13 +43,34 @@ void high_isr(void)
 #pragma interruptlow low_isr
 void low_isr (void)
 {	
-	if(SSPSTATbits.R_W == 0){
-		SSPBUF = 0x30;	
-	} else {
-		pointer = SSPBUF;
+	if(PIR1bits.SSPIF){		// If - SSP Module (I2C)
+		unsigned char c;
+		if(SSPSTATbits.R_W){	// If - Read from slave
+			if(!isQueueEmpty()){// Check if QUEUE is EMPTY
+				c = popQueue();	// Grab a char from the QUEUE
+				SSPBUF = c;		// Write the byte to the I2C bus
+			}
+		} 
+		else {				// Else - Write to Slave
+			if(SSPSTATbits.D_A){	// If - Data
+				if(SSPSTATbits.BF){		//If - Buffer Full
+					c = SSPBUF;	// Grab a char from the I2C Buffer
+					if(!isQueueFull()){	// Check if QUEUE is FULL
+						pushQueue(c);	// Write the char to the QUEUE
+					}
+				}	
+			} 
+			else {					// Else - Address
+				c = SSPBUF;	// Grab a char from the I2C Buffer (Dummy Read)	
+			}
+		}
+		PIR1bits.SSPIF = 0;		// Clear SSP Module Interrupt
+		SSPCON1bits.CKP = 0;	// Release I2C Clock	
+	} 
+	else {				// Else - Bus Collision (I2C) 
+		PIR2bits.BCLIF = 0; 	// Clear Bus Collision Flag
 	}	
-	PIR1bits.SSPIF =0;
-		
+
 }
 
 //***************************************************************************************************************

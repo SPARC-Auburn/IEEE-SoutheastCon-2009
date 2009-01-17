@@ -9,8 +9,11 @@
 
 #include "queue.h"
 
-#define BUFFER_SIZE = 32
-volatile unsigned char[BUFFER_SIZE] queue_buffer;
+#define BUFFER_SIZE 32
+#pragma udata QUEUE
+volatile unsigned char queue_buffer[BUFFER_SIZE];
+
+#pragma code
 volatile int count = 0;
 volatile int left = 0;
 volatile int right = 0;
@@ -41,11 +44,7 @@ unsigned char isQueueFull()
 
 void pushQueue(unsigned char c)
 {
-	if(count == (BUFFER_SIZE - 1))
-	{
-		break;
-	}
-	else
+	if(count != (BUFFER_SIZE - 1))
 	{
 		queue_buffer[right] = c;
 		if(right == (BUFFER_SIZE - 1))
@@ -62,11 +61,7 @@ void pushQueue(unsigned char c)
 
 unsigned char popQueue()
 {
-	if(isQueueEmpty())
-	{
-		break;
-	}
-	else
+	if(!isQueueEmpty())
 	{
 		count--;
 		left++;

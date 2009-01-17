@@ -38,7 +38,7 @@ void Init_I2C(void)
 		// SSPADD = 19;
 		SSPADD = 27; //This is so I can actually see stuff on my old O-Scope
 	#endif
-	//SSPCON2bits.SEN = 1;
+	SSPCON2bits.SEN = 1;
 	OpenI2C(SLAVE_7,SLEW_OFF);
 	SSPADD = 0x10;
 	PIR1bits.SSPIF = 0; 
