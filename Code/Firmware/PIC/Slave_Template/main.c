@@ -79,17 +79,18 @@ void low_isr (void)
 
 void main (void)
 {
-	unsigned char c;
+	unsigned char c;s
 	pointer = 0;
 	Init();
 	TXString("\x0D\x0A");		// Put out a new line
 	TXChar('>');	
 	
 	while(1){
-		if(RXReady()){
-			TXChar(pointer);
-			c = RXChar();
-		}	
-	}		
+		if(!isQueueEmpty()){
+			c = popQueue();
+			TXHex(c);
+			TXString("\x0D\x0A");		
+		}		
+	}
 
 }
