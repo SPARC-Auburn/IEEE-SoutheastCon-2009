@@ -25,7 +25,9 @@ void low_vec (void)
 }
 
 #pragma code
-volatile unsigned char pointer;
+
+union Servo servo[4];
+
 
 //***************************************************************************************************************
 //							high_isr
@@ -70,6 +72,18 @@ void high_isr(void)
 #pragma interruptlow low_isr
 void low_isr (void)
 {	
+	if(INTCONbits.TMR0IF)	// If - Timer 0
+	{
+				
+	}	
+	else if(PIR1bits.TMR1IF)	// Else - Timer 1
+	{
+		
+	}
+	else if(PIR2bits.TMR3IF)	// Else - Timer 3
+	{
+		
+	}
 }
 
 //***************************************************************************************************************
@@ -79,15 +93,41 @@ void low_isr (void)
 void main (void)
 {
 	unsigned char c;
+	unsigned char pointer = 0, count = 0, upper = 0, lower = 0;
 	Init();
-	TXString("\x0D\x0A");		// Put out a new line
-	TXChar('>');	
+
+	servo[0].lt = 0;
+	servo[1].lt = 0;
+	servo[2].lt = 0;
+	servo[3].lt = 0;
 	
-	while(1){
-		if(!isQueueEmpty()){
+	TXString("\x0D\x0A");		// Put out a new line
+	TXString("Servos Initialized to 0");	
+	
+	
+	while(1)
+	{
+		if(!isQueueEmpty())
+		{
 			c = popQueue();
-			TXHex(c);
-			TXString("\x0D\x0A");		
+			if(count == 0)
+			{
+				if(c < 4)		// Make sure that we are dealing with a pointer to a servo
+				{
+					pointer = c;
+					count++;	
+				}	
+			} 
+			else {
+				servo[pointer].bt[count-1];
+				if(count == 3)
+				{
+					if(servo[pointer].lt > 2500 || servo[pointer].lt < 500) servo[pointer].lt = 0;
+					
+					TXString(servo[pointer].lt);
+				}
+				count++;	
+			}	
 		}		
 	}
 

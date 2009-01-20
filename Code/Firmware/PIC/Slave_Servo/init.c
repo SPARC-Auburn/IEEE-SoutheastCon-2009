@@ -68,3 +68,29 @@ void Init_USART(void)
 	TRISCbits.TRISC7 = 1;	
 	
 }
+
+void Init_Timers(void)
+{
+	// Timer 0 Setup		Freq = 50.08 Hz - Period = 0.019968 seconds
+	T0CONbits.T08BIT = 1;	// 8 bit mode
+	T0CON |= 0b0000111;		// 1:256 Prescaler
+	TMR0L = 100;	
+	
+	INTCONbits.TMR0IF = 0;
+	INTCON2bits.TMR0IP = 0;	// Low Priority
+	INTCONbits.TMR0IE = 1;	//Enable Interrupt
+	
+	// Timer 1 Setup
+	T1CONbits.RD16 = 1;
+	
+	PIR1bits.TMR1IF = 0;
+	IPR2bits.TMR1IP = 0;	// Low Priority
+	PIE1bits.TMR1IE = 1;
+
+	// Timer 3 Setup
+	T3CONbits.RD16 = 1;
+
+	PIR2bits.TMR3IF = 0;
+	IPR2bits.TMR3IP = 0;	// Low Priority
+	PIE2bits.TMR3IE = 1;
+}	
