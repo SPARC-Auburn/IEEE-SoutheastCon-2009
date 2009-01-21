@@ -6,16 +6,25 @@
 #  Copyright (c) 2009 Auburn University. All rights reserved.
 #
 
+import os
+os.chdir('../')
+import sys
+sys.path.append('./Libraries')
 from socket import socket, AF_INET, SOCK_DGRAM
 from time import sleep, gmtime, strftime
+from configobj import ConfigObj
 import pygame
 import pygame.event
 
-SERVER_IP = '192.168.1.101'
-PORT_NUMBER = 5000
-SENSITIVITY = .1
-DEAD_ZONE = .2
-THROTTLE = 0
+f = open('Utilities/remote_client.cfg')
+config = ConfigObj(f)
+
+SERVER_IP = config['Server IP']
+PORT_NUMBER = config['Port']
+joy_config = config['Joystick']
+SENSITIVITY = joy_config['Sensitivity']
+DEAD_ZONE = joy_config['Dead Zone']
+THROTTLE = joy_config['Network Throttle']
 
 soc = socket( AF_INET, SOCK_DGRAM )
 
