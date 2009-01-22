@@ -2,6 +2,7 @@
 #include "init.h"
 #include "serial.h"
 #include "i2c.h"
+#include <delays.h>
 
 int Init (void) 
 {	
@@ -11,7 +12,7 @@ int Init (void)
 	Init_USART();
 	
 	TRISB = 0x00;
-	LATB = 0x01; // Turn on a little status LED;
+	//LATB = 0x01; // Turn on a little status LED;
 	return 1;
 }
 
