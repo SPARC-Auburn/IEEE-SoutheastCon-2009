@@ -4,12 +4,12 @@
 /*
 Wiring Guide for PIC18F2685:
 
-	pin 2	-	(input) microswitch (active high)
+	pin 6	-	(input) microswitch (active high)
 
-	pin 3	-	(output) LED
- 	pin 4	-	(output) LED
+	pin 2	-	(output) LED
+ 	pin 3	-	(output) LED
+	pin 4	-	(output) LED
 	pin 5	-	(output) LED
-	pin 6	-	(output) LED
 
 	pin 21	-	(i/o) signal line for Parallax Sonar Module
 	pin 22	-	(i/o) signal line for Parallax Sonar Module
@@ -18,12 +18,12 @@ Wiring Guide for PIC18F2685:
 
 Wiring Guide for PIC18F4685:
 
-	pin 2	-	(input) microswitch (active high)
+	pin 6	-	(input) microswitch (active high)
 
-	pin 3	-	(output) LED
- 	pin 4	-	(output) LED
+	pin 2	-	(output) LED
+ 	pin 3	-	(output) LED
+	pin 4	-	(output) LED
 	pin 5	-	(output) LED
-	pin 6	-	(output) LED
 
 	pin 36	-	(i/o) signal line for Parallax Sonar Module
 	pin 35	-	(i/o) signal line for Parallax Sonar Module
