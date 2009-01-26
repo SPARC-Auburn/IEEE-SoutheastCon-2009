@@ -78,70 +78,23 @@ void low_isr (void)
 {	
 	if(INTCONbits.TMR0IF)	// If - Timer 0
 	{
-		if(servo[1].lt > servo[0].lt + 10)
-		{
-			WriteTimer1(0xFFFF - servo[0].lt);
-			timer1_temp = 0xFFFF - (servo[1].lt - servo[0].lt);
-			timer1_pointer = 0;
-		}
-		else if(servo[0].lt > servo[1].lt + 10)
-		{
-			WriteTimer1(0xFFFF - servo[1].lt);	
-			timer1_temp = 0xFFFF - (servo[0].lt - servo[1].lt);
-			timer1_pointer = 1;
-		}
-		else
-		{
-			WriteTimer1(0xFFFF - servo[1].lt);
-			timer1_temp = 1;
-			timer1_pointer = 10;	
-		}	
+		WriteTimer1(0xFFFF - servo[0].lt);	
 		
-		LATA = 0x0F;
+		LATA = 0x01;
 		TMR0L = 100;
+		
 		INTCONbits.TMR0IF = 0;
 		PIR1bits.TMR1IF = 0;
-		PIR2bits.TMR3IF = 0;
 		T0CONbits.TMR0ON = 1;
 		T1CONbits.TMR1ON = 1;
-		T3CONbits.TMR3ON = 1;
 		return;
 	}
 	else if(PIR1bits.TMR1IF)
 	{
-		if(timer1_temp != 0)
-		{
-			if(timer1_pointer == 10)
-			{
-				LATA &= 0x03;
-				T1CONbits.TMR1ON = 0;
-				PIR1bits.TMR1IF = 0;
-				return;
-			}	
-			else if(timer1_pointer == 0)
-			{
-				LATA &= 0x01;
-				timer1_pointer = 1;
-			}
-			else if(timer1_pointer == 1)
-			{
-				LATA &= 0x02;
-				timer1_pointer = 0;
-			}
-			WriteTimer1(timer1_temp);
-			timer1_temp = 0;
-			T1CONbits.TMR1ON = 1;
-			PIR1bits.TMR1IF = 0;
-			return;				
-		}
-		else
-		{
-			LATA &= ~(1 << timer1_pointer);
-			T1CONbits.TMR1ON = 0;
-			PIR1bits.TMR1IF = 0;
-			return;
-		}	
-	}		
+		LATA = 0x00;
+		T1CONbits.TMR1ON = 0;
+		PIR1bits.TMR1IF = 0;
+	}				
 }
 
 //***************************************************************************************************************
@@ -156,7 +109,7 @@ void main (void)
 	
 	Init();
 
-	servo[0].lt = 0;
+	servo[0].lt = 1500;
 	servo[1].lt = 0;
 	servo[2].lt = 0;
 	servo[3].lt = 0;

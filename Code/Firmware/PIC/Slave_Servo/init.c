@@ -75,13 +75,11 @@ void Init_USART(void)
 
 void Init_Timers(void)
 {
-	OpenTimer0(TIMER_INT_ON & T0_8BIT & T0_SOURCE_INT & T0_PS_1_256);
+	OpenTimer0(	TIMER_INT_ON 	& 
+				T0_8BIT 		&
+				T0_SOURCE_INT	&
+				T0_PS_1_256);
 	WriteTimer0(100);
-	
-	// Timer 0 Setup		Freq = 50.08 Hz - Period = 0.019968 seconds
-	// T0CONbits.T08BIT = 1;	// 8 bit mode
-	// T0CON |= 0b0000111;		// 1:256 Prescaler
-	// TMR0L = 100;	
 	
 	INTCONbits.TMR0IF = 0;
 	INTCON2bits.TMR0IP = 0;	// Low Priority
@@ -89,20 +87,14 @@ void Init_Timers(void)
 	
 	// Timer 1 Setup
 	OpenTimer1(	TIMER_INT_ON 	& 
-				T1_8BIT_RW 	& 
+				T1_8BIT_RW 		& 
 				T1_SOURCE_INT 	& 
 				T1_PS_1_2		& 
 				T1_OSC1EN_OFF  	&
 				T1_SYNC_EXT_OFF);
+	WriteTimer1(65535 - 1500);
 	
 	PIR1bits.TMR1IF = 0;
 	IPR1bits.TMR1IP = 0;	// Low Priority
 	PIE1bits.TMR1IE = 1;
-
-	// Timer 3 Setup
-	T3CONbits.RD16 = 1;
-
-	PIR2bits.TMR3IF = 0;
-	IPR2bits.TMR3IP = 0;	// Low Priority
-	PIE2bits.TMR3IE = 1;
 }	
