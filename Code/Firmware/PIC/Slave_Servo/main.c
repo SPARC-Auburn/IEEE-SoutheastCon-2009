@@ -1,15 +1,16 @@
-//************************************************************************************************
+  //************************************************************************************************
 //	Node:		Generic Template
 //************************************************************************************************
 
 #include "main.h"
 #include "i2c.h"
 #include "init.h"
+#include "timers.h"
 #include "serial.h"
 #include "hardware.h"
 #include "queue.h"
 
-#pragma config OSC = IRCIO67,WDT = OFF, MCLRE = OFF
+#pragma config OSC = IRCIO67,WDT = OFF, MCLRE = ON
 
 #pragma code high_vector=0x08
 void high_vec(void)
@@ -27,7 +28,10 @@ void low_vec (void)
 #pragma code
 
 union Servo servo[4];
-
+volatile unsigned int timer1_temp;
+volatile unsigned int timer3_temp;
+volatile unsigned char timer1_pointer;
+volatile unsigned char timer3_pointer;
 
 //***************************************************************************************************************
 //							high_isr
@@ -74,16 +78,70 @@ void low_isr (void)
 {	
 	if(INTCONbits.TMR0IF)	// If - Timer 0
 	{
-				
-	}	
-	else if(PIR1bits.TMR1IF)	// Else - Timer 1
-	{
+		if(servo[1].lt > servo[0].lt + 10)
+		{
+			WriteTimer1(0xFFFF - servo[0].lt);
+			timer1_temp = 0xFFFF - (servo[1].lt - servo[0].lt);
+			timer1_pointer = 0;
+		}
+		else if(servo[0].lt > servo[1].lt + 10)
+		{
+			WriteTimer1(0xFFFF - servo[1].lt);	
+			timer1_temp = 0xFFFF - (servo[0].lt - servo[1].lt);
+			timer1_pointer = 1;
+		}
+		else
+		{
+			WriteTimer1(0xFFFF - servo[1].lt);
+			timer1_temp = 1;
+			timer1_pointer = 10;	
+		}	
 		
+		LATA = 0x0F;
+		TMR0L = 100;
+		INTCONbits.TMR0IF = 0;
+		PIR1bits.TMR1IF = 0;
+		PIR2bits.TMR3IF = 0;
+		T0CONbits.TMR0ON = 1;
+		T1CONbits.TMR1ON = 1;
+		T3CONbits.TMR3ON = 1;
+		return;
 	}
-	else if(PIR2bits.TMR3IF)	// Else - Timer 3
+	else if(PIR1bits.TMR1IF)
 	{
-		
-	}
+		if(timer1_temp != 0)
+		{
+			if(timer1_pointer == 10)
+			{
+				LATA &= 0x03;
+				T1CONbits.TMR1ON = 0;
+				PIR1bits.TMR1IF = 0;
+				return;
+			}	
+			else if(timer1_pointer == 0)
+			{
+				LATA &= 0x01;
+				timer1_pointer = 1;
+			}
+			else if(timer1_pointer == 1)
+			{
+				LATA &= 0x02;
+				timer1_pointer = 0;
+			}
+			WriteTimer1(timer1_temp);
+			timer1_temp = 0;
+			T1CONbits.TMR1ON = 1;
+			PIR1bits.TMR1IF = 0;
+			return;				
+		}
+		else
+		{
+			LATA &= ~(1 << timer1_pointer);
+			T1CONbits.TMR1ON = 0;
+			PIR1bits.TMR1IF = 0;
+			return;
+		}	
+	}		
 }
 
 //***************************************************************************************************************
@@ -93,7 +151,9 @@ void low_isr (void)
 void main (void)
 {
 	unsigned char c;
-	unsigned char pointer = 0, count = 0, upper = 0, lower = 0;
+	unsigned char pointer = 0, count = 0;
+	union Servo temp;
+	
 	Init();
 
 	servo[0].lt = 0;
@@ -103,32 +163,51 @@ void main (void)
 	
 	TXString("\x0D\x0A");		// Put out a new line
 	TXString("Servos Initialized to 0");	
-	
+	TXString("\x0D\x0A");
 	
 	while(1)
 	{
 		if(!isQueueEmpty())
 		{
 			c = popQueue();
-			if(count == 0)
+			#ifdef __DEBUG
+				TXString("popQueue() = ");
+				TXHex(c);
+				TXString("\x0A\x0D");
+			#endif
+			
+			if(count == 0 && c < 5 && c > 0)
 			{
-				if(c < 4)		// Make sure that we are dealing with a pointer to a servo
-				{
-					pointer = c;
-					count++;	
-				}	
-			} 
-			else {
-				servo[pointer].bt[count-1];
-				if(count == 3)
-				{
-					if(servo[pointer].lt > 2500 || servo[pointer].lt < 500) servo[pointer].lt = 0;
-					
-					TXString(servo[pointer].lt);
-				}
-				count++;	
+				pointer = c - 1;
+				count++;
+				#ifdef __DEBUG
+					TXString("pointer = ");
+					TXHex(c);
+					TXString("\x0A\x0D");
+				#endif
+			}
+			else if(count == 1)
+			{
+				temp.bt[1] = c; 
+				count++;
+			}
+			else if(count == 2)
+			{
+				temp.bt[0] = c;
+				servo[pointer].lt = temp.lt;
+				
+				#ifdef __DEBUG
+					TXString("Servo Set: ");
+					TXDec(pointer);
+					TXString("  To Position: ");
+					TXDec_Int(servo[pointer].lt);
+					TXString("\x0A\x0D");
+				#endif	
+
+				count = 0;			
 			}	
+			
+					
 		}		
 	}
-
 }

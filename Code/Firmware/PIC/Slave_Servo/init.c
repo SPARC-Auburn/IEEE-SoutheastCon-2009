@@ -2,6 +2,7 @@
 #include "init.h"
 #include "serial.h"
 #include "i2c.h"
+#include "timers.h"
 
 int Init (void) 
 {	
@@ -9,7 +10,10 @@ int Init (void)
 	Init_I2C();
 	Init_Interrupts();
 	Init_USART();
+	Init_Timers();
 	
+	TRISA = 0x00;
+	LATA = 0x00;
 	TRISB = 0x00;
 	LATB = 0x01; // Turn on a little status LED;
 	return 1;
@@ -71,20 +75,28 @@ void Init_USART(void)
 
 void Init_Timers(void)
 {
+	OpenTimer0(TIMER_INT_ON & T0_8BIT & T0_SOURCE_INT & T0_PS_1_256);
+	WriteTimer0(100);
+	
 	// Timer 0 Setup		Freq = 50.08 Hz - Period = 0.019968 seconds
-	T0CONbits.T08BIT = 1;	// 8 bit mode
-	T0CON |= 0b0000111;		// 1:256 Prescaler
-	TMR0L = 100;	
+	// T0CONbits.T08BIT = 1;	// 8 bit mode
+	// T0CON |= 0b0000111;		// 1:256 Prescaler
+	// TMR0L = 100;	
 	
 	INTCONbits.TMR0IF = 0;
 	INTCON2bits.TMR0IP = 0;	// Low Priority
 	INTCONbits.TMR0IE = 1;	//Enable Interrupt
 	
 	// Timer 1 Setup
-	T1CONbits.RD16 = 1;
+	OpenTimer1(	TIMER_INT_ON 	& 
+				T1_8BIT_RW 	& 
+				T1_SOURCE_INT 	& 
+				T1_PS_1_2		& 
+				T1_OSC1EN_OFF  	&
+				T1_SYNC_EXT_OFF);
 	
 	PIR1bits.TMR1IF = 0;
-	IPR2bits.TMR1IP = 0;	// Low Priority
+	IPR1bits.TMR1IP = 0;	// Low Priority
 	PIE1bits.TMR1IE = 1;
 
 	// Timer 3 Setup

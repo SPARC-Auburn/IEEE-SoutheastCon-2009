@@ -5,9 +5,10 @@
 
 union Servo
 {
-  unsigned int lt;
-  unsigned char bt[2];
-};
+	unsigned int lt;
+	unsigned char bt[2];
+};	
+
 
 int		init 			(void);
 void	Init_Oscillator		(void);
