@@ -20,11 +20,7 @@ import sys
 import logging
 import logging.config
 # Config
-import config
-
-# Modules
-# Sabertooth2x10 module
-import sabertooth2x10 as saber
+import configs
 
 # Functions #
 # These functions should be mostly 'pass through' functions.
@@ -38,15 +34,16 @@ import sabertooth2x10 as saber
 # Motor Controller Related Functions
 def right(speed):
 	mc.right(speed)
-	
+		
 def left(speed):
 	mc.left(speed)
-	
+		
 def both(speed):
 	mc.both(speed)
-	
+		
 def move(speed, direction):
 	mc.move(speed, direction)
+	
 
 # Logging Related Functions
 def debug(msg):
@@ -89,14 +86,14 @@ try:
 	log.info("Using non default config file: %s" % configFile)
 except NameError:
 	configFile = 'Configurations/robot.cfg'
-config.init(configFile)
+configs.init(configFile)
+config = configs.get_config()
 
 # Initialize modules #
 # Sabertooth2x10
+import sabertooth2x10 as saber
 saber.init()
-global mc
-mc = saber.MotorController()
-
+mc = saber.get_motorcontroller()
 
 # Done
 log.info("Robot.py has been loaded.")
