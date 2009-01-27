@@ -7,7 +7,8 @@
 #
 
 import os
-os.chdir('../')
+cwd = os.getcwd()
+os.chdir('../../')
 import sys
 sys.path.append('./Libraries')
 from socket import socket, AF_INET, SOCK_DGRAM
@@ -16,15 +17,17 @@ from configobj import ConfigObj
 import pygame
 import pygame.event
 
-f = open('Utilities/remote_client.cfg')
+os.chdir(cwd)
+
+f = open('remote_client.cfg')
 config = ConfigObj(f)
 
 SERVER_IP = config['Server IP']
-PORT_NUMBER = config['Port']
+PORT_NUMBER = int(config['Port'])
 joy_config = config['Joystick']
-SENSITIVITY = joy_config['Sensitivity']
-DEAD_ZONE = joy_config['Dead Zone']
-THROTTLE = joy_config['Network Throttle']
+SENSITIVITY = float(joy_config['Sensitivity'])
+DEAD_ZONE = float(joy_config['Dead Zone'])
+THROTTLE = float(joy_config['Network Throttle'])
 
 soc = socket( AF_INET, SOCK_DGRAM )
 
