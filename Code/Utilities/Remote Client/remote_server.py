@@ -6,7 +6,7 @@
 #  Copyright (c) 2009 Auburn University. All rights reserved.
 #
 import os
-os.chdir('../')
+os.chdir('../../')
 import sys
 sys.path.append('./')
 
