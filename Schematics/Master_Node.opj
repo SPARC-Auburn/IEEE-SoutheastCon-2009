@@ -1,0 +1,59 @@
+(ExpressProject "Master_Node"
+  (ProjectVersion "19981106")
+  (ProjectType "PCB")
+  (Folder "Design Resources"
+    (Folder "Library"
+      (File ".\library1.olb"
+        (Type "Schematic Library")))
+    (NoModify)
+    (File ".\master_node.dsn"
+      (Type "Schematic Design"))
+    (BuildFileAddedOrDeleted "x")
+    (CompileFileAddedOrDeleted "x"))
+  (Folder "Outputs")
+  (Folder "Referenced Projects")
+  (PartMRUSelector
+    (R
+      (FullPartName "R.Normal")
+      (LibraryName
+         "C:\ORCAD\ORCAD_16.0_DEMO\TOOLS\CAPTURE\LIBRARY\PSPICE\ANALOG.OLB")
+      (DeviceIndex "0"))
+    (GND
+      (LibraryName "C:\ORCAD\ORCAD_16.0_DEMO\TOOLS\CAPTURE\LIBRARY\CAPSYM.OLB")
+      (DeviceIndex "0"))
+    (VCC
+      (LibraryName "C:\ORCAD\ORCAD_16.0_DEMO\TOOLS\CAPTURE\LIBRARY\CAPSYM.OLB")
+      (DeviceIndex "0"))
+    ("FTDI Cable"
+      (FullPartName "FTDI Cable.Normal")
+      (LibraryName "C:\SVN\SCHEMATICS\LIBRARY1.OLB")
+      (DeviceIndex "0"))
+    ("PICKIT2 Programmer"
+      (FullPartName "PICKIT2 Programmer.Normal")
+      (LibraryName "C:\SVN\SCHEMATICS\LIBRARY1.OLB")
+      (DeviceIndex "0"))
+    (PIC18F2685-A
+      (FullPartName "PIC18F2685-A.Normal")
+      (LibraryName "C:\SVN\SCHEMATICS\LIBRARY1.OLB")
+      (DeviceIndex "0"))
+    (PIC18F2685-B
+      (FullPartName "PIC18F2685-B.Normal")
+      (LibraryName "C:\SVN\SCHEMATICS\LIBRARY1.OLB")
+      (DeviceIndex "0")))
+  (GlobalState
+    (FileView
+      (Path "Design Resources")
+      (Path "Design Resources" "C:\SVN\Schematics\master_node.dsn")
+      (Path "Design Resources" "C:\SVN\Schematics\master_node.dsn" "SCHEMATIC1")
+      (Path "Design Resources" "C:\SVN\Schematics\master_node.dsn"
+         "Design Cache")
+      (Path "Design Resources" "Library")
+      (Path "Design Resources" "Library" "C:\SVN\Schematics\library1.olb")
+      (Select "Design Resources" "C:\SVN\Schematics\master_node.dsn"
+         "Design Cache" "PICKIT2 Programmer"))
+    (HierarchyView)
+    (Doc
+      (Type "COrCapturePMDoc")
+      (Frame
+        (Placement "44 2 3 -1 -1 -4 -23 0 269 0 498"))
+      (Tab 0))))
