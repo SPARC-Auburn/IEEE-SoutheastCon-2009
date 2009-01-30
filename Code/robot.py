@@ -43,7 +43,6 @@ def both(speed):
 		
 def move(speed, direction):
 	mc.move(speed, direction)
-	
 
 # Logging Related Functions
 def debug(msg):
@@ -94,6 +93,17 @@ config = configs.get_config()
 import sabertooth2x10 as saber
 saber.init()
 mc = saber.get_object()
+# MCN
+import micro_controller_network as mcn
+mcn.init()
+master_node = mcn.get_object()
+# Servo Controller
+import servo_controller as sc
+sc.init()
+arm_servo = sc.get_object('Arm Servo')
+gripper_servo = sc.get_object('Gripper Servo')
+
+
 
 # Done
 log.info("Robot.py has been loaded.")
