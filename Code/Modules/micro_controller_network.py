@@ -66,7 +66,7 @@ class MasterNode:
 				log.error("Unable to open serial port %s: %s", (serial, e))
 		return
 	
-	def send(address, msg):
+	def send(self, address, msg):
 		''''
 			Sends a msg to a micro controller at the given address.
 			Address must be a byte.
