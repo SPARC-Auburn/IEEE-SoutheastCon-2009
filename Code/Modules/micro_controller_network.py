@@ -89,5 +89,5 @@ class MasterNode:
 			message += x
 		message += ']'
 		master_log.debug("Sending message: %s", message)
-		self.serial.write(message)
+		self.serial.write(message+'\r')
 		return

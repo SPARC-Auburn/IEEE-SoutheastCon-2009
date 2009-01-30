@@ -89,30 +89,6 @@ class Servo:
 		msg.append(self.pointer)
 		for x in range(len(position)):
 			if x % 2 is 1:
-				msg.append(position[x:x+2])
+				msg.append(position[x-1:x+1])
 		mcn.send(address, msg)
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		a
