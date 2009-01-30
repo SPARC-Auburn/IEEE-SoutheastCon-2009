@@ -3,6 +3,11 @@
 
 #define SLAVE
 
+#define SERVO0	0xFE
+#define SERVO1	0xFD
+#define SERVO2	0xFB
+#define SERVO3	0xF7
+
 union Servo
 {
 	unsigned int lt;

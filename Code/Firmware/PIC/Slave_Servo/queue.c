@@ -64,8 +64,16 @@ unsigned char popQueue()
 	if(!isQueueEmpty())
 	{
 		count--;
-		left++;
-		return queue_buffer[left-1];
+		if(left == (BUFFER_SIZE-1))
+		{
+			left = 0;
+			return queue_buffer[BUFFER_SIZE-1];	
+		}
+		else
+		{
+			left++;		
+			return queue_buffer[left-1];
+		}	
 	}
 }
 

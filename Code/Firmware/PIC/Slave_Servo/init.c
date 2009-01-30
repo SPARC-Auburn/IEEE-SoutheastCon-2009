@@ -14,6 +14,7 @@ int Init (void)
 	
 	TRISA = 0x00;
 	LATA = 0x00;
+	
 	TRISB = 0x00;
 	LATB = 0x01; // Turn on a little status LED;
 	return 1;
@@ -92,9 +93,21 @@ void Init_Timers(void)
 				T1_PS_1_2		& 
 				T1_OSC1EN_OFF  	&
 				T1_SYNC_EXT_OFF);
-	WriteTimer1(65535 - 1500);
+	WriteTimer1(64035);
 	
 	PIR1bits.TMR1IF = 0;
 	IPR1bits.TMR1IP = 0;	// Low Priority
 	PIE1bits.TMR1IE = 1;
+	
+	OpenTimer3(	TIMER_INT_ON	&
+				T3_8BIT_RW		&
+				T3_SOURCE_INT	&
+				T3_PS_1_2		&
+				T3_OSC1EN_OFF	&
+				T3_SYNC_EXT_OFF	);
+	WriteTimer3(64035);
+	
+	PIR2bits.TMR3IF = 0;
+	IPR2bits.TMR3IP = 0;
+	PIE2bits.TMR3IE = 1;
 }	
