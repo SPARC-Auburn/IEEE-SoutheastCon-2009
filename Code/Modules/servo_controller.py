@@ -26,7 +26,8 @@ def init():
 	global config, initialized, servos, address, mcn
 	servos = {}
 	for x in config:
-		if type(config[x]) is list:
+		print x
+		if type(config[x]) is configobj.Section:
 			servos[x] = Servo(config = config[x])
 	address = config['address']
 	mcn = micro_controller_network.get_object()
