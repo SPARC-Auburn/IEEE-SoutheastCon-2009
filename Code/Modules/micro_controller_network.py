@@ -35,7 +35,7 @@ else:
 def init():
 	global config, initialized, master_nodes
 	master_nodes = {}
-	master_nodes['master'] = MasterNode(serial = config['serial_port'])
+	master_nodes['master'] = MasterNode(serial = config['serial_port'], baud_rate = config['baud_rate'])
 	initialized = True
 	
 def get_object(id = 'master'):
@@ -54,7 +54,7 @@ class MasterNode:
 		This is the class that represents and provides access to the master 
 		node of a micro controller network.
 		'''
-	def __init__(self, serial=''):
+	def __init__(self, serial='', baud_rate = 19200):
 		'''
 			Constructor - opens serial port given and initializes the master node.
 			'''
