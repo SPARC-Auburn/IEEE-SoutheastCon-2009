@@ -62,6 +62,7 @@ class MasterNode:
 		if enabled:
 			try:
 				self.serial = Serial(serial)
+				self.serial.baudrate = baud_rate
 			except Exception as e:
 				log.error("Unable to open serial port %s: %s", (serial, e))
 		return
