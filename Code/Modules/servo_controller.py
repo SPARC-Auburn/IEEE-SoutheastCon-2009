@@ -56,7 +56,6 @@ class Servo:
 		'''
 			Constructor - Creates a servo obejct given a configuration list.
 			'''
-		global config
 		if config is None and pointer is None:
 			log.error("When creating a servo either pointer or config must be defined, but not both.")
 		if config is not None and pointer is not None:
