@@ -10,11 +10,15 @@
 	'''
 
 # Imports #
+# Paths
+import sys
+sys.path.append("../Libraries")
 # Logging
 import logging
 log = logging.getLogger('Servo Ctrl')
 # Configs
 import configs
+import configobj
 global config, enable
 config = configs.get_config('Servo Controller')
 enabled = config['enabled']
