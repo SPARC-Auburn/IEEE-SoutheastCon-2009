@@ -30,7 +30,6 @@ def init():
 	global config, initialized, servos, address, mcn
 	servos = {}
 	for x in config:
-		print x
 		if type(config[x]) is configobj.Section:
 			servos[x] = Servo(config = config[x])
 	address = config['address']
@@ -74,7 +73,7 @@ class Servo:
 			self.min = int(config['min'])
 		return
 				
-	def move_to_position(position = 1500):
+	def move_to_position(self,position = 1500):
 		'''
 			Moves the servo to the given position.
 			'''
