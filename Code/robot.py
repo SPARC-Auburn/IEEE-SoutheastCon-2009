@@ -93,7 +93,7 @@ config = configs.get_config()
 # Sabertooth2x10
 import sabertooth2x10 as saber
 saber.init()
-mc = saber.get_motorcontroller()
+mc = saber.get_object()
 
 # Done
 log.info("Robot.py has been loaded.")

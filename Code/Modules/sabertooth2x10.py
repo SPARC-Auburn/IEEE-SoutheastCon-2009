@@ -40,17 +40,20 @@ else:
 
 # Static Functions #
 def init():
-	global config, motorcontrollers
-	motorcontrollers = []
+	global config, initialized, motorcontrollers
+	motorcontrollers = {}
 	# Implement dynamic number of mc's using the config files maybe?
-	motorcontrollers.append(MotorController(config['serial_port']))
+	motorcontrollers['motor controller'] = MotorController(config['serial_port'])
+	initialized = True
 
-def get_motorcontroller(id = 0):
-	global motorcontrollers
-	if id >= len(motorcontrollers):
-		log.error("Provided id to get_motorcontroller is out of range! Start with zero and make sure you have that many motorcontrollers.")
-	else:
+def get_object(id = 'motor controller'):
+	global motorcontrollers, initialized
+	if not initialized:
+		log.critical("The sabertooth2x10.init() method has to be called before retrieving objects.")
+	try:
 		return motorcontrollers[id]
+	except KeyError:
+		log.error("You provided an invalid id for any of the available Motor Controllers.  Please double check the names in the config files.")
 
 # Classes #
 class MotorController:
@@ -76,9 +79,6 @@ class MotorController:
 		'''
 			Converts a given decimal number to hex.
 			'''
-		global enabled
-		if not enabled:
-			return
 		hex = '%X' % dec
 		if len(hex) < 2: #Prevents Odd-length error with decode.
 			hex = '0'+hex
@@ -189,16 +189,4 @@ class MotorController:
 		self.left(leftSpeed)
 		self.right(rightSpeed)
 		return
-
-
-
-
-
-
-
-
-
-
-
-
-
+		
