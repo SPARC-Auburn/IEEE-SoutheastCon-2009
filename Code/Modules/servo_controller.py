@@ -53,7 +53,7 @@ class Servo:
 		This class represents and allows control of a servo controlled by 
 		a servo controller on a micro controller network.
 		'''
-	def __init___(self, pointer = None, zero = 1500, max = 2400, min = 600, config = None):
+	def __init__(self, pointer = None, zero = 1500, max = 2400, min = 600, config = None):
 		'''
 			Constructor - Creates a servo obejct given a configuration list.
 			'''
