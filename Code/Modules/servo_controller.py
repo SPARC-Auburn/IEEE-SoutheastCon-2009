@@ -80,13 +80,13 @@ class Servo:
 		global enabled, mcn, address
 		if not enabled:
 			return
-		position = '%X' % position
+		position = '%X' % self.position
 		if len(position) % 2 is 1:
 			position = '0' + position
 		msg = []
-		if len(pointer) <= 1:
-			pointer = '0' + pointer
-		msg.append(pointer)
+		if len(self.pointer) <= 1:
+			self.pointer = '0' + self.pointer
+		msg.append(self.pointer)
 		for x in range(len(position)):
 			if x % 2 is 1:
 				msg.append(position[x:x+2])
