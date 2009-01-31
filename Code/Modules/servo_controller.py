@@ -44,7 +44,8 @@ def get_object(id):
 	try:
 		return servos[id]
 	except KeyError:
-		log.error("You provided an invalid id for any of the available servos.  Please double check the names in the config files.")
+		log.error("You provided an invalid id for any of the available servos.  Please double check \
+the names in the config files.")
 		
 # Classes #
 class Servo:
@@ -74,7 +75,7 @@ class Servo:
 				
 	def move_to_position(self,position = 1500):
 		'''
-			Moves the servo to the given position.
+			Moves the servo to the given position in uSeconds.
 			'''
 		global enabled, mcn, address
 		if not enabled:
@@ -90,4 +91,29 @@ class Servo:
 			if x % 2 is 1:
 				msg.append(position[x-1:x+1])
 		mcn.send(address, msg)
+		return
+		
+	def move(position = 0.0):
+		'''
+			Move the servo to a given position between 1.0 and -1.0 with 0.0 centered.
+			'''
+		if type(position) is int:
+			if position > 1.0 or position < -1.0:
+				log.error("You must provide a number between 1.0 and -1.0 for the move function.")
+				return
+			# Do int stuff
+		elif type(position) is str:
+			if position is 'zero' or position is 'Zero':
+				self.move_to_position(self.zero)
+			elif position is 'max' or position is 'Max':
+				self.move_to_position(self.max)
+			elif position is 'min' or position is 'Min':
+				self.move_to_position(self.min)
+			else:
+				log.error("When providing a string to move() it must be zero, max, or min.")
+		else:
+			log.error("You passed an invalid parameter to move(). Valid parameters are: an int between \
+1.0 and -1.0, or one of the strings zero, max, or min.")
+			return
+		return
 		
