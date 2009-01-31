@@ -113,7 +113,7 @@ class Servo:
 			elif position < 0.0:
 				delta = self.zero - self.min
 				pw = position * delta
-				pw = self.zero - pw
+				pw = self.zero + pw
 				self.move_to_position(pw)
 			else:
 				return
