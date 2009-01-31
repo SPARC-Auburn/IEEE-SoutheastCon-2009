@@ -93,15 +93,29 @@ class Servo:
 		mcn.send(address, msg)
 		return
 		
-	def move(position = 0.0):
+	def move(self, position = 0.0):
 		'''
 			Move the servo to a given position between 1.0 and -1.0 with 0.0 centered.
 			'''
-		if type(position) is int:
+		if type(position) is float or type(position) is int:
 			if position > 1.0 or position < -1.0:
 				log.error("You must provide a number between 1.0 and -1.0 for the move function.")
 				return
 			# Do int stuff
+			if position == 0.0:
+				self.move_to_position(self.zero)
+			elif position > 0.0:
+				delta = self.max - self.zero
+				pw = position * delta
+				pw = pw + self.zero
+				self.move_to_position(pw)
+			elif position < 0.0:
+				delta = self.zero - self.min
+				pw = position * delta
+				pw = self.zero - pw
+				self.move_to_position(pw)
+			else:
+				return
 		elif type(position) is str:
 			if position is 'zero' or position is 'Zero':
 				self.move_to_position(self.zero)
