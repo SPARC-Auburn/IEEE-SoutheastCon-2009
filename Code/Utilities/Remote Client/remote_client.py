@@ -42,6 +42,7 @@ def loop():
 	direction = 0.0
 	arm = 0.0
 	sorter = 0.0
+	gripper = 0.0
 	e = None
 	while True:
 		try:
@@ -57,6 +58,9 @@ def loop():
 				send = True
 			elif e.axis == 3 and abs(sorter - e.dict['value']) > SENSITIVITY:
 				sorter = e.dict['value']
+				send = True
+			elif e.axis == 2 and abs(gripper - e.dict['value']) > SENSITIVITY:
+				gripper = e.dict['value']
 				send = True
 			if send:
 				if abs(speed) < DEAD_ZONE:

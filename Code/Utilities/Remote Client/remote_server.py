@@ -33,9 +33,11 @@ def loop():
 		direction = float(p[2])
 		arm = float(p[4])
 		sorter = float(p[6])
+		gripper = float(p[8])
 		move(speed, direction)
 		arm_servo.move(arm)
 		sorter_servo.move(sorter)
+		gripper_servo.move(gripper)
 		
 try:
 	loop()
