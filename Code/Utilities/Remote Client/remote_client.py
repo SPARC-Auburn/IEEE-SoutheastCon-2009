@@ -37,24 +37,40 @@ joy = pygame.joystick.Joystick(0)
 joy.init()
 
 def loop():
+	send = True
 	speed = 0.0
 	direction = 0.0
+	arm = 0.0
+	sorter = 0.0
 	e = None
 	while True:
 		try:
 			e = pygame.event.wait()
 			if e.axis == 1 and abs(speed - e.dict['value']) > SENSITIVITY:
 				speed = e.dict['value']
+				send = True
 			elif e.axis == 0 and abs(direction - e.dict['value']) > SENSITIVITY:
 				direction = e.dict['value']
-			elif e.axis == 1 or e.axis == 0:
+				send = True
+			elif e.axis == 4 and abs(arm - e.dict['value']) > SENSITIVITY:
+				arm = e.dict['value']
+				send = True
+			elif e.axis == 3 and abs(sorter - e.dict['value']) > SENSITIVITY:
+				sorter = e.dict['value']
+				send = True
+			if send:
 				if abs(speed) < DEAD_ZONE:
 					speed = 0
 				if abs(direction) < DEAD_ZONE:
 					direction = 0
-				move = str(speed)+" "+str(direction)
+				if abs(arm) < DEAD_ZONE:
+					arm = 0
+				if abs(sorter) < DEAD_ZONE:
+					sorter = 0
+				move = str(speed)+" "+str(direction)+" "+str(arm)+" "+srtr(sorter)
 				print move
 				soc.sendto(move, (SERVER_IP, PORT_NUMBER))
+				send = False
 				sleep(THROTTLE)
 		except AttributeError:
 			pass

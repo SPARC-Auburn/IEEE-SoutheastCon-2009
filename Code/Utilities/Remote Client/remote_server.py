@@ -31,7 +31,11 @@ def loop():
 		p = data.partition(' ')
 		speed = float(p[0])
 		direction = float(p[2])
+		arm = float(p[4])
+		sorter = float(p[6])
 		move(speed, direction)
+		arm_servo.move(arm)
+		sorter_servo.move(sorter)
 		
 try:
 	loop()

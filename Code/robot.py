@@ -101,7 +101,7 @@ master_node = mcn.get_object()
 import servo_controller as sc
 sc.init()
 arm_servo = sc.get_object('Arm Servo')
-gripper_servo = sc.get_object('Gripper Servo')
+sorter_servo = sc.get_object('Sorter Servo')
 
 
 
