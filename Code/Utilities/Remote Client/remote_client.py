@@ -67,7 +67,7 @@ def loop():
 					arm = 0
 				if abs(sorter) < DEAD_ZONE:
 					sorter = 0
-				move = str(speed)+" "+str(direction)+" "+str(arm)+" "+srtr(sorter)
+				move = str(speed)+" "+str(direction)+" "+str(arm)+" "+srt(sorter)
 				print move
 				soc.sendto(move, (SERVER_IP, PORT_NUMBER))
 				send = False
