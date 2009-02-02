@@ -23,6 +23,7 @@ int Init (void)
 void Init_Oscillator(void)
 {
 	OSCCON = 0b01110000; //configure PIC to primary oscillator block at 8MHz
+	OSCTUNEbits.PLLEN = 1;
 }
 
 void Init_Interrupts(void)
@@ -37,11 +38,11 @@ void Init_I2C(void)
 	#ifdef MASTER
 		OpenI2C(MASTER,SLEW_OFF);
 		// In Master Mode:
-		// Clock = Fosc/(4 * (SSPADD + 1)
+		// Clock = Fosc/(4 * (SSPADD + 1))
 		// SSPADD = Fosc/(4 * Fi2c) - 1 = 8meg/4*100k - 1 = 19
 		// 19 = 0x13
 		// SSPADD = 19;
-		SSPADD = 27; //This is so I can actually see stuff on my old O-Scope
+		SSPADD = 19; //This is so I can actually see stuff on my old O-Scope
 	#endif
 	//SSPCON2bits.SEN = 1;
 	OpenI2C(SLAVE_7,SLEW_OFF);
@@ -77,10 +78,10 @@ void Init_USART(void)
 void Init_Timers(void)
 {
 	OpenTimer0(	TIMER_INT_ON 	& 
-				T0_8BIT 		&
+				T0_16BIT 		&
 				T0_SOURCE_INT	&
 				T0_PS_1_256);
-	WriteTimer0(100);
+	WriteTimer0(64910);
 	
 	INTCONbits.TMR0IF = 0;
 	INTCON2bits.TMR0IP = 0;	// Low Priority

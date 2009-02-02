@@ -214,7 +214,6 @@ void main (void)
 			{
 				temp.bt[0] = c;
 				servo[pointer].lt = temp.lt;
-				
 				#ifdef __DEBUG
 					TXString("Servo Set: ");
 					TXDec(pointer);
@@ -224,9 +223,7 @@ void main (void)
 				#endif	
 
 				count = 0;			
-			}	
-			
-					
+			}					
 		}		
 	}
 }
