@@ -12,25 +12,25 @@ int Init (void)
 	Init_USART();
 	Init_Timers();
 	
-	TRISA = 0x00;
-	LATA = 0x00;
+	TRISA = 0x00;		// Make PORTA all outputs
+	LATA = 0x00;		// Initialize PORTA to 0
 	
-	TRISB = 0x00;
-	LATB = 0x01; // Turn on a little status LED;
+	TRISB = 0x00;		// Make PORTB all outputs
+	LATB = 0x01; 		// Turn on a little status LED;
 	return 1;
 }
 
 void Init_Oscillator(void)
 {
-	OSCCON = 0b01110000; //configure PIC to primary oscillator block at 8MHz
-	OSCTUNEbits.PLLEN = 1;
+	OSCCON = 0b01110000; 	// Configure PIC to primary oscillator block at 8MHz
+	OSCTUNEbits.PLLEN = 1;	// Enable the PLL for 32MHz
 }
 
 void Init_Interrupts(void)
 {	
-	RCONbits.IPEN = 1; //enable high priority and low priority interrupts
-	INTCONbits.GIEL = 1; //low priority interrupts enabler
-	INTCONbits.GIEH = 1; //high priority interrupt enabler
+	RCONbits.IPEN = 1; 		//enable high priority and low priority interrupts
+	INTCONbits.GIEL = 1; 	//low priority interrupts enabler
+	INTCONbits.GIEH = 1; 	//high priority interrupt enabler
 }	
 
 void Init_I2C(void)
@@ -42,13 +42,12 @@ void Init_I2C(void)
 		// SSPADD = Fosc/(4 * Fi2c) - 1 = 8meg/4*100k - 1 = 19
 		// 19 = 0x13
 		// SSPADD = 19;
-		SSPADD = 19; //This is so I can actually see stuff on my old O-Scope
+		SSPADD = 19;
 	#endif
-	//SSPCON2bits.SEN = 1;
 	OpenI2C(SLAVE_7,SLEW_OFF);
-	SSPADD = 0x10;
-	PIR1bits.SSPIF = 0; 
-	PIE1bits.SSPIE = 1;		//Enable Interrupt	
+	SSPADD = 0x10;			// Slave address
+	PIR1bits.SSPIF = 0; 	// Clear the I2C 
+	PIE1bits.SSPIE = 1;		// Enable I2C Interrupt	
 }
 
 void Init_USART(void)
@@ -77,6 +76,7 @@ void Init_USART(void)
 
 void Init_Timers(void)
 {
+	// Timer 0 Setup
 	OpenTimer0(	TIMER_INT_ON 	& 
 				T0_16BIT 		&
 				T0_SOURCE_INT	&

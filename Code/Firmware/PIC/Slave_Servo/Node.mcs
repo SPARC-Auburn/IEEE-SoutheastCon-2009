@@ -273,7 +273,7 @@ SOLK=<src>|main.c|init.c|serial.c|queue.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
 ToolArgsString=/o"$(BINDIR_)$(TARGETBASE).cof" /M"$(BINDIR_)$(TARGETBASE).map" /W
 TraceCmdString=
-DebugOptions=/z__MPLAB_DEBUG=1 /z__MPLAB_DEBUGGER_PICKIT2=1 /z__ICD2RAM=1
+DebugOptions=/z__MPLAB_DEBUG=1
 [File021]
 Location=C:\SVN\Code\Firmware\PIC\Slave_Servo\Node.hex
 Folder=Output
@@ -286,7 +286,7 @@ SOLK=<src>|main.c|init.c|serial.c|queue.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
 ToolArgsString=/o"$(BINDIR_)$(TARGETBASE).cof" /M"$(BINDIR_)$(TARGETBASE).map" /W
 TraceCmdString=
-DebugOptions=/z__MPLAB_DEBUG=1 /z__MPLAB_DEBUGGER_PICKIT2=1 /z__ICD2RAM=1
+DebugOptions=/z__MPLAB_DEBUG=1
 [File022]
 Location=C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Slave_Servo\Node.cof
 Folder=Output
