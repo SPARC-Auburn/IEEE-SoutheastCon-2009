@@ -160,7 +160,7 @@ DebugOptions=-D__DEBUG
 [File012]
 Location=C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Slave_Servo\main.o
 Folder=Intermediary
-DeviceName=PIC18F4685
+DeviceName=PIC18F2685
 LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
 LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
 LanguageToolLocation=C:\MCC18\bin\mcc18.exe
@@ -173,7 +173,7 @@ DebugOptions=-D__DEBUG
 [File013]
 Location=C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Slave_Servo\init.o
 Folder=Intermediary
-DeviceName=PIC18F4685
+DeviceName=PIC18F2685
 LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
 LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
 LanguageToolLocation=C:\MCC18\bin\mcc18.exe
@@ -186,7 +186,7 @@ DebugOptions=-D__DEBUG
 [File014]
 Location=C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Slave_Servo\serial.o
 Folder=Intermediary
-DeviceName=PIC18F4685
+DeviceName=PIC18F2685
 LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
 LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
 LanguageToolLocation=C:\MCC18\bin\mcc18.exe
@@ -199,7 +199,7 @@ DebugOptions=-D__DEBUG
 [File015]
 Location=C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Slave_Servo\queue.o
 Folder=Intermediary
-DeviceName=PIC18F4685
+DeviceName=PIC18F2685
 LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
 LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
 LanguageToolLocation=C:\MCC18\bin\mcc18.exe
@@ -290,7 +290,7 @@ DebugOptions=/z__MPLAB_DEBUG=1
 [File022]
 Location=C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Slave_Servo\Node.cof
 Folder=Output
-DeviceName=PIC18F4685
+DeviceName=PIC18F2685
 LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
 LanguageToolID={96C98149-AA1B-4CF9-B967-FAE79CAB663C}
 LanguageToolLocation=C:\MCC18\bin\mplink.exe
@@ -299,11 +299,11 @@ SOLK=<src>|main.c|init.c|serial.c|queue.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
 ToolArgsString=/o"$(BINDIR_)$(TARGETBASE).cof" /M"$(BINDIR_)$(TARGETBASE).map" /W
 TraceCmdString=
-DebugOptions=/z__MPLAB_DEBUG=1 /z__MPLAB_DEBUGGER_PICKIT2=1 /z__ICD2RAM=1
+DebugOptions=/z__MPLAB_DEBUG=1
 [File023]
 Location=C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Slave_Servo\Node.hex
 Folder=Output
-DeviceName=PIC18F4685
+DeviceName=PIC18F2685
 LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
 LanguageToolID={96C98149-AA1B-4CF9-B967-FAE79CAB663C}
 LanguageToolLocation=C:\MCC18\bin\mplink.exe
@@ -312,7 +312,7 @@ SOLK=<src>|main.c|init.c|serial.c|queue.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
 ToolArgsString=/o"$(BINDIR_)$(TARGETBASE).cof" /M"$(BINDIR_)$(TARGETBASE).map" /W
 TraceCmdString=
-DebugOptions=/z__MPLAB_DEBUG=1 /z__MPLAB_DEBUGGER_PICKIT2=1 /z__ICD2RAM=1
+DebugOptions=/z__MPLAB_DEBUG=1
 [TOOL_LOC_STAMPS]
 tool_loc{96C98149-AA1B-4CF9-B967-FAE79CAB663C}=C:\MCC18\bin\mplink.exe
 tool_loc{E56A1C86-9D32-4DF6-8C34-FE0388B1B644}=C:\MCC18\bin\mcc18.exe

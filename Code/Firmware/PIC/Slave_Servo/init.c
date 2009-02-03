@@ -52,12 +52,13 @@ void Init_I2C(void)
 
 void Init_USART(void)
 {
-	int baud = 25;
+	int baud = 70;
 	
 	TXSTA = 0;		// Reset registers
 	RCSTA = 0;
 	RCSTAbits.CREN = 1;		// Continuous Reception
 	TXSTAbits.BRGH = 1;		// High Baud Rate
+	BAUDCONbits.BRG16 = 1;
 	PIR1bits.TXIF = 0;
 	PIE1bits.RCIE = 0;		// No Receive Interrupt
 	PIR1bits.RCIF = 0;
@@ -91,7 +92,7 @@ void Init_Timers(void)
 	OpenTimer1(	TIMER_INT_ON 	& 
 				T1_8BIT_RW 		& 
 				T1_SOURCE_INT 	& 
-				T1_PS_1_2		& 
+				T1_PS_1_8		& 
 				T1_OSC1EN_OFF  	&
 				T1_SYNC_EXT_OFF);
 	WriteTimer1(64035);
@@ -103,7 +104,7 @@ void Init_Timers(void)
 	OpenTimer3(	TIMER_INT_ON	&
 				T3_8BIT_RW		&
 				T3_SOURCE_INT	&
-				T3_PS_1_2		&
+				T3_PS_1_8		&
 				T3_OSC1EN_OFF	&
 				T3_SYNC_EXT_OFF	);
 	WriteTimer3(64035);
