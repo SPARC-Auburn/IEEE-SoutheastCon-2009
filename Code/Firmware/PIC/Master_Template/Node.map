@@ -1,5 +1,5 @@
 MPLINK 4.22, Linker
-Linker Map File - Created Tue Jan 13 21:07:17 2009
+Linker Map File - Created Wed Feb 04 15:32:23 2009
 
                                  Section Info
                   Section       Type    Address   Location Size(Bytes)
@@ -36,15 +36,15 @@ Linker Map File - Created Tue Jan 13 21:07:17 2009
        .romdata_command.o    romdata   0x000cbd    program   0x000000
                _cinit_scn       code   0x000cbe    program   0x00009e
             .code_c018i.o       code   0x000cbe    program   0x000000
-             .code_init.o       code   0x000d5c    program   0x00008c
-         .code_i2c_writ.o       code   0x000de8    program   0x00003c
-         .code_i2c_open.o       code   0x000e24    program   0x000036
-             _startup_scn       code   0x000e5a    program   0x00001c
-         .code_fxd0808u.o       code   0x000e76    program   0x00001c
-         .code_i2c_idle.o       code   0x000e92    program   0x00000e
-                    .code       code   0x000ea0    program   0x00000e
-        .idata_serial.o_i    romdata   0x000eae    program   0x000010
-       .idata_command.o_i    romdata   0x000ebe    program   0x000002
+             .code_init.o       code   0x000d5c    program   0x000092
+         .code_i2c_writ.o       code   0x000dee    program   0x00003c
+         .code_i2c_open.o       code   0x000e2a    program   0x000036
+             _startup_scn       code   0x000e60    program   0x00001c
+         .code_fxd0808u.o       code   0x000e7c    program   0x00001c
+         .code_i2c_idle.o       code   0x000e98    program   0x00000e
+                    .code       code   0x000ea6    program   0x00000e
+        .idata_serial.o_i    romdata   0x000eb4    program   0x000010
+       .idata_command.o_i    romdata   0x000ec4    program   0x000002
     .config_300001_main.o    romdata   0x300001    program   0x000001
     .config_300003_main.o    romdata   0x300003    program   0x000001
     .config_300005_main.o    romdata   0x300005    program   0x000001
@@ -96,91 +96,91 @@ Linker Map File - Created Tue Jan 13 21:07:17 2009
                                Start         End      
                            ---------   ---------      
                             0x000000    0x000cbc      
-                            0x000cbe    0x000ebf      
+                            0x000cbe    0x000ec5      
                             0x300001    0x300001      
                             0x300003    0x300003      
                             0x300005    0x300005      
-            3778 out of 99352 program addresses used, program memory utilization is 3%
+            3784 out of 99352 program addresses used, program memory utilization is 3%
 
 
 
                               Symbols - Sorted by Name
                      Name    Address   Location    Storage File                     
                 ---------  ---------  ---------  --------- ---------                
-               ASCII2BYTE   0x0003b8    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-                 FXD0808U   0x000e76    program     extern C:\MCC18\src\traditional\math\fxd0808u.c
-                  IdleI2C   0x000e92    program     extern C:\MCC18\src\pmc_common\i2c\i2c_idle.c
-                     Init   0x000d5c    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\init.c
-                 Init_I2C   0x000d7e    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\init.c
-          Init_Interrupts   0x000d76    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\init.c
-          Init_Oscillator   0x000d70    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\init.c
-               Init_USART   0x000d94    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\init.c
-                  OpenI2C   0x000e24    program     extern C:\MCC18\src\pmc_common\i2c\i2c_open.c
-                   RXChar   0x0007cc    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\serial.c
-                  RXReady   0x0007be    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\serial.c
+               ASCII2BYTE   0x0003b8    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+                 FXD0808U   0x000e7c    program     extern C:\MCC18\src\traditional\math\fxd0808u.c
+                  IdleI2C   0x000e98    program     extern C:\MCC18\src\pmc_common\i2c\i2c_idle.c
+                     Init   0x000d5c    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\init.c
+                 Init_I2C   0x000d82    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\init.c
+          Init_Interrupts   0x000d7a    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\init.c
+          Init_Oscillator   0x000d72    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\init.c
+               Init_USART   0x000d98    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\init.c
+                  OpenI2C   0x000e2a    program     extern C:\MCC18\src\pmc_common\i2c\i2c_open.c
+                   RXChar   0x0007cc    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\serial.c
+                  RXReady   0x0007be    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\serial.c
                   ReadI2C   0x00000e    program     extern C:\MCC18\src\pmc_common\i2c\i2c_read.c
-                    TXBin   0x000840    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\serial.c
-                   TXChar   0x0007e8    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\serial.c
-                    TXDec   0x0008b0    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\serial.c
-                    TXHex   0x000964    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\serial.c
-                 TXString   0x000802    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\serial.c
-                 WriteI2C   0x000de8    program     extern C:\MCC18\src\pmc_common\i2c\i2c_writ.c
-       ___return_lbl00000   0x000e90    program     static                          
+                    TXBin   0x000840    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\serial.c
+                   TXChar   0x0007e8    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\serial.c
+                    TXDec   0x0008b0    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\serial.c
+                    TXHex   0x000964    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\serial.c
+                 TXString   0x000802    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\serial.c
+                 WriteI2C   0x000dee    program     extern C:\MCC18\src\pmc_common\i2c\i2c_writ.c
+       ___return_lbl00000   0x000e96    program     static                          
        ___return_lbl00000   0x00000c    program     static                          
        ___return_lbl00000   0x000004    program     static                          
-       ___return_lbl00001   0x000e74    program     static                          
+       ___return_lbl00001   0x000e7a    program     static                          
        ___return_lbl00001   0x00001c    program     static                          
        ___return_lbl00002   0x000d5a    program     static                          
-               __config_0   0x300001    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\main.c
-               __config_1   0x300003    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\main.c
-               __config_2   0x300005    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\main.c
+               __config_0   0x300001    program     static C:\SVN\Code\Firmware\PIC\Master_Template\main.c
+               __config_1   0x300003    program     static C:\SVN\Code\Firmware\PIC\Master_Template\main.c
+               __config_2   0x300005    program     static C:\SVN\Code\Firmware\PIC\Master_Template\main.c
                    __init   0x000006    program     extern C:\MCC18\src\traditional\stdclib\__init.c
-               __string_0   0x000b9a    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\main.c
-               __string_0   0x000c8b    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-               __string_0   0x000ba0    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\serial.c
-               __string_1   0x000b87    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\main.c
-               __string_1   0x000c75    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-               __string_1   0x000b9d    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\serial.c
-              __string_10   0x000bd0    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-              __string_11   0x000bc1    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-              __string_12   0x000bad    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-              __string_13   0x000ba3    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-               __string_2   0x000b68    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\main.c
-               __string_2   0x000c61    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-               __string_3   0x000c5e    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-               __string_4   0x000c41    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-               __string_5   0x000c31    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-               __string_6   0x000c17    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-               __string_7   0x000bfe    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-               __string_8   0x000bef    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-               __string_9   0x000bdf    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-            __zero_memory   0x000ea0    program     extern C:\MCC18\src\traditional\proc\p18F4685.asm
+               __string_0   0x000b9a    program     static C:\SVN\Code\Firmware\PIC\Master_Template\main.c
+               __string_0   0x000c8b    program     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+               __string_0   0x000ba0    program     static C:\SVN\Code\Firmware\PIC\Master_Template\serial.c
+               __string_1   0x000b87    program     static C:\SVN\Code\Firmware\PIC\Master_Template\main.c
+               __string_1   0x000c75    program     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+               __string_1   0x000b9d    program     static C:\SVN\Code\Firmware\PIC\Master_Template\serial.c
+              __string_10   0x000bd0    program     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+              __string_11   0x000bc1    program     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+              __string_12   0x000bad    program     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+              __string_13   0x000ba3    program     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+               __string_2   0x000b68    program     static C:\SVN\Code\Firmware\PIC\Master_Template\main.c
+               __string_2   0x000c61    program     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+               __string_3   0x000c5e    program     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+               __string_4   0x000c41    program     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+               __string_5   0x000c31    program     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+               __string_6   0x000c17    program     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+               __string_7   0x000bfe    program     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+               __string_8   0x000bef    program     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+               __string_9   0x000bdf    program     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+            __zero_memory   0x000ea6    program     extern C:\MCC18\src\traditional\proc\p18F4685.asm
                 _do_cinit   0x000cbe    program     extern C:\MCC18\src\traditional\startup\c018i.c
                    _entry   0x000000    program     extern C:\MCC18\src\traditional\startup\c018i.c
-                 _startup   0x000e5a    program     extern C:\MCC18\src\traditional\startup\c018i.c
-              busReadBulk   0x000738    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-              busReadByte   0x0006ea    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-            busStartWrite   0x000642    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-             busStopWrite   0x000662    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-             busWriteByte   0x000682    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-             checkCommand   0x000038    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-               clear_loop   0x000ea6    program     static C:\MCC18\src\traditional\proc\p18F4685.asm
+                 _startup   0x000e60    program     extern C:\MCC18\src\traditional\startup\c018i.c
+              busReadBulk   0x000738    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+              busReadByte   0x0006ea    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+            busStartWrite   0x000642    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+             busStopWrite   0x000662    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+             busWriteByte   0x000682    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+             checkCommand   0x000038    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+               clear_loop   0x000eac    program     static C:\MCC18\src\traditional\proc\p18F4685.asm
                 copy_loop   0x000d30    program     static                          
             copy_one_byte   0x000d36    program     static                          
                      done   0x000d5a    program     static                          
              done_copying   0x000d44    program     static                          
-            echoByteValue   0x0005be    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-                  endloop   0x000e8c    program     static                          
-             getMenuReply   0x00056a    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-                 high_isr   0x000a08    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\main.c
-                 high_vec   0x000008    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\main.c
-                     loop   0x000e7e    program     static                          
-                     loop   0x000e6a    program     static                          
-                  low_isr   0x000a1a    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\main.c
-                  low_vec   0x000018    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\main.c
-                     main   0x000a40    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\main.c
-     processCommandString   0x000088    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-               setBusMode   0x000620    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
+            echoByteValue   0x0005be    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+                  endloop   0x000e92    program     static                          
+             getMenuReply   0x00056a    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+                 high_isr   0x000a08    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\main.c
+                 high_vec   0x000008    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\main.c
+                     loop   0x000e84    program     static                          
+                     loop   0x000e70    program     static                          
+                  low_isr   0x000a1a    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\main.c
+                  low_vec   0x000018    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\main.c
+                     main   0x000a40    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\main.c
+     processCommandString   0x000088    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+               setBusMode   0x000620    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\command.c
                      test   0x000cd8    program     static                          
                    ADCON0   0x000fc2       data     extern C:\MCC18\src\traditional\proc\p18F4685.asm
                ADCON0bits   0x000fc2       data     extern C:\MCC18\src\traditional\proc\p18F4685.asm
@@ -465,7 +465,7 @@ Linker Map File - Created Tue Jan 13 21:07:17 2009
                      FSR2   0x000fd9       data     extern C:\MCC18\src\traditional\proc\p18F4685.asm
                     FSR2H   0x000fda       data     extern C:\MCC18\src\traditional\proc\p18F4685.asm
                     FSR2L   0x000fd9       data     extern C:\MCC18\src\traditional\proc\p18F4685.asm
-                 HEXASCII   0x000060       data     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\serial.c
+                 HEXASCII   0x000060       data     extern C:\SVN\Code\Firmware\PIC\Master_Template\serial.c
                   HLVDCON   0x000fd2       data     extern C:\MCC18\src\traditional\proc\p18F4685.asm
               HLVDCONbits   0x000fd2       data     extern C:\MCC18\src\traditional\proc\p18F4685.asm
                     INDF0   0x000fef       data     extern C:\MCC18\src\traditional\proc\p18F4685.asm
@@ -941,20 +941,20 @@ Linker Map File - Created Tue Jan 13 21:07:17 2009
                   __REMB1   0x00001b       data     extern C:\MCC18\src\traditional\math\aarg.asm
                   __REMB2   0x00001a       data     extern C:\MCC18\src\traditional\math\aarg.asm
                   __REMB3   0x000019       data     extern C:\MCC18\src\traditional\math\aarg.asm
-                  __tmp_0   0x000000       data     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\serial.c
-                  __tmp_0   0x000000       data     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\init.c
-                  __tmp_0   0x000000       data     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-                        b   0x0001fc       data     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\main.c
-                  busMode   0x0001fe       data     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
+                  __tmp_0   0x000000       data     static C:\SVN\Code\Firmware\PIC\Master_Template\serial.c
+                  __tmp_0   0x000000       data     static C:\SVN\Code\Firmware\PIC\Master_Template\init.c
+                  __tmp_0   0x000000       data     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+                        b   0x0001fc       data     extern C:\SVN\Code\Firmware\PIC\Master_Template\main.c
+                  busMode   0x0001fe       data     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
                 curr_byte   0x000080       data     static C:\MCC18\src\traditional\startup\c018i.c
                curr_entry   0x000082       data     static C:\MCC18\src\traditional\startup\c018i.c
                  data_ptr   0x000084       data     static C:\MCC18\src\traditional\startup\c018i.c
-            displayFormat   0x0001ff       data     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-                        i   0x000070       data     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-                numberArr   0x000071       data     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
+            displayFormat   0x0001ff       data     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+                        i   0x000070       data     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+                numberArr   0x000071       data     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
                      prom   0x00007d       data     static C:\MCC18\src\traditional\startup\c018i.c
-                   sample   0x000100       data     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\main.c
-              sampleCount   0x0001fa       data     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\main.c
+                   sample   0x000100       data     extern C:\SVN\Code\Firmware\PIC\Master_Template\main.c
+              sampleCount   0x0001fa       data     extern C:\SVN\Code\Firmware\PIC\Master_Template\main.c
 
 
 
@@ -964,51 +964,51 @@ Linker Map File - Created Tue Jan 13 21:07:17 2009
                    _entry   0x000000    program     extern C:\MCC18\src\traditional\startup\c018i.c
        ___return_lbl00000   0x000004    program     static                          
                    __init   0x000006    program     extern C:\MCC18\src\traditional\stdclib\__init.c
-                 high_vec   0x000008    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\main.c
+                 high_vec   0x000008    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\main.c
        ___return_lbl00000   0x00000c    program     static                          
                   ReadI2C   0x00000e    program     extern C:\MCC18\src\pmc_common\i2c\i2c_read.c
-                  low_vec   0x000018    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\main.c
+                  low_vec   0x000018    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\main.c
        ___return_lbl00001   0x00001c    program     static                          
-             checkCommand   0x000038    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-     processCommandString   0x000088    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-               ASCII2BYTE   0x0003b8    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-             getMenuReply   0x00056a    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-            echoByteValue   0x0005be    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-               setBusMode   0x000620    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-            busStartWrite   0x000642    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-             busStopWrite   0x000662    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-             busWriteByte   0x000682    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-              busReadByte   0x0006ea    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-              busReadBulk   0x000738    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-                  RXReady   0x0007be    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\serial.c
-                   RXChar   0x0007cc    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\serial.c
-                   TXChar   0x0007e8    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\serial.c
-                 TXString   0x000802    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\serial.c
-                    TXBin   0x000840    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\serial.c
-                    TXDec   0x0008b0    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\serial.c
-                    TXHex   0x000964    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\serial.c
-                 high_isr   0x000a08    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\main.c
-                  low_isr   0x000a1a    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\main.c
-                     main   0x000a40    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\main.c
-               __string_2   0x000b68    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\main.c
-               __string_1   0x000b87    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\main.c
-               __string_0   0x000b9a    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\main.c
-               __string_1   0x000b9d    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\serial.c
-               __string_0   0x000ba0    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\serial.c
-              __string_13   0x000ba3    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-              __string_12   0x000bad    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-              __string_11   0x000bc1    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-              __string_10   0x000bd0    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-               __string_9   0x000bdf    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-               __string_8   0x000bef    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-               __string_7   0x000bfe    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-               __string_6   0x000c17    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-               __string_5   0x000c31    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-               __string_4   0x000c41    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-               __string_3   0x000c5e    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-               __string_2   0x000c61    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-               __string_1   0x000c75    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-               __string_0   0x000c8b    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
+             checkCommand   0x000038    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+     processCommandString   0x000088    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+               ASCII2BYTE   0x0003b8    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+             getMenuReply   0x00056a    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+            echoByteValue   0x0005be    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+               setBusMode   0x000620    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+            busStartWrite   0x000642    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+             busStopWrite   0x000662    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+             busWriteByte   0x000682    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+              busReadByte   0x0006ea    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+              busReadBulk   0x000738    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+                  RXReady   0x0007be    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\serial.c
+                   RXChar   0x0007cc    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\serial.c
+                   TXChar   0x0007e8    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\serial.c
+                 TXString   0x000802    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\serial.c
+                    TXBin   0x000840    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\serial.c
+                    TXDec   0x0008b0    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\serial.c
+                    TXHex   0x000964    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\serial.c
+                 high_isr   0x000a08    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\main.c
+                  low_isr   0x000a1a    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\main.c
+                     main   0x000a40    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\main.c
+               __string_2   0x000b68    program     static C:\SVN\Code\Firmware\PIC\Master_Template\main.c
+               __string_1   0x000b87    program     static C:\SVN\Code\Firmware\PIC\Master_Template\main.c
+               __string_0   0x000b9a    program     static C:\SVN\Code\Firmware\PIC\Master_Template\main.c
+               __string_1   0x000b9d    program     static C:\SVN\Code\Firmware\PIC\Master_Template\serial.c
+               __string_0   0x000ba0    program     static C:\SVN\Code\Firmware\PIC\Master_Template\serial.c
+              __string_13   0x000ba3    program     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+              __string_12   0x000bad    program     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+              __string_11   0x000bc1    program     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+              __string_10   0x000bd0    program     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+               __string_9   0x000bdf    program     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+               __string_8   0x000bef    program     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+               __string_7   0x000bfe    program     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+               __string_6   0x000c17    program     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+               __string_5   0x000c31    program     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+               __string_4   0x000c41    program     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+               __string_3   0x000c5e    program     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+               __string_2   0x000c61    program     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+               __string_1   0x000c75    program     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+               __string_0   0x000c8b    program     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
                 _do_cinit   0x000cbe    program     extern C:\MCC18\src\traditional\startup\c018i.c
                      test   0x000cd8    program     static                          
                 copy_loop   0x000d30    program     static                          
@@ -1016,29 +1016,29 @@ Linker Map File - Created Tue Jan 13 21:07:17 2009
              done_copying   0x000d44    program     static                          
        ___return_lbl00002   0x000d5a    program     static                          
                      done   0x000d5a    program     static                          
-                     Init   0x000d5c    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\init.c
-          Init_Oscillator   0x000d70    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\init.c
-          Init_Interrupts   0x000d76    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\init.c
-                 Init_I2C   0x000d7e    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\init.c
-               Init_USART   0x000d94    program     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\init.c
-                 WriteI2C   0x000de8    program     extern C:\MCC18\src\pmc_common\i2c\i2c_writ.c
-                  OpenI2C   0x000e24    program     extern C:\MCC18\src\pmc_common\i2c\i2c_open.c
-                 _startup   0x000e5a    program     extern C:\MCC18\src\traditional\startup\c018i.c
-                     loop   0x000e6a    program     static                          
-       ___return_lbl00001   0x000e74    program     static                          
-                 FXD0808U   0x000e76    program     extern C:\MCC18\src\traditional\math\fxd0808u.c
-                     loop   0x000e7e    program     static                          
-                  endloop   0x000e8c    program     static                          
-       ___return_lbl00000   0x000e90    program     static                          
-                  IdleI2C   0x000e92    program     extern C:\MCC18\src\pmc_common\i2c\i2c_idle.c
-            __zero_memory   0x000ea0    program     extern C:\MCC18\src\traditional\proc\p18F4685.asm
-               clear_loop   0x000ea6    program     static C:\MCC18\src\traditional\proc\p18F4685.asm
-               __config_0   0x300001    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\main.c
-               __config_1   0x300003    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\main.c
-               __config_2   0x300005    program     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\main.c
-                  __tmp_0   0x000000       data     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\serial.c
-                  __tmp_0   0x000000       data     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\init.c
-                  __tmp_0   0x000000       data     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
+                     Init   0x000d5c    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\init.c
+          Init_Oscillator   0x000d72    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\init.c
+          Init_Interrupts   0x000d7a    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\init.c
+                 Init_I2C   0x000d82    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\init.c
+               Init_USART   0x000d98    program     extern C:\SVN\Code\Firmware\PIC\Master_Template\init.c
+                 WriteI2C   0x000dee    program     extern C:\MCC18\src\pmc_common\i2c\i2c_writ.c
+                  OpenI2C   0x000e2a    program     extern C:\MCC18\src\pmc_common\i2c\i2c_open.c
+                 _startup   0x000e60    program     extern C:\MCC18\src\traditional\startup\c018i.c
+                     loop   0x000e70    program     static                          
+       ___return_lbl00001   0x000e7a    program     static                          
+                 FXD0808U   0x000e7c    program     extern C:\MCC18\src\traditional\math\fxd0808u.c
+                     loop   0x000e84    program     static                          
+                  endloop   0x000e92    program     static                          
+       ___return_lbl00000   0x000e96    program     static                          
+                  IdleI2C   0x000e98    program     extern C:\MCC18\src\pmc_common\i2c\i2c_idle.c
+            __zero_memory   0x000ea6    program     extern C:\MCC18\src\traditional\proc\p18F4685.asm
+               clear_loop   0x000eac    program     static C:\MCC18\src\traditional\proc\p18F4685.asm
+               __config_0   0x300001    program     static C:\SVN\Code\Firmware\PIC\Master_Template\main.c
+               __config_1   0x300003    program     static C:\SVN\Code\Firmware\PIC\Master_Template\main.c
+               __config_2   0x300005    program     static C:\SVN\Code\Firmware\PIC\Master_Template\main.c
+                  __tmp_0   0x000000       data     static C:\SVN\Code\Firmware\PIC\Master_Template\serial.c
+                  __tmp_0   0x000000       data     static C:\SVN\Code\Firmware\PIC\Master_Template\init.c
+                  __tmp_0   0x000000       data     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
                   __REMB3   0x000019       data     extern C:\MCC18\src\traditional\math\aarg.asm
                  __AARGB7   0x000019       data     extern C:\MCC18\src\traditional\math\aarg.asm
                   __REMB2   0x00001a       data     extern C:\MCC18\src\traditional\math\aarg.asm
@@ -1060,18 +1060,18 @@ Linker Map File - Created Tue Jan 13 21:07:17 2009
                      SIGN   0x000027       data     extern C:\MCC18\src\traditional\math\cmath18.asm
                 __FPFLAGS   0x000028       data     extern C:\MCC18\src\traditional\math\cmath18.asm
             __FPFLAGSbits   0x000028       data     extern C:\MCC18\src\traditional\math\cmath18.asm
-                 HEXASCII   0x000060       data     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\serial.c
-                        i   0x000070       data     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-                numberArr   0x000071       data     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
+                 HEXASCII   0x000060       data     extern C:\SVN\Code\Firmware\PIC\Master_Template\serial.c
+                        i   0x000070       data     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+                numberArr   0x000071       data     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
                      prom   0x00007d       data     static C:\MCC18\src\traditional\startup\c018i.c
                 curr_byte   0x000080       data     static C:\MCC18\src\traditional\startup\c018i.c
                curr_entry   0x000082       data     static C:\MCC18\src\traditional\startup\c018i.c
                  data_ptr   0x000084       data     static C:\MCC18\src\traditional\startup\c018i.c
-                   sample   0x000100       data     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\main.c
-              sampleCount   0x0001fa       data     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\main.c
-                        b   0x0001fc       data     extern C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\main.c
-                  busMode   0x0001fe       data     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
-            displayFormat   0x0001ff       data     static C:\Users\mjcarroll\SVN\secon\Code\Firmware\PIC\Master_Template\command.c
+                   sample   0x000100       data     extern C:\SVN\Code\Firmware\PIC\Master_Template\main.c
+              sampleCount   0x0001fa       data     extern C:\SVN\Code\Firmware\PIC\Master_Template\main.c
+                        b   0x0001fc       data     extern C:\SVN\Code\Firmware\PIC\Master_Template\main.c
+                  busMode   0x0001fe       data     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
+            displayFormat   0x0001ff       data     static C:\SVN\Code\Firmware\PIC\Master_Template\command.c
                  RXF6SIDH   0x000d60       data     extern C:\MCC18\src\traditional\proc\p18F4685.asm
              RXF6SIDHbits   0x000d60       data     extern C:\MCC18\src\traditional\proc\p18F4685.asm
              RXF6SIDLbits   0x000d61       data     extern C:\MCC18\src\traditional\proc\p18F4685.asm
