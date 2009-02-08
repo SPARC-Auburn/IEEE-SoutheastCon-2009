@@ -96,7 +96,7 @@ unsigned char isTXEmpty(void)
 
 unsigned char isRXEmpty(void)
 {
-	return QueueStatus.TxBufferEmpty;
+	return QueueStatus.RxBufferEmpty;
 }	
 
 unsigned char isTXFull(void)
@@ -118,6 +118,7 @@ void pushTXQueue(unsigned char c)
 	PIE1bits.TXIE = 0; 		// Disable Interrupts for safety
 	tx_buffer[tx_write_ptr] = c;
 	tx_count++;
+	QueueStatus.TxBufferEmpty = 0;
 	if(tx_count == TX_BUFFER_SIZE)
 	{
 		QueueStatus.TxBufferFull = 1;
@@ -138,6 +139,7 @@ void pushRXQueue(unsigned char c)
 	PIE1bits.RCIE = 0; 		// Disable Interrupts for safety
 	rx_buffer[rx_write_ptr] = c;
 	rx_count++;
+	QueueStatus.RxBufferEmpty = 0;
 	if(rx_count == RX_BUFFER_SIZE)
 	{
 		QueueStatus.RxBufferFull = 1;

@@ -1,5 +1,6 @@
 #include "hardware.h"
 #include "serial.h"
+#include "queue.h"
 
 char RXReady(void){
 	if(PIR1bits.RCIF)
