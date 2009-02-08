@@ -1,0 +1,91 @@
+(ExpressProject "Dog_Fence_Detector_Antenna_Array"
+  (ProjectVersion "19981106")
+  (ProjectType "PCB")
+  (Folder "Design Resources"
+    (Folder "Library"
+      (File ".\library1.olb"
+        (Type "Schematic Library")))
+    (NoModify)
+    (File ".\dog_fence_detector_antenna_array.dsn"
+      (Type "Schematic Design"))
+    (BuildFileAddedOrDeleted "x")
+    (CompileFileAddedOrDeleted "x")
+    (ANNOTATE_Scope "1")
+    (ANNOTATE_Mode "1")
+    (ANNOTATE_Action "0")
+    (ANNOTATE_Reset_References_to_1 "FALSE")
+    (ANNOTATE_No_Page_Number_Change "FALSE")
+    (ANNOTATE_Property_Combine "{Value}{Source Package}")
+    (GATE_&_PIN_SWAP_Scope "0")
+    (GATE_&_PIN_SWAP_File_Name
+       "E:\ANTENNA PROJECT\SCHEMATIC\DOG_FENCE_DETECTOR_ANTENNA_ARRAY.SWP")
+    (FLDSTUFF_Scope "0")
+    (FLDSTUFF_Action "0")
+    (FLDSTUFF_Report_File
+       "E:\ANTENNA PROJECT\schematic\dog_fence_detector_antenna_array.RPT")
+    (FLDSTUFF_Update_File
+       "E:\ANTENNA PROJECT\schematic\dog_fence_detector_antenna_array.UPD")
+    (FLDSTUFF__Uppercase_Result_Property "FALSE")
+    (FLDSTUFF_Uppercase_Update_Property "FALSE")
+    (FLDSTUFF_Uppercase_Unconditionally "FALSE")
+    (FLDSTUFF_Visibility "0")
+    (FLDSTUFF_inst_or_occurrence "0")
+    (FLDSTUFF_Create_Report_File "FALSE"))
+  (Folder "Outputs")
+  (Folder "Referenced Projects")
+  (PartMRUSelector
+    (PORTBOTH-L
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\CAPSYM.OLB")
+      (DeviceIndex "0"))
+    (R
+      (FullPartName "R.Normal")
+      (LibraryName "E:\ANTENNA PROJECT\SCHEMATIC\LIBRARY1.OLB")
+      (DeviceIndex "0"))
+    (PORTBOTH-R
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\CAPSYM.OLB")
+      (DeviceIndex "0"))
+    (VCC
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\CAPSYM.OLB")
+      (DeviceIndex "0"))
+    (C
+      (FullPartName "C.Normal")
+      (LibraryName "E:\ANTENNA PROJECT\SCHEMATIC\LIBRARY1.OLB")
+      (DeviceIndex "0"))
+    ("DIODE 1N4001"
+      (FullPartName "DIODE 1N4001.Normal")
+      (LibraryName "E:\ANTENNA PROJECT\SCHEMATIC\LIBRARY1.OLB")
+      (DeviceIndex "0"))
+    (GND
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\CAPSYM.OLB")
+      (DeviceIndex "0"))
+    (LM324
+      (FullPartName "LM324.Normal")
+      (LibraryName "E:\ANTENNA PROJECT\SCHEMATIC\LIBRARY1.OLB")
+      (DeviceIndex "0"))
+    (PIC18F2685
+      (FullPartName "PIC18F2685.Normal")
+      (LibraryName "E:\ANTENNA PROJECT\SCHEMATIC\LIBRARY1.OLB")
+      (DeviceIndex "0")))
+  (GlobalState
+    (FileView
+      (Path "Design Resources")
+      (Path "Design Resources"
+         "E:\ANTENNA PROJECT\schematic\dog_fence_detector_antenna_array.dsn")
+      (Path "Design Resources"
+         "E:\ANTENNA PROJECT\schematic\dog_fence_detector_antenna_array.dsn"
+         "SCHEMATIC1")
+      (Path "Design Resources"
+         "E:\ANTENNA PROJECT\schematic\dog_fence_detector_antenna_array.dsn"
+         "Design Cache")
+      (Path "Design Resources" "Library")
+      (Path "Design Resources" "Library" ".\library1.olb")
+      (Select "Design Resources"
+         "E:\ANTENNA PROJECT\schematic\dog_fence_detector_antenna_array.dsn"
+         "SCHEMATIC1" "PAGE1"))
+    (HierarchyView)
+    (Doc
+      (Type "COrCapturePMDoc")
+      (Frame
+        (Placement "44 2 3 0 876 -4 -23 0 200 2 587"))
+      (Tab 0)))
+  (LastUsedLibraryBrowseDirectory "C:\Program Files\Orcad\Capture\Library"))
