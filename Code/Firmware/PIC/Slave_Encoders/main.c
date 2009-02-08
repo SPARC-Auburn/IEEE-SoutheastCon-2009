@@ -9,7 +9,7 @@
 #include "hardware.h"
 #include "queue.h"
 
-#pragma config OSC = IRCIO67,WDT = OFF, MCLRE = OFF
+#pragma config OSC = IRCIO67,WDT = OFF, MCLRE = ON
 
 #pragma code high_vector=0x08
 void high_vec(void)

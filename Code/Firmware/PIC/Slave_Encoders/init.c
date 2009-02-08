@@ -47,6 +47,7 @@ void Init_I2C(void)
 
 void Init_USART(void)
 {
+	// 19.2kbaud
 	int baud = 25;
 	
 	TXSTA = 0;		// Reset registers
