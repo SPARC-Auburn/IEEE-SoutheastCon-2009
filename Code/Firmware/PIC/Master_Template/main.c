@@ -7,7 +7,7 @@
 #include "init.h"
 #include "main.h"
 #include "serial.h"
-
+#include "queue.h"
 
 #pragma config OSC = IRCIO67,WDT = OFF, MCLRE = ON
 
@@ -38,8 +38,9 @@ unsigned int sampleCount,b;
 
 #pragma interrupt high_isr
 void high_isr(void)
-{
-}
+{	
+	SerialISR();
+}		
 
 //***************************************************************************************************************
 //							low_isr
@@ -62,11 +63,11 @@ void main (void)
 	TXString("\x0D\x0A");		// Put out a new line
 	setBusMode();
 	TXChar('>');			// Print Command Prompt
-	b =0;
+	b = 0;
 	while(1)
-	{
-		if(RXReady()){		// Wait for input
-			c=RXChar();	
+	{	
+		if(!isRXEmpty()){		// Wait for input
+			popRXQueue(&c);	
 			
 			switch(c){
 				case 0x0A:

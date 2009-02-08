@@ -14,8 +14,7 @@ char RXChar(void){
 }	
 
 void TXChar(char c){
-	TXREG = c;
-	while(!TXSTAbits.TRMT);
+	pushTXQueue(c);
 }
 
 void TXString(const rom char *s){

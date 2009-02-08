@@ -17,8 +17,8 @@ int Init (void)
 
 void Init_Oscillator(void)
 {
-	OSCCON = 0b01110000; //configure PIC to primary oscillator block at 8MHz
-	OSCTUNEbits.PLLEN = 1;
+	OSCCON = 0b01110000; 		// Configure PIC to primary oscillator block at 8MHz
+	OSCTUNEbits.PLLEN = 1;		// Enable PLL for 32MHz operation
 }
 
 void Init_Interrupts(void)
@@ -39,18 +39,28 @@ void Init_I2C(void)
 
 void Init_USART(void)
 {
+	// SPBRG = (Fosc/Baud)/4 - 1
+	// Fosc = 32000000
+	// Baud = 115200
+	// SPBRG = (32000000/115200)/4 - 1
+	// SPBRG = 277.778/4 - 1 = 69.4444 - 1 = 68.4444
+	
+	// Actual Baud = Fosc/(4*(SPBRG + 1)) = 32000000/(4*(68 + 1)) = 115942 baud
+	// Error = (115942-115200)/115200 * 100% = 0.6%
 	int baud = 68;
 	
 	TXSTA = 0;		// Reset registers
 	RCSTA = 0;
 	RCSTAbits.CREN = 1;		// Continuous Reception
 	TXSTAbits.BRGH = 1;		// High Baud Rate
-	BAUDCONbits.BRG16 = 1;
+	BAUDCONbits.BRG16 = 1;	// 16-bit Baud Rate counter
 	
-	PIR1bits.TXIF = 0;
-	PIE1bits.RCIE = 0;		// No Receive Interrupt
 	PIR1bits.RCIF = 0;
-	PIE1bits.TXIE = 0;		// No Transmit Interrupt
+	PIE1bits.RCIE = 1;		// Enable Receive Interrupt
+	IPR1bits.RCIP = 1;		// High Priority
+	PIR1bits.TXIF = 0;
+	PIE1bits.TXIE = 1;		// Enable Transmit Interrupt
+	IPR1bits.TXIP = 1;		// High Priority
 	
 	SPBRG = baud;			// Write the baud rate
 	SPBRGH = baud >> 8;
