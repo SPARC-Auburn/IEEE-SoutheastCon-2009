@@ -23,7 +23,7 @@ global config, enable
 config = configs.get_config('Micro Controller Network')
 enabled = config['enabled']
 # Threading
-from threading import Thread
+from threading import Thread, Lock
 # PySerial
 if enabled:
 	try:
@@ -61,7 +61,7 @@ class MasterNode:
 			Constructor - opens serial port given and initializes the master node.
 			'''
 		global enabled
-		self.serial = serial.Serial()
+		self.serial = Serial()
 		self.serial.port = serial
 		self.serial.baudrate = baud_rate
 		self.serial.timeout = 0
@@ -69,9 +69,9 @@ class MasterNode:
 			try:
 				self.serial.open()
 			except Exception as e:
-				log.error("Unable to open serial port %s: %s", (serial, e))
-		self.send_lock = threading.Lock()
-		debugging = debug()
+				log.error("Unable to open serial port %s: %s" % (serial, e))
+		self.send_lock = Lock()
+		self.debugging = debug(self.serial)
 		self.debugging.start()
 		return
 	
@@ -98,7 +98,7 @@ class MasterNode:
 			message += x
 		message += ']'
 		self.send_lock.acquire()
-		master_log.debug("Sending message: %s", message)
+		master_log.debug("Sending message: %s" % message)
 		self.serial.write(message+'\r')
 		self.send_lock.release()
 		return
@@ -113,17 +113,18 @@ class debug(Thread):
 	def __init__(self, serial):
 		Thread.__init__(self)
 		self.serial = serial
-		self.stop = Fale
+		self.stop = False
 		
 	def run(self):
-		while not stop:
+		while not self.stop:
 			input = self.serial.readline()
-			processInput(input)
+			self.processInput(input)
 			
 	def stop(self):
-		stop = True
+		self.stop = True
 		return
 	
 	def processInput(input):
-		log.debug("MCN: %s", input)
+		log.debug("MCN: %s" % input)
+		return
 		
