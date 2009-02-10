@@ -15,6 +15,7 @@ from robot import *
 from socket import socket, gethostbyname, AF_INET, SOCK_DGRAM
 
 PORT_NUMBER = 5000
+SENSITIVITY = .2
 
 hostName = ''
 
@@ -37,17 +38,17 @@ def loop():
 		direction = float(p[0])
 		
 		p = p[2].partition(' ')
-		if arm is not float(p[0]):
+		if abs(arm - float(p[0])) > SENSITIVITY:
 			arm_bool = True
 			arm = float(p[0])
 		
 		p = p[2].partition(' ')
-		if sorter is not float(p[0]):
+		if abs(sorter - float(p[0])) > SENSITIVITY:
 			sorter_bool = True
 			sorter = float(p[0])
 		
 		p = p[2].partition(' ')
-		if gripper is not float(p[0]):
+		if abs(gripper - float(p[0])) > SENSITIVITY:
 			gripper_bool = True
 			gripper = float(p[0])
 		
