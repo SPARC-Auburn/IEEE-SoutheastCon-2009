@@ -62,7 +62,7 @@ def critical(msg):
 	
 # Misc Functions
 def shutdown():
-	mcn.shutdown()
+	master_node.shutdown()
 	pass
 
 
