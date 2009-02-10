@@ -64,7 +64,7 @@ class MasterNode:
 		self.serial = Serial()
 		self.serial.port = serial
 		self.serial.baudrate = baud_rate
-		self.serial.timeout = 0
+		self.serial.timeout = 1
 		if enabled:
 			try:
 				self.serial.open()
@@ -124,7 +124,8 @@ class debug(Thread):
 		self.stop = True
 		return
 	
-	def processInput(input):
-		log.debug("MCN: %s" % input)
+	def processInput(self, input):
+		if len(input) > 2:
+			log.debug("MCN: %s" % input)
 		return
 		
