@@ -26,6 +26,7 @@ SERVER_IP = config['Server IP']
 PORT_NUMBER = int(config['Port'])
 joy_config = config['Joystick']
 SENSITIVITY = float(joy_config['Sensitivity'])
+SERVO_SENSITIVITY = float(joy_config['Servo_Sensitivity'])
 DEAD_ZONE = float(joy_config['Dead Zone'])
 THROTTLE = float(joy_config['Network Throttle'])
 
@@ -53,13 +54,13 @@ def loop():
 			elif e.axis == 0 and abs(direction - e.dict['value']) > SENSITIVITY:
 				direction = e.dict['value']
 				send = True
-			elif e.axis == 4 and abs(arm - e.dict['value']) > SENSITIVITY:
+			elif e.axis == 4 and abs(arm - e.dict['value']) > SERVO_SENSITIVITY:
 				arm = e.dict['value']
 				send = True
-			elif e.axis == 3 and abs(sorter - e.dict['value']) > SENSITIVITY:
+			elif e.axis == 3 and abs(sorter - e.dict['value']) > SERVO_SENSITIVITY:
 				sorter = e.dict['value']
 				send = True
-			elif e.axis == 2 and abs(gripper - e.dict['value']) > SENSITIVITY:
+			elif e.axis == 2 and abs(gripper - e.dict['value']) > SERVO_SENSITIVITY:
 				gripper = e.dict['value']
 				send = True
 			if send:

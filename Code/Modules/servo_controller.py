@@ -80,7 +80,7 @@ class Servo:
 		global enabled, mcn, address
 		if not enabled:
 			return
-		log.debug("Moving to position: %i", position)
+		log.debug("Moving to position: %i" % position)
 		position = '%X' % position
 		if len(position) % 2 is 1:
 			position = '0' + position

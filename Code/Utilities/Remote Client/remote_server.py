@@ -32,16 +32,32 @@ def loop():
 		speed = float(p[0])
 		p = p[2].partition(' ')
 		direction = float(p[0])
+		
 		p = p[2].partition(' ')
-		arm = float(p[0])
+		if arm is not float(p[0]):
+			arm_bool = True
+			arm = float(p[0])
+		
 		p = p[2].partition(' ')
-		sorter = float(p[0])
+		if sorter is not float(p[0]):
+			sorter_bool = True
+			sorter = float(p[0])
+		
 		p = p[2].partition(' ')
-		gripper = float(p[0])
+		if gripper is not float(p[0]):
+			gripper_bool = True
+			gripper = float(p[0])
+		
 		move(speed, direction)
-		arm_servo.move(arm)
-		sorter_servo.move(sorter)
-		gripper_servo.move(gripper)
+		if arm_bool:
+			arm_servo.move(arm)
+			arm_bool = False
+		if sorter_bool:
+			sorter_servo.move(sorter)
+			sorter_bool = False
+		if gripper_bool:
+			gripper_servo.move(gripper)
+			gripper_bool = False
 		
 try:
 	loop()
