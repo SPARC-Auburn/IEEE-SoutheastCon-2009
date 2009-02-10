@@ -104,7 +104,7 @@ class MasterNode:
 		return
 		
 	def shutdown(self):
-		self.debugging.stop()
+		self.debugging.shutdown()
 		self.debugging.join()
 		return
 		
@@ -120,7 +120,7 @@ class debug(Thread):
 			input = self.serial.readline()
 			self.processInput(input)
 			
-	def stop(self):
+	def shutdown(self):
 		self.stop = True
 		return
 	
