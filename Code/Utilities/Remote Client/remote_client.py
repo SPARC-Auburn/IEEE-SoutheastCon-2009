@@ -54,15 +54,31 @@ def loop():
 			elif e.axis == 0 and abs(direction - e.dict['value']) > SENSITIVITY:
 				direction = e.dict['value']
 				send = True
-			elif e.axis == 4 and abs(arm - e.dict['value']) > SERVO_SENSITIVITY:
-				arm = e.dict['value']
-				send = True
-			elif e.axis == 3 and abs(sorter - e.dict['value']) > SERVO_SENSITIVITY:
-				sorter = e.dict['value']
-				send = True
-			elif e.axis == 2 and abs(gripper - e.dict['value']) > SERVO_SENSITIVITY:
-				gripper = e.dict['value']
-				send = True
+			elif e.axis == 4:
+				if abs(e.dict['value'] - 1) < SENSITIVITY:
+					if e.dict['value'] > 0:
+						arm = 1.0
+					else
+						arm = -1.0
+					send = True
+					
+			elif e.axis == 3:
+				if abs(e.dict['value'] - 1) < SENSITIVITY:
+					if e.dict['value'] > 0:
+						sorter = 1.0
+					else
+						sorter = -1.0
+					send = True
+				elif abs(e.dit['value']) < SENSITIVITY:
+					sorter = 0
+					send = True
+			elif e.axis == 2:
+				if abs(e.dict['value'] - 1) < SENSITIVITY:
+					if e.dict['value'] > 0:
+						gripper = 1.0
+					else
+						gripper = -1.0
+					send = True
 			if send:
 				if abs(speed) < DEAD_ZONE:
 					speed = 0
