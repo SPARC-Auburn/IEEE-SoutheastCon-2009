@@ -58,7 +58,7 @@ def loop():
 				if abs(e.dict['value'] - 1) < SENSITIVITY:
 					if e.dict['value'] > 0:
 						arm = 1.0
-					else
+					else:
 						arm = -1.0
 					send = True
 					
@@ -66,7 +66,7 @@ def loop():
 				if abs(e.dict['value'] - 1) < SENSITIVITY:
 					if e.dict['value'] > 0:
 						sorter = 1.0
-					else
+					else:
 						sorter = -1.0
 					send = True
 				elif abs(e.dit['value']) < SENSITIVITY:
@@ -76,7 +76,7 @@ def loop():
 				if abs(e.dict['value'] - 1) < SENSITIVITY:
 					if e.dict['value'] > 0:
 						gripper = 1.0
-					else
+					else:
 						gripper = -1.0
 					send = True
 			if send:
