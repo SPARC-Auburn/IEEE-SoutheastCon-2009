@@ -26,9 +26,9 @@ info("Server started on port: %i" % PORT_NUMBER)
 
 # Loop
 def loop():
-	arm = None
-	sorter = None
-	gripper = None
+	arm = 0.0
+	sorter = 0.0
+	gripper = 0.0
 	while True:
 		(data, addr) = soc.recvfrom( 1024 )
 		debug("Recieved Pack from %s: %s" % (addr, data))
