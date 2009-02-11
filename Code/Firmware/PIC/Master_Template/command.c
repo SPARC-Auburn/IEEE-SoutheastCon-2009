@@ -3,15 +3,18 @@
 #include "init.h"
 #include "i2c.h"
 #include "serial.h"
+#include "eep.h"
 
-#define I2C 1
+#define CHIP 	1
+#define I2C 	2
 
 #define HEX 1
 #define DEC 2
 #define BIN 3
 #define RAW 4
 
-static unsigned char busMode=1, displayFormat=1;
+static unsigned char busMode=2, displayFormat=1;
+static unsigned int eeprom_ptr = 0;
 
 unsigned char checkCommand(unsigned char c){
 	static unsigned char i;
@@ -21,6 +24,14 @@ unsigned char checkCommand(unsigned char c){
 			TXString(" 1. HEX\x0D\x0A 2. DEC\x0D\x0A 3. BIN\x0D\x0A 4. RAW\x0D\x0A OUTPUT MODE>");
 			displayFormat=getMenuReply(4);
 			TXString("903 OUTPUT MODE SET\x0D\x0A");
+			break;
+		case 'I':
+			busMode = I2C;
+			setBusMode();
+			break;
+		case 'c':
+			busMode = CHIP;
+			setBusMode();
 			break;
 		default:
 			return 0;
@@ -80,7 +91,7 @@ void processCommandString(unsigned int nb, unsigned char *commandArr){
 		}
 		if(err) break;
 	}
-	if(err) TXString("000 SYNTAX ERROR\x0D\0A");
+	if(err) TXString("000\x0D\0A");		//Syntax error
 }
 
 void ASCII2BYTE(unsigned char b, unsigned char *numberArr){
@@ -123,7 +134,7 @@ unsigned char getMenuReply(unsigned char i){
 		c=(RXChar())-0x31;	//Correct from ASCII
 		TXString("\x0D\x0A");
 		if(c<i)break;
-		TXString("001 SYNTAX ERROR, TRY AGAIN>");
+		TXString("001>"); // Menu syntax error
 	}
 	return c+1;
 }			
@@ -147,9 +158,12 @@ void echoByteValue(unsigned char c){
 
 void setBusMode(){
 	switch(busMode){
+		case CHIP:
+			TXString("Master EEPROM settings mode\x0D\x0A");
+			break;
 		case I2C:
 			Init_I2C();
-			TXString("202 I2C Ready\x0D\x0A");
+			TXString("202\x0D\x0A"); //I2C Ready
 			break;
 		default:
 			break;
@@ -158,31 +172,40 @@ void setBusMode(){
 
 void busStartWrite(void){
 	switch(busMode){
+		case CHIP:
+			eeprom_ptr = 0;
+			break;
 		case I2C:
 			StartI2C();
-			TXString("210 I2C START CONDITION\x0D\x0A");
+			TXString("210"); //I2C Start condition
 			break;
 	}
 }
 
 void busStopWrite(void){
 	switch(busMode){
+		case CHIP:
+			TXString("EEPROM Written.\x0D\x0A");
+			break;
 		case I2C:
 			StopI2C();
-			TXString("240 I2C STOP CONDITION\x0D\x0A");
+			TXString("240\x0D\x0A");	//I2C Stop Condition
 			break;
 	}
 }
 
 void busWriteByte(unsigned char c){
 	switch(busMode){
+		case CHIP:
+			Write_b_eep(eeprom_ptr,c);
+			Busy_eep();
+			break;
 		case I2C:
-			TXString("220 I2C WRITE:");
-			echoByteValue(c);
+			//TXString("220")	//Write byte
 			if(WriteI2C(c)==0){
-				TXString(" GOT ACK: YES\x0D\x0A");
+				TXString("Y");
 			} else {
-				TXString(" GOT ACK: NO\x0D\x0A");
+				TXString("N");
 			}
 			break;
 	}
@@ -191,8 +214,14 @@ void busWriteByte(unsigned char c){
 void busReadByte(void){
 	unsigned char c;
 	switch(busMode){
+		case CHIP:
+			TXString("EEPROM Read: ");
+			c = Read_b_eep(eeprom_ptr);
+			echoByteValue(c);
+			TXString("\x0D\x0A");
+			break;
 		case I2C:
-			TXString("230 I2C READ: ");
+			TXString("230: ");
 			c = ReadI2C();
 			echoByteValue(c);
 			TXString("\x0D\x0A");
@@ -204,9 +233,9 @@ void busReadBulk(unsigned char c){
 	unsigned char i,j;
 	switch(busMode){
 		case I2C:
-			TXString("231 I2C BULK READ, ");
+			TXString("231:");
 			echoByteValue(c);
-			TXString(" BYTES:\x0D\x0A");
+			TXString("\x0D\x0A");
 			for(i=0; i<c; i++){
 				j = ReadI2C();
 				echoByteValue(j);

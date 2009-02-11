@@ -23,6 +23,21 @@ void Init_Oscillator(void)
 
 void Init_Interrupts(void)
 {	
+	INTCON2bits.INTEDG0 = 1;
+	INTCON2bits.INTEDG1 = 1;	// Make external interrupts work on rising edge
+	INTCON2bits.INTEDG2 = 1;
+	
+	INTCONbits.INT0IF = 0;
+	INTCONbits.INT0IE = 1;		// Enable External interrupt 0
+	
+	INTCON3bits.INT1IP = 1;		// High priority
+	INTCON3bits.INT1IF = 0;
+	INTCON3bits.INT1IE = 1;		//Enable External interrupt 1
+	
+	INTCON3bits.INT2IP = 1;		// High priority
+	INTCON3bits.INT2IF = 0;
+	INTCON3bits.INT2IE = 1;		//Enable External interrupt 2
+	
 	INTCONbits.GIEL = 1; //low priority interrupts enabler
 	INTCONbits.GIEH = 1; //high priority interrupt enabler
 	RCONbits.IPEN = 1; //enable high priority and low priority interrupts
