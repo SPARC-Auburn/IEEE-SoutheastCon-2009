@@ -41,9 +41,9 @@ def loop():
 	send = True
 	speed = 0.0
 	direction = 0.0
-	arm = 0.0
+	arm = -1.0
 	sorter = 0.0
-	gripper = 0.0
+	gripper = 1.0
 	e = None
 	while True:
 		try:
@@ -71,19 +71,23 @@ def loop():
 						arm = -1.0
 			# Else if sorter
 			elif e.axis == 3:
-				if abs(e.dit['value']) < SENSITIVITY:
+				# If it is close to zero
+				if abs(e.dict['value']) < SENSITIVITY:
 					if sorter is not 0:
 						send = True
-					sorter = 0
-				elif 1 - abs(e.dict['value']) < SENSITIVITY:
+						sorter = 0
+				# If it is close to 1.0 or -1.0
+				elif (1 - abs(e.dict['value'])) < SENSITIVITY:
+					# If it was positive
 					if e.dict['value'] > 0:
 						if sorter is not 1.0:
+							sorter = 1.0
 							send = True
-						sorter = 1.0
-					else:
+					# If it was negative
+					elif e.dict['value'] < 0:
 						if sorter is not -1.0:
+							sorter = -1.0
 							send = True
-						sorter = -1.0
 			# Else if gripper
 			elif e.axis == 2:
 				if abs(e.dict['value']) < SENSITIVITY:
