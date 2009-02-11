@@ -75,7 +75,7 @@ def loop():
 					if sorter is not 0:
 						send = True
 					sorter = 0
-				elif abs(e.dict['value']) - 1 < SENSITIVITY:
+				elif 1 - abs(e.dict['value']) < SENSITIVITY:
 					if e.dict['value'] > 0:
 						if sorter is not 1.0:
 							send = True
