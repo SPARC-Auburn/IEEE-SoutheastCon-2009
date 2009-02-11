@@ -55,7 +55,7 @@ def loop():
 				direction = e.dict['value']
 				send = True
 			elif e.axis == 4:
-				if abs(e.dict['value'] - 1) < SENSITIVITY:
+				if abs(e.dict['value']) - 1 < SENSITIVITY:
 					if e.dict['value'] > 0:
 						arm = 1.0
 					else:
@@ -63,7 +63,7 @@ def loop():
 					send = True
 					
 			elif e.axis == 3:
-				if abs(e.dict['value'] - 1) < SENSITIVITY:
+				if abs(e.dict['value']) - 1 < SENSITIVITY:
 					if e.dict['value'] > 0:
 						sorter = 1.0
 					else:
@@ -73,7 +73,7 @@ def loop():
 					sorter = 0
 					send = True
 			elif e.axis == 2:
-				if abs(e.dict['value'] - 1) < SENSITIVITY:
+				if abs(e.dict['value']) - 1 < SENSITIVITY:
 					if e.dict['value'] > 0:
 						gripper = 1.0
 					else:
