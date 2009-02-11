@@ -185,7 +185,7 @@ void busStartWrite(void){
 void busStopWrite(void){
 	switch(busMode){
 		case CHIP:
-			TXString("EEPROM Written.\x0D\x0A");
+			TXString("EEPROM Command Completed.\x0D\x0A");
 			break;
 		case I2C:
 			StopI2C();
@@ -197,8 +197,11 @@ void busStopWrite(void){
 void busWriteByte(unsigned char c){
 	switch(busMode){
 		case CHIP:
+			TXString("Writing EEPROM: ");
+			echoByteValue(c);
 			Write_b_eep(eeprom_ptr,c);
 			Busy_eep();
+			eeprom_ptr++;
 			break;
 		case I2C:
 			//TXString("220")	//Write byte
@@ -218,6 +221,7 @@ void busReadByte(void){
 			TXString("EEPROM Read: ");
 			c = Read_b_eep(eeprom_ptr);
 			echoByteValue(c);
+			eeprom_ptr++;
 			TXString("\x0D\x0A");
 			break;
 		case I2C:
