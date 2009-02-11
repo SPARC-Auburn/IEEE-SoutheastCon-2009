@@ -48,46 +48,57 @@ def loop():
 	while True:
 		try:
 			e = pygame.event.wait()
+			# If speed
 			if e.axis == 1 and abs(speed - e.dict['value']) > SENSITIVITY:
 				speed = e.dict['value']
 				send = True
+			# Else if direction
 			elif e.axis == 0 and abs(direction - e.dict['value']) > SENSITIVITY:
 				direction = e.dict['value']
 				send = True
+			# Else if arm
 			elif e.axis == 4:
 				if abs(e.dict['value']) - 1 < SENSITIVITY:
 					if e.dict['value'] > 0:
+						if arm is not 1.0:
+							send = True
 						arm = 1.0
 					else:
+						if arm is not -1.0:
+							send = True
 						arm = -1.0
-					send = True
-					
+			# Else if sorter
 			elif e.axis == 3:
 				if abs(e.dict['value']) - 1 < SENSITIVITY:
 					if e.dict['value'] > 0:
+						if sorter is not 1.0:
+							send = True
 						sorter = 1.0
 					else:
+						if sorter is not -1.0:
+							send = True
 						sorter = -1.0
-					send = True
 				elif abs(e.dit['value']) < SENSITIVITY:
+					if sorter is not 0:
+						send = True
 					sorter = 0
-					send = True
+			# Else if gripper
 			elif e.axis == 2:
 				if abs(e.dict['value']) - 1 < SENSITIVITY:
 					if e.dict['value'] > 0:
+						if gripper is not 1.0:
+							send = True
 						gripper = 1.0
 					else:
+						if gripper is not -1.0:
+							send = True
 						gripper = -1.0
-					send = True
+			# If new information
 			if send:
 				if abs(speed) < DEAD_ZONE:
 					speed = 0
 				if abs(direction) < DEAD_ZONE:
 					direction = 0
-				if abs(arm) < DEAD_ZONE:
-					arm = 0
-				if abs(sorter) < DEAD_ZONE:
-					sorter = 0
 				move = str(speed)+" "+str(direction)+" "+str(arm)+" "+str(sorter)+" "+str(gripper)
 				print move
 				soc.sendto(move, (SERVER_IP, PORT_NUMBER))
