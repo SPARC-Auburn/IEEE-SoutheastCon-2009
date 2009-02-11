@@ -68,7 +68,7 @@
 #define RIDX 0x04    //RCNTR/ABG pin is indexed
 
 #define Addr 0x00 	 
-static int Count[3];
+static int Count[6];
 
 #pragma config OSC = IRCIO67,WDT = OFF, MCLRE = ON
 
@@ -210,9 +210,12 @@ void Write_7266_PR(int addr, int Data[3])
 void Read_7266_OL(int addr)
 {
   outp(XCMD(addr), RLD(Rst_BP + Trf_CNTR_OL));	//Reset Byte Pointer and Transfer Counter to Output Latch
-  Count[0] = inp(XDATA(addr));					//Load Lowest Byte to Count 0
-  Count[1] = inp(XDATA(addr));					//Load Lowest Byte to Count 1
-  Count[2] = inp(XDATA(addr));					//Load Lowest Byte to Count 2
+  Count[0] = inp(XDATA(addr));					//Load Lowest Byte of X to Count 0
+  Count[1] = inp(XDATA(addr));					//Load Next Byte of X to Count 1
+  Count[2] = inp(XDATA(addr));					//Load Highest Byte of X to Count 2
+  Count[3] = inp(YDATA(addr));					//Load Lowest Byte of Y to Count 3
+  Count[4] = inp(YDATA(addr));					//Load Next Byte of Y to Count 4
+  Count[5] = inp(YDATA(addr));					//Load Highest Byte of Y to Count 5
 }
 
 //***************************************************************************************************************
@@ -225,6 +228,15 @@ void Read_7266_OL(int addr)
 } */
 
 //***************************************************************************************************************
+//							Clear_Counter
+//***************************************************************************************************************
+
+void Clear_Counter(int addr)
+{
+	outp(XCMD(addr), RLD(Rst_CNTR));  			//Reset Counter
+}
+
+//***************************************************************************************************************
 //							main
 //***************************************************************************************************************
 
@@ -232,20 +244,35 @@ void main (void)
 {
 	
     char c;
-	DDRA = 0x1F;
-	DDRB = 0xFF;
-	Init_7266(Addr);
+	int i;
+	DDRA = 0x1F;				//Set Port A bits 0-4 as output
+	DDRB = 0xFF;				//Set Port B to all output	
 
 	Init();
 	TXString("\x0D\x0A");		// Put out a new line
 	TXChar('>');	
 	
+	Init_7266(Addr);			//Initialize the 7266 Counter
+
 	while(1){
-		if(!isQueueEmpty()){
-			c = popQueue();
-			TXHex(c);
-			TXString("\x0D\x0A");		
-		}		
+//		if(!isQueueEmpty()){
+//			c = popQueue();
+//			TXHex(c);
+//			TXString("\x0D\x0A");		
+//		}		
+
+		Read_7266_OL(Addr);
+		TXString("X count\n");
+		TXBin(Count[2]);
+		TXBin(Count[1]);
+		TXBin(Count[0]);
+		TXChar("\n");
+		TXString("Y count\n");
+		TXBin(Count[5]);
+		TXBin(Count[4]);
+		TXBin(Count[3]);
+		TXChar("\n");
+		for(i=0; i<20000; i++);
 	}
 
 	
