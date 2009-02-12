@@ -27,6 +27,16 @@ PORT_NUMBER = int(config['Port'])
 joy_config = config['Joystick']
 SENSITIVITY = float(joy_config['Sensitivity'])
 SERVO_SENSITIVITY = float(joy_config['Servo_Sensitivity'])
+INVERT_X = joy_config['Invert_X']
+if INVERT_X is 'True':
+	INVERT_X = True
+else:
+	INVERT_X = False
+INVERT_Y = joy_config['Invert_Y']
+if INVERT_Y is 'True':
+	INVERT_Y = True
+else:
+	INVERT_Y = False
 DEAD_ZONE = float(joy_config['Dead Zone'])
 THROTTLE = float(joy_config['Network Throttle'])
 
@@ -51,10 +61,14 @@ def loop():
 			# If speed
 			if e.axis == 1 and abs(speed - e.dict['value']) > SENSITIVITY:
 				speed = e.dict['value']
+				if INVERT_Y:
+					speed *= -1
 				send = True
 			# Else if direction
 			elif e.axis == 0 and abs(direction - e.dict['value']) > SENSITIVITY:
 				direction = e.dict['value']
+				if INVERT_X:
+					direction *= -1
 				send = True
 			# Else if arm
 			elif e.axis == 4:
@@ -62,13 +76,13 @@ def loop():
 					pass
 				elif (1 - abs(e.dict['value'])) < SENSITIVITY and abs(e.dict['value']) - 1 < SENSITIVITY:
 					if e.dict['value'] > 0:
-						if arm is not 1.0:
-							send = True
-						arm = 1.0
-					else:
 						if arm is not -1.0:
 							send = True
 						arm = -1.0
+					else:
+						if arm is not 1.0:
+							send = True
+						arm = 1.0
 			# Else if sorter
 			elif e.axis == 3:
 				# If it is close to zero
