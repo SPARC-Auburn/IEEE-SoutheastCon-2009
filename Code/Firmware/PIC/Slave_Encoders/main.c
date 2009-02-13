@@ -9,6 +9,8 @@
 #include "hardware.h"
 #include "queue.h"
 
+#pragma config OSC = IRCIO7,WDT = OFF, MCLRE = ON
+
 #define XDATA(arg) (arg + 0)
 #define XCMD(arg) (arg + 1)
 #define YDATA(arg) (arg + 2)
@@ -68,9 +70,10 @@
 #define RIDX 0x04    //RCNTR/ABG pin is indexed
 
 #define Addr 0x00 	 
-static int Count[6];
+static char Count[6];
+char flags;
 
-#pragma config OSC = IRCIO67,WDT = OFF, MCLRE = ON
+
 
 #pragma code high_vector=0x08
 void high_vec(void)
@@ -140,7 +143,7 @@ void low_isr (void)
 void outp(int addr, int cmd)
 {
   PORTA = addr | 0x1C;				//A2 = RD = 1,  A3 = WR = 1, A4 = CS = 1
-  PORTB = cmd;						//Apply Command Data to the Data Bus
+  PORTD = cmd;						//Apply Command Data to the Data Bus
   PORTAbits.RA3 = 0;				//Pull WR (Write Enable) low
   PORTAbits.RA4 = 0;				//Pull CS (Chip Select) low
   PORTAbits.RA3 = 1;				//Restore WR high
@@ -154,14 +157,14 @@ void outp(int addr, int cmd)
 char inp(int addr)
 {
 	char byte;
-	DDRB = 0x00;					//Set PORTB to intput
+	TRISD = 1;						//Set PORTB to intput
 	PORTA = addr | 0x1C;			//A2 = RD = 1, A3 = WR =1, A4 = CS = 1
 	PORTAbits.RA2 = 0;				//Pull RD (Read Data) low
 	PORTAbits.RA4 = 0;				//Pull CS (Chip Select) low
-	byte = PORTB;					//Read Information on Data Bus
+	byte = PORTD;					//Read Information on Data Bus
 	PORTAbits.RA2 = 1;				//Restore RD high
 	PORTAbits.RA4 = 1;				//Restore CS high
-	DDRB = 0xFF;					//Set PORTB to output
+	TRISD = 0;						//Set PORTB to output
 	return byte;					//Return Data
 }
 
@@ -222,10 +225,17 @@ void Read_7266_OL(int addr)
 //							Get_7266_Flags
 //***************************************************************************************************************
 
-/*unsigned char Get_7266_Flags(int addr)
+unsigned char Get_7266_Flags(int addr)
 { 
-	return(inp(CMD(addr)));
-} */
+	char flags;
+	TRISD = 1;
+	PORTA = 0x0D;				//CD = 1, XY = 0, RD = 1, WR = 1, CS = 0
+	PORTAbits.RA2 = 0;			//pull RD low to read
+	flags = PORTD;				//Read value of flags
+	PORTAbits.RA2 = 1;			//restore CS high
+	TRISD = 0;
+	return flags;
+} 
 
 //***************************************************************************************************************
 //							Clear_Counter
@@ -244,9 +254,9 @@ void main (void)
 {
 	
     char c;
-	int i;
-	DDRA = 0x1F;				//Set Port A bits 0-4 as output
-	DDRB = 0xFF;				//Set Port B to all output	
+	unsigned int i;
+	TRISA = 0;					//Set Port A bits 0-4 as output
+	TRISD = 0;					//Set Port B to all output	
 
 	Init();
 	TXString("\x0D\x0A");		// Put out a new line
@@ -262,17 +272,22 @@ void main (void)
 //		}		
 
 		Read_7266_OL(Addr);
-		TXString("X count\n");
+		TXString("X count");
+		TXString("\x0D\x0A");
 		TXBin(Count[2]);
 		TXBin(Count[1]);
 		TXBin(Count[0]);
-		TXChar("\n");
-		TXString("Y count\n");
+		TXString("\x0D\x0A");
+		TXString("Y count");
+		TXString("\x0D\x0A");
 		TXBin(Count[5]);
 		TXBin(Count[4]);
 		TXBin(Count[3]);
-		TXChar("\n");
-		for(i=0; i<20000; i++);
+		TXString("\x0D\x0A");
+		flags = Get_7266_Flags(Addr);
+		TXBin(flags);
+		TXString("\x0D\x0A");
+		for(i=0; i<40000; i++);
 	}
 
 	
