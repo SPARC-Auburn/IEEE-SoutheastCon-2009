@@ -2,6 +2,7 @@
 #include "init.h"
 #include "serial.h"
 #include "i2c.h"
+#include <portb.h>
 
 int Init (void) 
 {	
@@ -9,9 +10,6 @@ int Init (void)
 	Init_Interrupts();
 	Init_I2C();
 	Init_USART();
-	
-	TRISB = 0x00;
-	LATB = 0x01; // Turn on a little status LED;
 	return 1;
 }
 
@@ -23,21 +21,22 @@ void Init_Oscillator(void)
 
 void Init_Interrupts(void)
 {	
-	INTCON2bits.INTEDG0 = 1;
-	INTCON2bits.INTEDG1 = 1;	// Make external interrupts work on rising edge
-	INTCON2bits.INTEDG2 = 1;
+	TRISB = 0x07;
+	LATB = 0x07;	
 	
-	INTCONbits.INT0IF = 0;
-	INTCONbits.INT0IE = 1;		// Enable External interrupt 0
-	
-	INTCON3bits.INT1IP = 1;		// High priority
-	INTCON3bits.INT1IF = 0;
-	INTCON3bits.INT1IE = 1;		//Enable External interrupt 1
-	
-	INTCON3bits.INT2IP = 1;		// High priority
-	INTCON3bits.INT2IF = 0;
-	INTCON3bits.INT2IE = 1;		//Enable External interrupt 2
-	
+	INTCON3bits.INT1IP = 1;
+	INTCON3bits.INT2IP = 1;	
+
+	OpenRB0INT( PORTB_CHANGE_INT_ON		&
+            	FALLING_EDGE_INT     	&
+            	PORTB_PULLUPS_ON);
+	OpenRB1INT( PORTB_CHANGE_INT_ON		&
+				FALLING_EDGE_INT		&
+				PORTB_PULLUPS_ON);
+	OpenRB2INT( PORTB_CHANGE_INT_ON		&
+				FALLING_EDGE_INT		&
+				PORTB_PULLUPS_ON);	
+
 	INTCONbits.GIEL = 1; //low priority interrupts enabler
 	INTCONbits.GIEH = 1; //high priority interrupt enabler
 	RCONbits.IPEN = 1; //enable high priority and low priority interrupts

@@ -10,7 +10,7 @@
 #include "queue.h"
 #include "eep.h"
 
-#pragma config OSC = IRCIO67,WDT = OFF, MCLRE = ON
+#pragma config OSC = IRCIO67,WDT = OFF, WDTPS = 32768,MCLRE = ON, PBADEN = OFF
 
 #pragma code high_vector=0x08
 void high_vec(void)
@@ -25,13 +25,15 @@ void low_vec (void)
    _asm goto low_isr _endasm
 }
 #pragma udata BUFFER
-#define TERMINAL_BUFFER 250
+#define TERMINAL_BUFFER 200
 unsigned char sample[TERMINAL_BUFFER];
 unsigned int sampleCount,b;
 
 
 #pragma code
-volatile unsigned char external_interrupts = 0;
+volatile unsigned char INT0_count;
+volatile unsigned char INT1_count;
+volatile unsigned char INT2_count;
 
 //***************************************************************************************************************
 //							high_isr
@@ -43,19 +45,20 @@ void high_isr(void)
 	{
 		SerialISR();
 	}
-	else if(INTCONbits.INT0IF)
+
+	if(INTCONbits.INT0IF == 1)
 	{
-		external_interrupts |= 0x01;
+		INT0_count++;
 		INTCONbits.INT0IF = 0;	
 	}
-	else if(INTCON3bits.INT1IF)
+	else if(INTCON3bits.INT1IF == 1)
 	{
-		external_interrupts |= 0x02;
+		INT1_count++;;
 		INTCON3bits.INT1IF = 0;	
 	}		
-	else if(INTCON3bits.INT2IF)
+	else if(INTCON3bits.INT2IF == 1)
 	{
-		external_interrupts |= 0x04;
+		INT2_count++;
 		INTCON3bits.INT2IF = 0;
 	}	
 }		
@@ -74,40 +77,66 @@ void low_isr (void)
 void main (void)
 {
 	unsigned char c, interrupt_0_addr, interrupt_1_addr, interrupt_2_addr;
-
+	
 	Init();						// Run Hardware Initialization
 	TXString("\x0D\x0A");		// Put out a new line
 	setBusMode();
 	TXChar('>');			// Print Command Prompt
 	b = 0;
 	
+	INT0_count = 0;
+	INT1_count = 0;
+	INT2_count = 0;
+
 	interrupt_0_addr = Read_b_eep(0x0000);
 	interrupt_1_addr = Read_b_eep(0x0001);
 	interrupt_2_addr = Read_b_eep(0x0002);
 	
 	while(1)
 	{	
-		if(external_interrupts&0x01)
+		if(INT0_count > 0)
 		{	
 			#ifdef __DEBUG
-				TXString("External Interrupt 0 called:, Reading:  ");
-				TXBin(interrupt_0_addr);
+				TXString("INT0, Reading: ");
+				TXHex(interrupt_0_addr);
+				TXString(" ==== Returned: ");
+				//StartI2C();
+				//WriteI2C(interrupt_0_addr);
+				//TXHex(ReadI2C());
+				//StopI2C();
+				TXString("\x0A\x0D");
+				INT0_count--;
 			#endif
 		}
-		if(external_interrupts&0x02)
+		if(INT1_count > 0)
 		{
 			#ifdef __DEBUG
-				TXString("External Interrupt 1 called:, Reading:  ");
-				TXBin(interrupt_0_addr);
+				TXString("INT1, Reading: ");
+				TXHex(interrupt_1_addr);
+				TXString(" ==== Returned: ");
+				//StartI2C();
+				//WriteI2C(interrupt_1_addr);
+				//TXHex(ReadI2C());
+				//StopI2C();
+				TXString("\x0A\x0D");
+				INT1_count--;
 			#endif
 		}
-		if(external_interrupts&0x04)
+		if(INT2_count > 0)
 		{
 			#ifdef __DEBUG
-				TXString("External Interrupt 2 called:, Reading:  ");
-				TXBin(interrupt_0_addr);
+				TXString("INT2, Reading: ");
+				TXHex(interrupt_2_addr);
+				TXString(" ==== Returned: ");
+				//StartI2C();
+				//WriteI2C(interrupt_2_addr);
+				//TXHex(ReadI2C());
+				//StopI2C();
+				TXString("\x0A\x0D");
+				INT2_count--;
 			#endif
-		}			
+		}	
+		
 		if(!isRXEmpty()){		// Wait for input
 			popRXQueue(&c);	
 			
