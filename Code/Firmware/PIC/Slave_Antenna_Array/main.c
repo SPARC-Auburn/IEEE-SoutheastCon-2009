@@ -30,11 +30,11 @@
 
 unsigned int result, thingOne, thingTwo;
 
-unsigned int resultArray[3] = {0,0,0};
+unsigned int resultArray[4] = {0,0,0};
 
-unsigned int calibrationArray[3] = {0,0,0};
+unsigned int calibrationArray[4] = {0,0,0};
 
-int differenceLineFollow, differenceCorner;
+int differenceLineFollow, differenceCorner, differenceAngularRate;
 
 
 								//  SET THRESHOLDS FOR THE LINE FOLLOWING AND CORNER DETECTION ALGORITHMS
@@ -47,6 +47,7 @@ const unsigned int thresholdLine = 20;
 
 							
 unsigned int i = 0;				//  SET INDEX VALUE TO CONTROL NUMBER OF TIMES CALIBRATION CYCLE SHOULD RUN
+
 
 //****************************  INITIALIZE VARIABLES END ***********************
 
@@ -136,9 +137,10 @@ void main (void)
 
 //************************************  SETUP A/D CONVERTER BEGIN  ***********************************
 	
-	TRISAbits.TRISA0 = 1;		//set pins 2,3, and 4 as inputs
+	TRISAbits.TRISA0 = 1;		//set pins 2,3,4, AND 5 as inputs
 	TRISAbits.TRISA1 = 1;
-	TRISAbits.TRISA2 = 1;		
+	TRISAbits.TRISA2 = 1;
+	TRISAbits.TRISA3 = 1;		
 	
 	
 	ADCON0 = 0x01;				//turn on the A/D converter, and configure pin 2 as the analog input for the A/D converter								
@@ -152,9 +154,20 @@ void main (void)
 //*************************************  SETUP A/D CONVERTER END  **********************************								
 
 
+
+
+
+
+//**********************************************  Calibration Cycle Begin	*********************************************	
+
 while(i < 3)
 {
-	ADCON0 = 0x01;		//configure pin 2 as the analog input for the A/D converter
+
+
+//**********************************************  Left Antenna	*********************************************	
+
+
+		ADCON0 = 0x01;		//configure pin 2 as the analog input for the A/D converter
 			
 							//start the A/D converter 
 		ADCON0bits.GO = 1;
@@ -179,12 +192,19 @@ while(i < 3)
 			result += 768;	
 		}			
 		
-		resultArray[0] = result;
+		calibrationArray[0] = result;
 					
 
 		Delay10TCYx(1);		//delay before starting A/D converter again
 		
 		
+
+
+
+
+//**********************************************  Right Antenna	*********************************************	
+
+
 		
 							//configure pin 3 as the analog input for the A/D converter
 		ADCON0bits.CHS0 = 1;
@@ -212,10 +232,14 @@ while(i < 3)
 			result += 768;	
 		}			
 		
-		resultArray[1] = result;
+		calibrationArray[1] = result;
 							
 		Delay10TCYx(1);		//delay before starting A/D converter again
 		
+
+
+
+//**********************************************  Front Antenna	*********************************************	
 		
 		
 							//configure pin 4 as the analog input for the A/D converter
@@ -245,7 +269,44 @@ while(i < 3)
 			result += 768;	
 		}			
 					
-		resultArray[2] = result;
+		calibrationArray[2] = result;
+		
+		Delay10TCYx(1);		//delay before starting A/D converter again
+		
+		
+		
+		
+		
+//**********************************************  Angular Rate Sensor	*********************************************	
+		
+							//configure pin 5 as the analog input for the A/D converter
+		ADCON0bits.CHS0 = 1;
+		
+		
+							//start the A/D converter 
+		ADCON0bits.GO = 1;
+							
+							//wait for the A/D converter to finish
+		while(ADCON0bits.GO)
+		{
+		}
+							
+		result = (int)ADRESL;		//type cast and store low A/D register results in unsigned integer variable
+		
+		if(ADRESH == 0x01)			//perform if statements to handle high A/D register results
+		{
+			result += 256;
+		}
+		if(ADRESH == 0x02)
+		{
+			result += 512;	
+		}
+		if(ADRESH == 0x03)
+		{
+			result += 768;	
+		}			
+					
+		calibrationArray[3] = result;
 	
 	
 		i++;
@@ -253,15 +314,21 @@ while(i < 3)
 		Delay10KTCYx(990);		//delay before starting A/D converter again			
 }	
 
+//**********************************************  Calibration Cycle End	*********************************************	
 
-calibrationArray[0] = resultArray[0];
-calibrationArray[1] = resultArray[1];
-calibrationArray[2] = resultArray[2];
+
+
+		
 		
 		
 //*********************  MAIN LOOP BEGIN (a.k.a. line following/corner detection)  **************************************		
 	while(1)
 		{	
+			
+//**********************************************  Left Antenna	*********************************************	
+		
+			
+			
 			ADCON0 = 0x01;		//configure pin 2 as the analog input for the A/D converter
 			
 								//start the A/D converter 
@@ -288,10 +355,18 @@ calibrationArray[2] = resultArray[2];
 			}			
 			
 			resultArray[0] = result;
-						
-
+			
+			
 			Delay10TCYx(1);		//delay before starting A/D converter again
 			
+
+
+
+
+
+
+//**********************************************  Right Antenna	*********************************************	
+		
 			
 			
 								//configure pin 3 as the analog input for the A/D converter
@@ -325,6 +400,13 @@ calibrationArray[2] = resultArray[2];
 			Delay10TCYx(1);		//delay before starting A/D converter again
 			
 			
+
+
+
+
+
+//**********************************************  Front Antenna	*********************************************	
+		
 			
 								//configure pin 4 as the analog input for the A/D converter
 			ADCON0bits.CHS0 = 0;
@@ -356,6 +438,40 @@ calibrationArray[2] = resultArray[2];
 			resultArray[2] = result;						
 						
 
+
+
+
+
+//**********************************************  Angular Rate Sensor	*********************************************	
+
+									//configure pin 5 as the analog input for the A/D converter
+			ADCON0bits.CHS0 = 1;
+			
+			
+								//start the A/D converter 
+			ADCON0bits.GO = 1;
+								
+								//wait for the A/D converter to finish
+			while(ADCON0bits.GO)
+			{
+			}
+								
+			result = (int)ADRESL;		//type cast and store low A/D register results in unsigned integer variable
+			
+			if(ADRESH == 0x01)			//perform if statements to handle high A/D register results
+			{
+				result += 256;
+			}
+			if(ADRESH == 0x02)
+			{
+				result += 512;	
+			}
+			if(ADRESH == 0x03)
+			{
+				result += 768;	
+			}			
+						
+			resultArray[3] = result;
 		
 		
 		
@@ -431,25 +547,56 @@ calibrationArray[2] = resultArray[2];
 //				}			
 			}
 //******************************  CORNER DETECTION ALGORITHM END **********************************
-										
+
+
+		
+		
 			
 			
 			
+
+
+//***********************************  ANGULAR RATE DATA HANDLING BEGIN *********************************	
+			
+		//	differenceAngularRate = 
 			
 			
 			
-//***********************************  DEBUGGING SERIAL OUTPUT BEGIN *********************************			
-			TXDec_Int(resultArray[0]);
+			/*What I need to do:
+			
+				- get the differenence of the analog output
+				- determine time period overwhich
+				
+
+			
+			*/
+
+
+
+//***********************************  ANGULAR RATE DATA HANDLING END *********************************	
+
+
+
+
+
+
+
+
+
+
+//***********************************  DEBUGGING SERIAL OUTPUT BEGIN *********************************	
+		
+//			TXDec_Int(resultArray[0]);
+//			TXString("\x0D\x0A");
+			TXDec_Int(resultArray[3]);
 			TXString("\x0D\x0A");
-			TXDec_Int(resultArray[1]);
 			TXString("\x0D\x0A");
+			TXDec_Int(calibrationArray[3]);
 			TXString("\x0D\x0A");
-			TXDec_Int(calibrationArray[0]);
-			TXString("\x0D\x0A");
-			TXDec_Int(calibrationArray[1]);
-			TXString("\x0D\x0A");
-			TXString("\x0D\x0A");
-			TXDec_Int(differenceLineFollow);
+//			TXDec_Int(calibrationArray[1]);
+//			TXString("\x0D\x0A");
+//			TXString("\x0D\x0A");
+//			TXDec_Int(differenceLineFollow);
 			
 //***********************************  DEBUGGING SERIAL OUTPUT END *********************************
 								
