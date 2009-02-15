@@ -71,7 +71,7 @@
 
 #define Addr 0x00 	 
 static char Count[6];
-char flags;
+char flags, test;
 
 
 
@@ -140,10 +140,14 @@ void low_isr (void)
 //					outp function
 //***************************************************************************************************************
 
-void outp(int addr, int cmd)
+void outp(char addr, char cmd)
 {
   PORTA = addr | 0x1C;				//A2 = RD = 1,  A3 = WR = 1, A4 = CS = 1
   PORTD = cmd;						//Apply Command Data to the Data Bus
+  TXBin(cmd);
+  TXString("\x0D\x0A");
+  TXBin(PORTD);
+  TXString("\x0D\x0A");
   PORTAbits.RA3 = 0;				//Pull WR (Write Enable) low
   PORTAbits.RA4 = 0;				//Pull CS (Chip Select) low
   PORTAbits.RA3 = 1;				//Restore WR high
@@ -154,10 +158,10 @@ void outp(int addr, int cmd)
 //					inp function
 //***************************************************************************************************************
 
-char inp(int addr)
+char inp(char addr)
 {
 	char byte;
-	TRISD = 1;						//Set PORTB to intput
+	TRISD = 0xFF;					//Set PORTB to intput
 	PORTA = addr | 0x1C;			//A2 = RD = 1, A3 = WR =1, A4 = CS = 1
 	PORTAbits.RA2 = 0;				//Pull RD (Read Data) low
 	PORTAbits.RA4 = 0;				//Pull CS (Chip Select) low
@@ -172,33 +176,34 @@ char inp(int addr)
 //							Init_7266
 //***************************************************************************************************************
 
-void Init_7266(int addr)
+void Init_7266(char addr)
 {
   //Setup IOR Register
   outp(XCMD(addr),IOR(DisAB + LOL + ABGate + CYBW));  	//Disable Counters and Set CY BW mode
 
   //Setup RLD Register
   outp(XCMD(addr),RLD(Rst_BP + Rst_FLAGS));				//Reset Byte Pointer(BP) and Flags
-  outp(XDATA(addr), 0x01);  							//Load 1 to PR0 to setup Transfer to PS0
-  outp(YDATA(addr), 0x01);  							//Load 1 to PR0 to setup Transfer to PS0
+  outp(XDATA(addr), 0x06);  							//Load 6 to PR0 to setup Transfer to PS0
+  outp(YDATA(addr), 0x06);  							//Load 6 to PR0 to setup Transfer to PS0
   outp(XCMD(addr), RLD(Rst_E + Trf_PS0_PSC));   		//Reset E Flagand Transfer PR0 to PSC
   outp(XCMD(addr), RLD(Rst_BP + Rst_CNTR));    			//Reset BP and Counter
 
   //Setup IDR Register
-  outp(XCMD(addr),IDR(EnIDX + NIDX + LIDX));    		//Enable Negative Index on LCNTR/LOL Input
+  outp(XCMD(addr),IDR(DisIDX));    		//Enable Negative Index on LCNTR/LOL Input
 
   //Setup CMR Register
   outp(XCMD(addr), CMR(BINCnt + NrmCnt + QDX1)); 		//Set Binary Normal Count Quadrature x1
-
+  
   //Enable Counters
   outp(XCMD(addr), IOR(EnAB));    //Enable Counters
+  
 }
 
 //***************************************************************************************************************
 //							Write_7266_PR
 //***************************************************************************************************************
 
-void Write_7266_PR(int addr, int Data[3])
+void Write_7266_PR(char addr, char Data[3])
 {
   outp(XCMD(addr), RLD(Rst_BP));    //Reset Byte Pointer to Synchronize Byte Writing
   outp(XDATA(addr), Data[0]);       //Write Byte to PR0
@@ -210,7 +215,7 @@ void Write_7266_PR(int addr, int Data[3])
 //							Read_7266_OL	
 //***************************************************************************************************************
 
-void Read_7266_OL(int addr)
+void Read_7266_OL(char addr)
 {
   outp(XCMD(addr), RLD(Rst_BP + Trf_CNTR_OL));	//Reset Byte Pointer and Transfer Counter to Output Latch
   Count[0] = inp(XDATA(addr));					//Load Lowest Byte of X to Count 0
@@ -227,10 +232,12 @@ void Read_7266_OL(int addr)
 
 unsigned char Get_7266_Flags(int addr)
 { 
+	int i;
 	char flags;
-	TRISD = 1;
+	TRISD = 0xFF;
 	PORTA = 0x0D;				//CD = 1, XY = 0, RD = 1, WR = 1, CS = 0
 	PORTAbits.RA2 = 0;			//pull RD low to read
+	for(i=0;i<2000;i++);		//delay?
 	flags = PORTD;				//Read value of flags
 	PORTAbits.RA2 = 1;			//restore CS high
 	TRISD = 0;
@@ -285,6 +292,8 @@ void main (void)
 		TXBin(Count[3]);
 		TXString("\x0D\x0A");
 		flags = Get_7266_Flags(Addr);
+		TXString("Flags");
+		TXString("\x0D\x0A");
 		TXBin(flags);
 		TXString("\x0D\x0A");
 		for(i=0; i<40000; i++);
