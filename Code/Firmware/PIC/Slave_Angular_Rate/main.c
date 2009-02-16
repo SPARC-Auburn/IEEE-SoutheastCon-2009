@@ -135,14 +135,14 @@ void main (void)
 
 
 OpenTimer0( TIMER_INT_OFF & 	//initialize timer0 for: - interupt disabled
-            T0_16BIT &           //					 	 - 8 bit timer
+            T0_16BIT &           //					 	 - 16 bit timer
             T0_SOURCE_INT &		//						 - based on internal oscillator
-            T0_PS_1_2 );		//						 - 8X prescaler to give sonar measurement 1 microsecond accuracy
+            T0_PS_1_2 );		//						 - 2X prescaler to give sonar measurement 1 microsecond accuracy
             
 OpenTimer1( TIMER_INT_OFF & 	//initialize timer0 for: - interupt disabled
-            T0_16BIT &           //					 	 - 8 bit timer
+            T0_16BIT &           //					 	 - 16 bit timer
             T0_SOURCE_INT &		//						 - based on internal oscillator
-            T0_PS_1_2 );		//						 - 8X prescaler to give sonar measurement 1 microsecond accuracy
+            T0_PS_1_2 );		//						 - 2X prescaler to give sonar measurement 1 microsecond accuracy
             
 
 
@@ -176,7 +176,7 @@ i = 0;
 
 //******************************************  Calibration Cycle Begin	*********************************************	
 
-while(i < 64)
+while(i < 100)
 {	
 //**********************************************  Angular Rate Sensor	*********************************************	
 			
@@ -219,7 +219,9 @@ while(i < 64)
 
 calibrationAverage = calibrationAccumulator/100;
 
-TXDec_Int(calibrationAverage);
+//TXDec_Int(calibrationAverage);
+//TXString("\x0D\x0A");
+//TXString("\x0D\x0A");
 
 //**********************************************  Calibration Cycle End	*********************************************	
 
@@ -228,14 +230,14 @@ TXDec_Int(calibrationAverage);
 
 
 angle = 0;        						//intialize angle to zero
-deltaAngle;
+deltaAngle = 0;
 WriteTimer1(0);
 
 //**********************************************  Main Loop Begin   *************************************************
 while(1)
 	{
 		i = 0;
-		readingAccumulator =0;
+		readingAccumulator =0;		
 		WriteTimer0(0);
 		
 		while(ReadTimer0() < 1000)
@@ -264,46 +266,59 @@ while(1)
 			
 			readingAccumulator += result;
 			
+			Delay1TCY();				//MINIMUM delay before starting A/D converter again
+			Delay1TCY();
+			
 			i++;			
 		}	
-		
 		//WriteTimer0(0);
 										//get average reading over the sample period of 1 millisecond
-		readingAverage = (readingAccumulator / i);
+		readingAverage = (int)(readingAccumulator / i);
 						
 										//compute the variation from the calibration value
 		differenceAD = readingAverage - calibrationAverage;
 					
-										
-		deltaAngle += (float)(differenceAD/1366);//divide the variation by 1366 to get the angle change during
-										//the sampled millisecond:  sensor has a "6.67mV/degree/second" 
-										//change in its output and the PIC's A-to-D has a "4.883mV/LSB"
-										//sensitivity which yeilds the 1366 LSB*ms number to yeild the 
-										//angle
-		if(ReadTimer1() > 5000)
-		{
-			
-			angle += deltaAngle;			//add the change in the angle to the running value of the angle
-				
-			if(angle < 0)
-			{
-				angle += 360;
-			}
-			else
-			{
-				if(angle > 360)
-				{
-					angle = (angle - 360);
-				}
-			}	
+		if(differenceAD > 1 || differenceAD < -1)
+		{								
+			deltaAngle += (float)differenceAD/211.74; //divide the variation by 1366 to get the angle change during
+													//the sampled millisecond:  sensor has a "6.67mV/degree/second" 
+													//change in its output and the PIC's A-to-D has a "4.883mV/LSB"
+													//sensitivity which yeilds the 1366 LSB*ms number to yeild the 
+													//angle
+		}
 		
+		
+		
+		if(ReadTimer1() > 5000)						//every 5 milliseconds check deltaAngle to determine distance traveled
+		{	
+			if(deltaAngle > 1 || deltaAngle < -1);  //if deltaAngle is greater than abs(1)
+			{
+				angle += (int)deltaAngle;			//truncate the float to integer
+					
+				if(angle < 0)
+				{
+					angle += 360;
+				}
+				else
+				{
+					if(angle > 360)
+					{
+						angle = (angle - 360);
+					}
+				}
+				
+				deltaAngle -= (int)deltaAngle;		//subtract integer from the float to yeild leftover fraction
+			}
+			
+			WriteTimer1(0);	
 		}
 												
-										
-		//result = ReadTimer0();
-		TXDec_Int(result);
+		//result = ReadTimer0();								
+		TXDec_Int(angle);
 		TXString("\x0D\x0A");
 		//Delay10KTCYx(999);		
+		
+		//while(1){};
 		
 		
 	}	
