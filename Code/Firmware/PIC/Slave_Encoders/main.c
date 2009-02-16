@@ -142,14 +142,12 @@ void low_isr (void)
 
 void outp(char addr, char cmd)
 {
+  int i;
   PORTA = addr | 0x1C;				//A2 = RD = 1,  A3 = WR = 1, A4 = CS = 1
   PORTD = cmd;						//Apply Command Data to the Data Bus
-  TXBin(cmd);
-  TXString("\x0D\x0A");
-  TXBin(PORTD);
-  TXString("\x0D\x0A");
   PORTAbits.RA3 = 0;				//Pull WR (Write Enable) low
   PORTAbits.RA4 = 0;				//Pull CS (Chip Select) low
+  for(i=0;i<1000;i++);				//Small delay
   PORTAbits.RA3 = 1;				//Restore WR high
   PORTAbits.RA4 = 1;				//Restore CS high
 }
@@ -160,11 +158,13 @@ void outp(char addr, char cmd)
 
 char inp(char addr)
 {
+	int i;
 	char byte;
 	TRISD = 0xFF;					//Set PORTB to intput
 	PORTA = addr | 0x1C;			//A2 = RD = 1, A3 = WR =1, A4 = CS = 1
 	PORTAbits.RA2 = 0;				//Pull RD (Read Data) low
 	PORTAbits.RA4 = 0;				//Pull CS (Chip Select) low
+	for(i=0;i<1000;i++);			//Small Delay
 	byte = PORTD;					//Read Information on Data Bus
 	PORTAbits.RA2 = 1;				//Restore RD high
 	PORTAbits.RA4 = 1;				//Restore CS high
@@ -183,8 +183,8 @@ void Init_7266(char addr)
 
   //Setup RLD Register
   outp(XCMD(addr),RLD(Rst_BP + Rst_FLAGS));				//Reset Byte Pointer(BP) and Flags
-  outp(XDATA(addr), 0x06);  							//Load 6 to PR0 to setup Transfer to PS0
-  outp(YDATA(addr), 0x06);  							//Load 6 to PR0 to setup Transfer to PS0
+  outp(XDATA(addr), 0x00);  							//Load 6 to PR0 to setup Transfer to PS0
+  outp(YDATA(addr), 0x00);  							//Load 6 to PR0 to setup Transfer to PS0
   outp(XCMD(addr), RLD(Rst_E + Trf_PS0_PSC));   		//Reset E Flagand Transfer PR0 to PSC
   outp(XCMD(addr), RLD(Rst_BP + Rst_CNTR));    			//Reset BP and Counter
 
@@ -237,7 +237,6 @@ unsigned char Get_7266_Flags(int addr)
 	TRISD = 0xFF;
 	PORTA = 0x0D;				//CD = 1, XY = 0, RD = 1, WR = 1, CS = 0
 	PORTAbits.RA2 = 0;			//pull RD low to read
-	for(i=0;i<2000;i++);		//delay?
 	flags = PORTD;				//Read value of flags
 	PORTAbits.RA2 = 1;			//restore CS high
 	TRISD = 0;
@@ -264,7 +263,8 @@ void main (void)
 	unsigned int i;
 	TRISA = 0;					//Set Port A bits 0-4 as output
 	TRISD = 0;					//Set Port B to all output	
-
+	CMCON = 7;					//Disable comparator inputs
+	ADCON1 = 15;				//Set PORTA to digital I/O
 	Init();
 	TXString("\x0D\x0A");		// Put out a new line
 	TXChar('>');	
