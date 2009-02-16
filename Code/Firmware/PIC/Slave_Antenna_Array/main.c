@@ -6,6 +6,7 @@
 	pin 2:   left antenna
 	pin 3:   right antenna
 	pin 4:   front antenna
+	pin 5:   angular rate sensor
 
 
 
@@ -20,8 +21,6 @@
 #include "queue.h"
 #include <delays.h>
 #include <math.h>
-
-
 
 
 
@@ -43,6 +42,8 @@ const unsigned int thresholdLineFollow = 50;
 const unsigned int thresholdCorner = 30;
 
 const unsigned int thresholdLine = 20;
+
+const char slaveAddress = 11;
 
 
 							

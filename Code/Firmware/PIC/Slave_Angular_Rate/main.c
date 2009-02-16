@@ -29,28 +29,13 @@
 
 //*****************************  INITIALIZE VARIABLES BEGIN *************************
 
-unsigned int result, thingOne, thingTwo, accumulator, average;
+long calibrationAccumulator, readingAccumulator;
 
-unsigned int resultArray[3] = {0,0,0};
+int calibrationAverage, readingAverage, differenceAD, i, result, angle;
 
-unsigned int calibrationArray[4] = {0,0,0};
-
-int differenceLineFollow, differenceCorner, differenceAngularRate, differenceAD, deltaAngle;
-
-float timeElapsed;
+float deltaAngle;
 
 
-								//  SET THRESHOLDS FOR THE LINE FOLLOWING AND CORNER DETECTION ALGORITHMS
-const unsigned int thresholdLineFollow = 50;
-
-const unsigned int thresholdCorner = 30;
-
-const unsigned int thresholdLine = 20;
-
-
-							
-unsigned int i = 0;				//  SET INDEX VALUE TO CONTROL NUMBER OF TIMES CALIBRATION CYCLE SHOULD RUN
-int angle = 0;
 
 //****************************  INITIALIZE VARIABLES END ***********************
 
@@ -149,10 +134,16 @@ void main (void)
 	TXChar('>');	
 
 
-OpenTimer0( TIMER_INT_OFF & //initialize timer0 for: - interupt disabled
+OpenTimer0( TIMER_INT_OFF & 	//initialize timer0 for: - interupt disabled
             T0_16BIT &           //					 	 - 8 bit timer
             T0_SOURCE_INT &		//						 - based on internal oscillator
             T0_PS_1_2 );		//						 - 8X prescaler to give sonar measurement 1 microsecond accuracy
+            
+OpenTimer1( TIMER_INT_OFF & 	//initialize timer0 for: - interupt disabled
+            T0_16BIT &           //					 	 - 8 bit timer
+            T0_SOURCE_INT &		//						 - based on internal oscillator
+            T0_PS_1_2 );		//						 - 8X prescaler to give sonar measurement 1 microsecond accuracy
+            
 
 
 
@@ -177,94 +168,21 @@ OpenTimer0( TIMER_INT_OFF & //initialize timer0 for: - interupt disabled
 
 
 
+Delay10KTCYx(9);
 
+calibrationAccumulator = 0;
 
-//**********************************************  Calibration Cycle Begin	*********************************************	
+i = 0;
 
-while(i < 3)
-{
+//******************************************  Calibration Cycle Begin	*********************************************	
 
-
-//**********************************************  Left Antenna	*********************************************	
-
-
-		ADCON0 = 0x01;		//configure pin 2 as the analog input for the A/D converter
+while(i < 64)
+{	
+//**********************************************  Angular Rate Sensor	*********************************************	
 			
-							//start the A/D converter 
-		ADCON0bits.GO = 1;
-							
-							//wait for the A/D converter to finish
-		while(ADCON0bits.GO)
-		{
-		}
-							
-		result = (int)ADRESL;		//type cast and store low A/D register results in unsigned integer variable
 		
-		if(ADRESH == 0x01)			//perform if statements to handle high A/D register results
-		{
-			result += 256;
-		}
-		if(ADRESH == 0x02)
-		{
-			result += 512;	
-		}
-		if(ADRESH == 0x03)
-		{
-			result += 768;	
-		}			
-		
-		calibrationArray[0] = result;
-					
-
-		Delay10TCYx(1);		//delay before starting A/D converter again
-		
-		
-
-
-
-
-//**********************************************  Right Antenna	*********************************************	
-
-
-		
-							//configure pin 3 as the analog input for the A/D converter
+							//configure pin 5 as the analog input for the A/D converter
 		ADCON0bits.CHS0 = 1;
-		
-							//start the A/D converter 
-		ADCON0bits.GO = 1;
-							
-							//wait for the A/D converter to finish
-		while(ADCON0bits.GO)
-		{
-		}
-							
-		result = (int)ADRESL;		//type cast and store low A/D register results in unsigned integer variable
-		
-		if(ADRESH == 0x01)			//perform if statements to handle high A/D register results
-		{
-			result += 256;
-		}
-		if(ADRESH == 0x02)
-		{
-			result += 512;	
-		}
-		if(ADRESH == 0x03)
-		{
-			result += 768;	
-		}			
-		
-		calibrationArray[1] = result;
-							
-		Delay10TCYx(1);		//delay before starting A/D converter again
-		
-
-
-
-//**********************************************  Front Antenna	*********************************************	
-		
-		
-							//configure pin 4 as the analog input for the A/D converter
-		ADCON0bits.CHS0 = 0;
 		ADCON0bits.CHS1 = 1;
 		
 							//start the A/D converter 
@@ -290,312 +208,42 @@ while(i < 3)
 			result += 768;	
 		}			
 					
-		calibrationArray[2] = result;
+		calibrationAccumulator += result;
 		
-		Delay10TCYx(1);		//delay before starting A/D converter again
+		Delay1TCY();				//MINIMUM delay before starting A/D converter again
+		Delay1TCY();
 		
-		
-		
-		
-		
-//**********************************************  Angular Rate Sensor	*********************************************	
-		
-							//configure pin 5 as the analog input for the A/D converter
-		ADCON0bits.CHS0 = 1;
-		
-		
-							//start the A/D converter 
-		ADCON0bits.GO = 1;
-							
-							//wait for the A/D converter to finish
-		while(ADCON0bits.GO)
-		{
-		}
-							
-		result = (int)ADRESL;		//type cast and store low A/D register results in unsigned integer variable
-		
-		if(ADRESH == 0x01)			//perform if statements to handle high A/D register results
-		{
-			result += 256;
-		}
-		if(ADRESH == 0x02)
-		{
-			result += 512;	
-		}
-		if(ADRESH == 0x03)
-		{
-			result += 768;	
-		}			
-					
-		calibrationArray[3] = result;
-	
-	
 		i++;
-		
-		Delay10KTCYx(990);		//delay before starting A/D converter again			
-}	
+			
+}
+
+calibrationAverage = calibrationAccumulator/100;
+
+TXDec_Int(calibrationAverage);
 
 //**********************************************  Calibration Cycle End	*********************************************	
 
 
 
-		
-		
-		
-//*********************  MAIN LOOP BEGIN (a.k.a. line following/corner detection)  **************************************		
-	while(1)
-		{	
-			
-////**********************************************  Left Antenna	*********************************************	
-//		
-//			
-//			ADCON0 = 0x01;		//configure pin 2 as the analog input for the A/D converter
-//			
-//								//start the A/D converter 
-//			ADCON0bits.GO = 1;
-//								
-//								//wait for the A/D converter to finish
-//			while(ADCON0bits.GO)
-//			{
-//			}
-//								
-//			result = (int)ADRESL;		//type cast and store low A/D register results in unsigned integer variable
-//			
-//			if(ADRESH == 0x01)			//perform if statements to handle high A/D register results
-//			{
-//				result += 256;
-//			}
-//			if(ADRESH == 0x02)
-//			{
-//				result += 512;	
-//			}
-//			if(ADRESH == 0x03)
-//			{
-//				result += 768;	
-//			}			
-//			
-//			resultArray[0] = result;
-//			
-//			
-//			Delay10TCYx(1);		//delay before starting A/D converter again
-//			
-//
-//
-//
-//
-//
-//
-////**********************************************  Right Antenna	*********************************************	
-//		
-//			
-//			
-//								//configure pin 3 as the analog input for the A/D converter
-//			ADCON0bits.CHS0 = 1;
-//			
-//								//start the A/D converter 
-//			ADCON0bits.GO = 1;
-//								
-//								//wait for the A/D converter to finish
-//			while(ADCON0bits.GO)
-//			{
-//			}
-//								
-//			result = (int)ADRESL;		//type cast and store low A/D register results in unsigned integer variable
-//			
-//			if(ADRESH == 0x01)			//perform if statements to handle high A/D register results
-//			{
-//				result += 256;
-//			}
-//			if(ADRESH == 0x02)
-//			{
-//				result += 512;	
-//			}
-//			if(ADRESH == 0x03)
-//			{
-//				result += 768;	
-//			}			
-//			
-//			resultArray[1] = result;
-//								
-//			Delay10TCYx(1);		//delay before starting A/D converter again
-//			
-//			
-//
-//
-//
-//
-//
-////**********************************************  Front Antenna	*********************************************	
-//		
-//			
-//								//configure pin 4 as the analog input for the A/D converter
-//			ADCON0bits.CHS0 = 0;
-//			ADCON0bits.CHS1 = 1;
-//			
-//								//start the A/D converter 
-//			ADCON0bits.GO = 1;
-//								
-//								//wait for the A/D converter to finish
-//			while(ADCON0bits.GO)
-//			{
-//			}
-//								
-//			result = (int)ADRESL;		//type cast and store low A/D register results in unsigned integer variable
-//			
-//			if(ADRESH == 0x01)			//perform if statements to handle high A/D register results
-//			{
-//				result += 256;
-//			}
-//			if(ADRESH == 0x02)
-//			{
-//				result += 512;	
-//			}
-//			if(ADRESH == 0x03)
-//			{
-//				result += 768;	
-//			}			
-//						
-//			resultArray[2] = result;						
-//						
-//			Delay10TCYx(1);		//delay before starting A/D converter again
-//
-			
-
-		
-		
-		
-					
-////******************************  LINE FOLLOWING ALGORITHM BEGIN **********************************
-//		
-//			
-//			if(resultArray[0] < (calibrationArray[0]+thresholdLine) && resultArray[1] < (calibrationArray[1]+thresholdLine))
-//			{
-//				TXString("********  NO WIRE DETECTED  ***********");
-//				TXString("\x0D\x0A");
-//			}	
-//			else
-//			{
-//										//get ready to determine line following instructions by calculating the difference 
-//										//between the power received on the left and right antennas
-//				differenceLineFollow = (int)resultArray[0] - (int)resultArray[1];
-//				
-//				if(differenceLineFollow > (int)thresholdLineFollow)
-//				{
-//					TXString("*********   GO LEFT   *********");
-//					TXString("\x0D\x0A");	
-//				}	
-//				else
-//				{	
-//					if(differenceLineFollow < (int)(thresholdLineFollow*-1))
-//					{
-//						TXString("********	  GO RIGHT  *********");
-//						TXString("\x0D\x0A");
-//					}
-//					else
-//					{
-//						TXString("**********   DEAD ON   ************");
-//						TXString("\x0D\x0A");
-//					}		
-//				}
-//			
-//			}
-////******************************  LINE FOLLOWING ALGORITHM END **********************************
-//
-//
-//
-//
-//				
-//			
-////******************************  CORNER DETECTION ALGORITHM BEGIN **********************************
-//										
-//										//get ready to determine corner detection by calculating the difference between the power recieved
-//										//by the corner antenna at startup and current readings
-////			differenceCorner = (int)resultArray[2] - (int)calibrationArray[2];	
-//								
-//			
-//			thingOne = calibrationArray[2] + thresholdCorner;
-//			thingTwo = calibrationArray[2] - 5;
-//								
-//										//perform if statements based on "differenceCorner" value to provide appropriate instuctions
-//			if(resultArray[2] > thingOne)
-//			{
-//				TXString("***********  Reached Corner **************");
-//				TXString("\x0D\x0A");
-//			}
-//			else
-//			{
-//				if(resultArray[2] < thingTwo)
-//				{
-//					TXString("***********   ERROR   *************");	
-//					TXString("\x0D\x0A");
-//				}
-////				else
-////				{
-////					TXString("***********   No Corner   *************");	
-////					TXString("\x0D\x0A");	
-////				}			
-//			}
-////******************************  CORNER DETECTION ALGORITHM END **********************************
-//
 
 
-//***********************************  DEBUGGING SERIAL OUTPUT BEGIN *********************************	
+angle = 0;        						//intialize angle to zero
+deltaAngle;
+WriteTimer1(0);
+
+//**********************************************  Main Loop Begin   *************************************************
+while(1)
+	{
+		i = 0;
+		readingAccumulator =0;
+		WriteTimer0(0);
 		
-//			TXDec_Int(resultArray[0]);
-//			TXString("\x0D\x0A");
-//			TXDec_Int(resultArray[1]);
-//			TXString("\x0D\x0A");
-//			TXString("\x0D\x0A");
-//			TXDec_Int(calibrationArray[0]);
-//			TXString("\x0D\x0A");
-//			TXDec_Int(calibrationArray[1]);
-//			TXString("\x0D\x0A");
-//			TXString("\x0D\x0A");
-//			TXDec_Int(differenceLineFollow);
-			
-//***********************************  DEBUGGING SERIAL OUTPUT END *********************************
+		while(ReadTimer0() < 1000)
+		{
+			ADCON0bits.GO = 1;			//start the A/D converter 
 								
-								
-			getAngle();					
-								
-								
-								
-			Delay10KTCYx(50);		//delay before starting A/D converter again
-			
-			
-			
-		}
-		
-//***********************  END MAIN LOOP (a.k.a. line following)  ************************************		
-}
-
-
-
-
-
-
-
-
-//**********************************************  Angular Rate Sensor	*********************************************
-
-void getAngle()
-{
-	
-	i = 0;
-	accumulator = 0;
-
-	WriteTimer0(0);                 	//set timer zero value to zero
-	
-	while(i<50)
-	{		
-										//configure pin 5 as the analog input for the A/D converter
-			ADCON0bits.CHS0 = 1;
-			
-										//start the A/D converter 
-			ADCON0bits.GO = 1;
-								
-										//wait for the A/D converter to finish
-			while(ADCON0bits.GO)
+										
+			while(ADCON0bits.GO)		//wait for the A/D converter to finish
 			{
 			}
 								
@@ -612,55 +260,130 @@ void getAngle()
 			if(ADRESH == 0x03)
 			{
 				result += 768;	
-			}			
-			
-			accumulator += result;	
-						
-			Delay1TCY();				//MINIMUM delay before starting A/D converter again
-			Delay1TCY();
-			Delay1TCY();
-			Delay1TCY();
-			Delay1TCY();
-						
-			i++;
-	}
-										//read in value from timer zero	and convert from milliseconds to seconds
-	timeElapsed = (float)(ReadTimer0()/1000);			
-	
-	average = accumulator/50;			//get average from sample period
-	
-										//determine the variation from the calibration value
-	differenceAD = average - calibrationArray[3];
-	
-	if(differenceAD < -2 || differenceAD > 2)
-	{
-											//Assumption: a variation of 1 in the ADC result is equal to 1 degree/second change in position.
-		deltaAngle = (int)((differenceAD * timeElapsed)/8);
-			
-		angle += deltaAngle;				//Add the change in angle to the running count of the angle
-			
-		if(angle < 0)
-		{
-			angle += 360;
-		}
-		else
-		{
-			if(angle > 360)
-			{
-				angle = (angle - 360);
 			}
-		}		
-	}
-	
-		
-	TXDec_Int(result);		
-	TXString("\x0D\x0A");
-	TXString("\x0D\x0A");
-//	TXDec_Int(calibrationArray[3]);		
-//	TXString("\x0D\x0A");
-//	TXString("\x0D\x0A");
-//	TXDec_Int(differenceAD);
-//	TXString("\x0D\x0A");
-//	TXString("\x0D\x0A");
 			
-}	
+			readingAccumulator += result;
+			
+			i++;			
+		}	
+		
+		//WriteTimer0(0);
+										//get average reading over the sample period of 1 millisecond
+		readingAverage = (readingAccumulator / i);
+						
+										//compute the variation from the calibration value
+		differenceAD = readingAverage - calibrationAverage;
+					
+										
+		deltaAngle += (float)(differenceAD/1366);//divide the variation by 1366 to get the angle change during
+										//the sampled millisecond:  sensor has a "6.67mV/degree/second" 
+										//change in its output and the PIC's A-to-D has a "4.883mV/LSB"
+										//sensitivity which yeilds the 1366 LSB*ms number to yeild the 
+										//angle
+		if(ReadTimer1() > 5000)
+		{
+			
+			angle += deltaAngle;			//add the change in the angle to the running value of the angle
+				
+			if(angle < 0)
+			{
+				angle += 360;
+			}
+			else
+			{
+				if(angle > 360)
+				{
+					angle = (angle - 360);
+				}
+			}	
+		
+		}
+												
+										
+		//result = ReadTimer0();
+		TXDec_Int(result);
+		TXString("\x0D\x0A");
+		//Delay10KTCYx(999);		
+		
+		
+	}	
+
+
+
+
+		
+		
+		
+		
+////		i = 0;
+////		readingAccumulator = 0;
+////	
+////	
+////		WriteTimer0(0);                 	//set timer zero value to zero
+////		
+////		while(i<50)
+////		{		
+////											//configure pin 5 as the analog input for the A/D converter
+////				ADCON0bits.CHS0 = 1;
+////				
+////											//start the A/D converter 
+////				ADCON0bits.GO = 1;
+////									
+////											//wait for the A/D converter to finish
+////				while(ADCON0bits.GO)
+////				{
+////				}
+////									
+////				result = (int)ADRESL;		//type cast and store low A/D register results in unsigned integer variable
+////				
+////				if(ADRESH == 0x01)			//perform if statements to handle high A/D register results
+////				{
+////					result += 256;
+////				}
+////				if(ADRESH == 0x02)
+////				{
+////					result += 512;	
+////				}
+////				if(ADRESH == 0x03)
+////				{
+////					result += 768;	
+////				}			
+////				
+////				readingAccumulator += (result - calibrationAverage);	
+////							
+////				Delay1TCY();				//MINIMUM delay before starting A/D converter again
+////				Delay1TCY();
+////											
+////				i++;
+////		}
+////											//read in value from timer zero	and convert from milliseconds to seconds
+////		timeElapsed = (float)(ReadTimer0()/1000);			
+////		
+////											//get average from sample period
+////		readingAverage = readingAccumulator/50;			
+////		
+////											//determine the variation from the calibration value
+////		differenceAD = readingAverage - calibrationArray[3];
+////		
+////		if(differenceAD < -2 || differenceAD > 2)
+////		{
+////												//Assumption: a variation of 1 in the ADC result is equal to 1 degree/second change in position.
+////			deltaAngle = (int)((differenceAD * timeElapsed)/8);
+////				
+////			angle += deltaAngle;				//Add the change in angle to the running count of the angle
+////				
+////			if(angle < 0)
+////			{
+////				angle += 360;
+////			}
+////			else
+////			{
+////				if(angle > 360)
+////				{
+////					angle = (angle - 360);
+////				}
+////			}		
+////		}
+////		
+		
+}
