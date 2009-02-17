@@ -97,13 +97,13 @@ void main (void)
 		if(INT0_count > 0)
 		{	
 			#ifdef __DEBUG
-				TXString("INT0, Reading: ");
-				TXHex(interrupt_0_addr);
-				TXString(" ==== Returned: ");
-				//StartI2C();
-				//WriteI2C(interrupt_0_addr);
-				//TXHex(ReadI2C());
-				//StopI2C();
+				TXString("I ");
+				TXDec(interrupt_0_addr);
+				TXString(" ");
+				StartI2C();
+				WriteI2C(interrupt_0_addr);
+				TXDec(ReadI2C());
+				StopI2C();
 				TXString("\x0A\x0D");
 				INT0_count--;
 			#endif
