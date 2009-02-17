@@ -2,6 +2,7 @@
 #include "init.h"
 #include "serial.h"
 #include "i2c.h"
+#include "timers.h"
 
 int Init (void) 
 {	
@@ -9,6 +10,8 @@ int Init (void)
 	Init_I2C();
 	Init_Interrupts();
 	Init_USART();
+	Init_ADC();
+	Init_Timers();
 	
 	TRISB = 0x00;
 	LATB = 0x01; // Turn on a little status LED;
@@ -68,3 +71,34 @@ void Init_USART(void)
 	TRISCbits.TRISC7 = 1;	
 	
 }
+
+void Init_Timers(void)
+{
+	OpenTimer1(     TIMER_INT_ON   			&
+					T1_8BIT_RW              & 
+					T1_SOURCE_INT   		& 
+					T1_PS_1_2               & 
+					T1_OSC1EN_OFF   		&
+					T1_SYNC_EXT_OFF);
+					
+	PIR1bits.TMR1IF = 0;
+	IPR1bits.TMR1IP = 0;
+	PIE1bits.TMR1IE	= 1;	
+}	
+
+void Init_ADC(void)
+{
+	TRISAbits.TRISA0 = 1;		//set pins 2,3,4, AND 5 as inputs
+	TRISAbits.TRISA1 = 1;
+	TRISAbits.TRISA2 = 1;
+	TRISAbits.TRISA3 = 1;		
+	
+	
+	ADCON0 = 0x01;				//turn on the A/D converter, and configure pin 2 as the analog input for the A/D converter								
+								
+	ADCON1 = 0x0D;				//configure reference voltages to Vdd and Vss, and configure pins 2 and 3 as 
+								//analog pins and configure pins 4 and 5 as digital pins
+	
+	ADCON2 = 0xA9;				//configure A/D converter result registers as right justified, acquisition time set to 12 times
+								//the AD timer, AD timer set to 1/8th the oscillator frequency	
+}	

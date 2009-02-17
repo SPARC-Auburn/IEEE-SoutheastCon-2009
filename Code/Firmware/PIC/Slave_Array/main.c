@@ -6,9 +6,6 @@
 	pin 2:   left antenna
 	pin 3:   right antenna
 	pin 4:   front antenna
-
-
-
 */
 //************************************************************************************************
 
@@ -18,46 +15,29 @@
 #include "serial.h"
 #include "hardware.h"
 #include "queue.h"
+#include "op_codes.h"
+#include "timers.h"
 #include <delays.h>
 #include <math.h>
 
 
+// Union arrays for antennas
+union int_byte antCalibration[3] = {0,0,0};
+union int_byte antMeasure[3] = {0,0,0};
+// Unions for angular rate sensor
+union int_byte arsCalibration = 0;
+union int_byte arsMeasure = 0;
 
+volatile struct proc_status ProcStatus = {0,0,0,0,0,1,1,1};
+unsigned char current_proc = 0;
+unsigned char paramter_count = 0;
 
+int EE_line_threshold = 20;							// 20
+int EE_line_follow_threshold = 50;					// 50
+unsigned char EE_corner_threshold = 30;				// 30
+unsigned int EE_interrupt_throttle = 5000;				// 5000
 
-
-//*****************************  INITIALIZE VARIABLES BEGIN *************************
-
-unsigned int result, thingOne, thingTwo;
-
-unsigned int resultArray[4] = {0,0,0};
-
-unsigned int calibrationArray[4] = {0,0,0};
-
-int differenceLineFollow, differenceCorner, differenceAngularRate;
-
-
-								//  SET THRESHOLDS FOR THE LINE FOLLOWING AND CORNER DETECTION ALGORITHMS
-const unsigned int thresholdLineFollow = 50;
-
-const unsigned int thresholdCorner = 30;
-
-const unsigned int thresholdLine = 20;
-
-
-							
-unsigned int i = 0;				//  SET INDEX VALUE TO CONTROL NUMBER OF TIMES CALIBRATION CYCLE SHOULD RUN
-
-
-//****************************  INITIALIZE VARIABLES END ***********************
-
-
-
-
-
-
-
-#pragma config OSC = IRCIO67,WDT = OFF, MCLRE = OFF
+#pragma config OSC = IRCIO67,WDT = OFF, MCLRE = ON
 
 #pragma code high_vector=0x08
 void high_vec(void)
@@ -73,7 +53,6 @@ void low_vec (void)
 }
 
 #pragma code
-volatile unsigned char pointer;
 
 //***************************************************************************************************************
 //							high_isr
@@ -85,17 +64,15 @@ void high_isr(void)
 	if(PIR1bits.SSPIF){		// If - SSP Module (I2C)
 		unsigned char c;
 		if(SSPSTATbits.R_W){	// If - Read from slave
-			if(!isQueueEmpty()){// Check if QUEUE is EMPTY
-				c = popQueue();	// Grab a char from the QUEUE
-				SSPBUF = c;		// Write the byte to the I2C bus
-			}
+			popTXQueue(&c);
+			SSPBUF = c;
 		} 
 		else {				// Else - Write to Slave
 			if(SSPSTATbits.D_A){	// If - Data
 				if(SSPSTATbits.BF){		//If - Buffer Full
 					c = SSPBUF;	// Grab a char from the I2C Buffer
-					if(!isQueueFull()){	// Check if QUEUE is FULL
-						pushQueue(c);	// Write the char to the QUEUE
+					if(!isRXFull()){	// Check if QUEUE is FULL
+						pushRXQueue(c);	// Write the char to the QUEUE
 					}
 				}	
 			} 
@@ -117,499 +94,242 @@ void high_isr(void)
 
 #pragma interruptlow low_isr
 void low_isr (void)
-{	
+{
+	if(PIR1bits.TMR1IF)
+	{
+		ProcStatus.line_follow_int = 1;
+		ProcStatus.corner_detect_int = 1;
+		ProcStatus.line_detect_int = 1;
+		WriteTimer1(65535 - EE_interrupt_throttle);	
+		PIR1bits.TMR1IF = 0;
+	}
 }
 
 //***************************************************************************************************************
 //							main
 //***************************************************************************************************************
-
+unsigned char c;
 void main (void)
 {
-	unsigned char c;
-	Init();
-	TXString("\x0D\x0A");		//Put out a new line
-	TXChar('>');	
-
-
-
-
-
-//************************************  SETUP A/D CONVERTER BEGIN  ***********************************
-	
-	TRISAbits.TRISA0 = 1;		//set pins 2,3,4, AND 5 as inputs
-	TRISAbits.TRISA1 = 1;
-	TRISAbits.TRISA2 = 1;
-	TRISAbits.TRISA3 = 1;		
-	
-	
-	ADCON0 = 0x01;				//turn on the A/D converter, and configure pin 2 as the analog input for the A/D converter								
-								
-	ADCON1 = 0x0D;				//configure reference voltages to Vdd and Vss, and configure pins 2 and 3 as 
-								//analog pins and configure pins 4 and 5 as digital pins
-	
-	ADCON2 = 0xA9;				//configure A/D converter result registers as right justified, acquisition time set to 12 times
-								//the AD timer, AD timer set to 1/8th the oscillator frequency
-								
-//*************************************  SETUP A/D CONVERTER END  **********************************								
-
-
-
-
-
-
-//**********************************************  Calibration Cycle Begin	*********************************************	
-
-while(i < 3)
-{
-
-
-//**********************************************  Left Antenna	*********************************************	
-
-
-		ADCON0 = 0x01;		//configure pin 2 as the analog input for the A/D converter
-			
-							//start the A/D converter 
-		ADCON0bits.GO = 1;
-							
-							//wait for the A/D converter to finish
-		while(ADCON0bits.GO)
-		{
+	WriteTimer1(65535 - EE_interrupt_throttle);
+	// Make sure the antenna calibration runs the first time.
+	ProcStatus.cal_ant_enabled = 1;
+	while(1) {
+		// *** Handle everything currently in the queue. *** //
+		while(!isRXEmpty()) {
+			if(ProcStatus.ProcessInProgress) {
+				popRXQueue(&c);
+				current_parameters[parameter_count] = c;
+				parameter_count++;
+			}
+			else {
+				ProcStatus.ProcessInProgress = 1;
+				popRXQueue(&c);
+				current_proc = c;
+			}
+			switch(current_proc) {
+				case RESET_OP:
+					Reset();
+					ProcStatus.ProcessInProgress = 0;
+					break;
+				case EEPROM_WR_OP:
+					// Do EEPROM_WR stuff here
+					ProcStatus.ProcessInProgress = 0;
+					parameter_count = 0;
+					break;
+				case CAL_ANT_OP:
+					ProcStatus.cal_ant_enabled = 1;
+					break;
+				case LINE_FOLLOW_OP:
+					if(parameter_count = 1) {
+						ProcStatus.line_follow_enabled = current_parameters[0];
+						ProcStatus.ProcessInProgress = 0;
+						parameter_count = 0;
+					}
+					break;
+				case CORNER_DETECTION_OP:
+					if(parameter_count = 1) {
+						ProcStatus.corner_detection_enabled = current_parameters[0];
+						ProcStatus.ProcessInProgress = 0;
+						parameter_count = 0;
+					}
+					break;
+				case LINE_DETECTION_OP:
+					if(parameter_count = 1) {
+						ProcStatus.line_detection_enabled = current_parameters[0];
+						ProcStatus.ProcessInProgress = 0;
+						parameter_count = 0;
+					}
+					break;
+			}
 		}
-							
-		result = (int)ADRESL;		//type cast and store low A/D register results in unsigned integer variable
+		// *** Handle execution loop. *** //
+		// If calibration needs to be run
+		if(ProcStatus.cal_ant_enabled) {
+			cal_ant();
+			ProcStatus.cal_ant_enabled = 0;
+		}
 		
-		if(ADRESH == 0x01)			//perform if statements to handle high A/D register results
-		{
-			result += 256;
-		}
-		if(ADRESH == 0x02)
-		{
-			result += 512;	
-		}
-		if(ADRESH == 0x03)
-		{
-			result += 768;	
-		}			
+		// Read the Antennas
+		read_antennas();
 		
-		calibrationArray[0] = result;
-					
+		// If line following is enabled
+		if(ProcStatus.line_follow_enabled) {
+			line_follow();
+		}
+		
+		// If corner detection is enabled
+		if(ProcStatus.corner_detection_enabled) {
+			corner_detection();
+		}
+		
+		// If line detection is enabled
+		if(ProcStatus.line_detection_enabled) {
+			line_detection();
+		}
+	}
+}
 
+
+void read_antennas(void) {
+	// This method should read the antennas values and store them in global variables.
+	// The other functions will use these readings to chack against thresholds set in the eeprom.
+	unsigned char channel;
+	channel = 0;
+	while(channel < 3)
+	{
+		ADCON0 = ((channel << 2) & 0b00111100) |
+          				(ADCON0 & 0b11000011);
+		ADCON0bits.GO = 1;			//start the A/D converter 
+		while(ADCON0bits.GO){}		//wait for the A/D converter to finish
+		antMeasure[channel].bt[0] = ADRESL;
+		antMeasure[channel].bt[1] = ADRESH;
 		Delay10TCYx(1);		//delay before starting A/D converter again
-		
-		
+		channel++;
+	}		
+}
 
-
-
-
-//**********************************************  Right Antenna	*********************************************	
-
-
-		
-							//configure pin 3 as the analog input for the A/D converter
-		ADCON0bits.CHS0 = 1;
-		
-							//start the A/D converter 
-		ADCON0bits.GO = 1;
-							
-							//wait for the A/D converter to finish
-		while(ADCON0bits.GO)
-		{
-		}
-							
-		result = (int)ADRESL;		//type cast and store low A/D register results in unsigned integer variable
-		
-		if(ADRESH == 0x01)			//perform if statements to handle high A/D register results
-		{
-			result += 256;
-		}
-		if(ADRESH == 0x02)
-		{
-			result += 512;	
-		}
-		if(ADRESH == 0x03)
-		{
-			result += 768;	
-		}			
-		
-		calibrationArray[1] = result;
-							
-		Delay10TCYx(1);		//delay before starting A/D converter again
-		
-
-
-
-//**********************************************  Front Antenna	*********************************************	
-		
-		
-							//configure pin 4 as the analog input for the A/D converter
-		ADCON0bits.CHS0 = 0;
-		ADCON0bits.CHS1 = 1;
-		
-							//start the A/D converter 
-		ADCON0bits.GO = 1;
-							
-							//wait for the A/D converter to finish
-		while(ADCON0bits.GO)
-		{
-		}
-							
-		result = (int)ADRESL;		//type cast and store low A/D register results in unsigned integer variable
-		
-		if(ADRESH == 0x01)			//perform if statements to handle high A/D register results
-		{
-			result += 256;
-		}
-		if(ADRESH == 0x02)
-		{
-			result += 512;	
-		}
-		if(ADRESH == 0x03)
-		{
-			result += 768;	
-		}			
-					
-		calibrationArray[2] = result;
-		
-		Delay10TCYx(1);		//delay before starting A/D converter again
-		
-		
-		
-		
-		
-//**********************************************  Angular Rate Sensor	*********************************************	
-		
-							//configure pin 5 as the analog input for the A/D converter
-		ADCON0bits.CHS0 = 1;
-		
-		
-							//start the A/D converter 
-		ADCON0bits.GO = 1;
-							
-							//wait for the A/D converter to finish
-		while(ADCON0bits.GO)
-		{
-		}
-							
-		result = (int)ADRESL;		//type cast and store low A/D register results in unsigned integer variable
-		
-		if(ADRESH == 0x01)			//perform if statements to handle high A/D register results
-		{
-			result += 256;
-		}
-		if(ADRESH == 0x02)
-		{
-			result += 512;	
-		}
-		if(ADRESH == 0x03)
-		{
-			result += 768;	
-		}			
-					
-		calibrationArray[3] = result;
+void read_ars(void) {
 	
-	
-		i++;
-		
-		Delay10KTCYx(990);		//delay before starting A/D converter again			
 }	
 
-//**********************************************  Calibration Cycle End	*********************************************	
+void interrupt(char c) {
+	pushTXQueue(c);
 
+	LATB &= 0b11111110;
+	Delay10TCYx(1);
+	LATB |= 0b00000001;
+}
 
+void cal_ars(void) {
+	unsigned char i = 0;
+	while(i < 3)
+	{		
+		ADCON0 = ((3 << 2) & 0b00111100) |
+           				(ADCON0 & 0b11000011);					 
+		ADCON0bits.GO = 1;			//start the A/D converter
+		while(ADCON0bits.GO){}		//wait for the A/D converter to finish
+		arsCalibration.bt[0] = ADRESL;
+		arsCalibration.bt[1] = ADRESH;
+		i++;
+		Delay10KTCYx(990);		//delay before starting A/D converter again		
+	}
+}		
 
-		
-		
-		
-//*********************  MAIN LOOP BEGIN (a.k.a. line following/corner detection)  **************************************		
-	while(1)
-		{	
-			
-//**********************************************  Left Antenna	*********************************************	
-		
-			
-			
-			ADCON0 = 0x01;		//configure pin 2 as the analog input for the A/D converter
-			
-								//start the A/D converter 
-			ADCON0bits.GO = 1;
-								
-								//wait for the A/D converter to finish
-			while(ADCON0bits.GO)
-			{
-			}
-								
-			result = (int)ADRESL;		//type cast and store low A/D register results in unsigned integer variable
-			
-			if(ADRESH == 0x01)			//perform if statements to handle high A/D register results
-			{
-				result += 256;
-			}
-			if(ADRESH == 0x02)
-			{
-				result += 512;	
-			}
-			if(ADRESH == 0x03)
-			{
-				result += 768;	
-			}			
-			
-			resultArray[0] = result;
-			
-			
+void cal_ant(void) {
+	unsigned char i = 0;
+	unsigned char channel;	
+	while(i < 3)
+	{	
+		channel = 0;
+		while(channel < 3)
+		{
+			ADCON0 = ((channel << 2) & 0b00111100) |
+           				(ADCON0 & 0b11000011);
+			ADCON0bits.GO = 1;			//start the A/D converter 
+			while(ADCON0bits.GO){}		//wait for the A/D converter to finish
+			antCalibration[channel].bt[0] = ADRESL;
+			antCalibration[channel].bt[1] = ADRESH;
 			Delay10TCYx(1);		//delay before starting A/D converter again
-			
-
-
-
-
-
-
-//**********************************************  Right Antenna	*********************************************	
-		
-			
-			
-								//configure pin 3 as the analog input for the A/D converter
-			ADCON0bits.CHS0 = 1;
-			
-								//start the A/D converter 
-			ADCON0bits.GO = 1;
-								
-								//wait for the A/D converter to finish
-			while(ADCON0bits.GO)
-			{
-			}
-								
-			result = (int)ADRESL;		//type cast and store low A/D register results in unsigned integer variable
-			
-			if(ADRESH == 0x01)			//perform if statements to handle high A/D register results
-			{
-				result += 256;
-			}
-			if(ADRESH == 0x02)
-			{
-				result += 512;	
-			}
-			if(ADRESH == 0x03)
-			{
-				result += 768;	
-			}			
-			
-			resultArray[1] = result;
-								
-			Delay10TCYx(1);		//delay before starting A/D converter again
-			
-			
-
-
-
-
-
-//**********************************************  Front Antenna	*********************************************	
-		
-			
-								//configure pin 4 as the analog input for the A/D converter
-			ADCON0bits.CHS0 = 0;
-			ADCON0bits.CHS1 = 1;
-			
-								//start the A/D converter 
-			ADCON0bits.GO = 1;
-								
-								//wait for the A/D converter to finish
-			while(ADCON0bits.GO)
-			{
-			}
-								
-			result = (int)ADRESL;		//type cast and store low A/D register results in unsigned integer variable
-			
-			if(ADRESH == 0x01)			//perform if statements to handle high A/D register results
-			{
-				result += 256;
-			}
-			if(ADRESH == 0x02)
-			{
-				result += 512;	
-			}
-			if(ADRESH == 0x03)
-			{
-				result += 768;	
-			}			
-						
-			resultArray[2] = result;						
-						
-
-
-
-
-
-//**********************************************  Angular Rate Sensor	*********************************************	
-
-									//configure pin 5 as the analog input for the A/D converter
-			ADCON0bits.CHS0 = 1;
-			
-			
-								//start the A/D converter 
-			ADCON0bits.GO = 1;
-								
-								//wait for the A/D converter to finish
-			while(ADCON0bits.GO)
-			{
-			}
-								
-			result = (int)ADRESL;		//type cast and store low A/D register results in unsigned integer variable
-			
-			if(ADRESH == 0x01)			//perform if statements to handle high A/D register results
-			{
-				result += 256;
-			}
-			if(ADRESH == 0x02)
-			{
-				result += 512;	
-			}
-			if(ADRESH == 0x03)
-			{
-				result += 768;	
-			}			
-						
-			resultArray[3] = result;
-		
-		
-		
-					
-//******************************  LINE FOLLOWING ALGORITHM BEGIN **********************************
-		
-			
-			if(resultArray[0] < (calibrationArray[0]+thresholdLine) && resultArray[1] < (calibrationArray[1]+thresholdLine))
-			{
-				TXString("********  NO WIRE DETECTED  ***********");
-				TXString("\x0D\x0A");
-			}	
-			else
-			{
-										//get ready to determine line following instructions by calculating the difference 
-										//between the power received on the left and right antennas
-				differenceLineFollow = (int)resultArray[0] - (int)resultArray[1];
-				
-				if(differenceLineFollow > (int)thresholdLineFollow)
-				{
-					TXString("*********   GO LEFT   *********");
-					TXString("\x0D\x0A");	
-				}	
-				else
-				{	
-					if(differenceLineFollow < (int)(thresholdLineFollow*-1))
-					{
-						TXString("********	  GO RIGHT  *********");
-						TXString("\x0D\x0A");
-					}
-					else
-					{
-						TXString("**********   DEAD ON   ************");
-						TXString("\x0D\x0A");
-					}		
-				}
-			
-			}
-//******************************  LINE FOLLOWING ALGORITHM END **********************************
-
-
-
-
-				
-			
-//******************************  CORNER DETECTION ALGORITHM BEGIN **********************************
-										
-										//get ready to determine corner detection by calculating the difference between the power recieved
-										//by the corner antenna at startup and current readings
-//			differenceCorner = (int)resultArray[2] - (int)calibrationArray[2];	
-								
-			
-			thingOne = calibrationArray[2] + thresholdCorner;
-			thingTwo = calibrationArray[2] - 5;
-								
-										//perform if statements based on "differenceCorner" value to provide appropriate instuctions
-			if(resultArray[2] > thingOne)
-			{
-				TXString("***********  Reached Corner **************");
-				TXString("\x0D\x0A");
-			}
-			else
-			{
-				if(resultArray[2] < thingTwo)
-				{
-					TXString("***********   ERROR   *************");	
-					TXString("\x0D\x0A");
-				}
-//				else
-//				{
-//					TXString("***********   No Corner   *************");	
-//					TXString("\x0D\x0A");	
-//				}			
-			}
-//******************************  CORNER DETECTION ALGORITHM END **********************************
-
-
-		
-		
-			
-			
-			
-
-
-//***********************************  ANGULAR RATE DATA HANDLING BEGIN *********************************	
-			
-		//	differenceAngularRate = 
-			
-			
-			
-			/*What I need to do:
-			
-				- get the differenence of the analog output
-				- determine time period overwhich
-				
-
-			
-			*/
-
-
-
-//***********************************  ANGULAR RATE DATA HANDLING END *********************************	
-
-
-
-
-
-
-
-
-
-
-//***********************************  DEBUGGING SERIAL OUTPUT BEGIN *********************************	
-		
-//			TXDec_Int(resultArray[0]);
-//			TXString("\x0D\x0A");
-			TXDec_Int(resultArray[3]);
-			TXString("\x0D\x0A");
-			TXString("\x0D\x0A");
-			TXDec_Int(calibrationArray[3]);
-			TXString("\x0D\x0A");
-//			TXDec_Int(calibrationArray[1]);
-//			TXString("\x0D\x0A");
-//			TXString("\x0D\x0A");
-//			TXDec_Int(differenceLineFollow);
-			
-//***********************************  DEBUGGING SERIAL OUTPUT END *********************************
-								
-								
-								
-								
-								
-								
-			Delay10KTCYx(99);		//delay before starting A/D converter again
-			
-			
-			
+			channel++;
 		}
-		
-//***********************  END MAIN LOOP (a.k.a. line following)  ************************************		
+		i++;
+		Delay10TCYx(990);		//delay before starting A/D converter again		
+	}	
+}
+
+void line_follow() {
+	// This function simply checks the antenna values against the threshholds in the eeprom and 
+	// interrupts if nessisary.  The interrupt return messages are on the wiki and should kept up to date
+	// with any changes.
+	
+	int differenceLineFollow;
+	differenceLineFollow = 0;
+	
+	if(antMeasure[0].lt < (antCalibration[0].lt + EE_line_threshold) && 
+		antMeasure[1].lt  < (antCalibration[1].lt + EE_line_threshold))
+	{
+		if(ProcStatus.line_follow_int)
+		{
+			interrupt(INT_LINE_ERROR);
+			ProcStatus.line_follow_int = 0;	
+		}
+	}	
+	else
+	{
+		differenceLineFollow = antMeasure[0].lt - antMeasure[1].lt;
+		if(differenceLineFollow > EE_line_follow_threshold)
+		{
+			if(ProcStatus.line_follow_int)
+			{
+				interrupt(INT_LINE_LEFT);
+				ProcStatus.line_follow_int = 0;		
+			}
+		}	
+		else if(differenceLineFollow > EE_line_follow_threshold)
+		{
+			if(ProcStatus.line_follow_int)
+			{
+				interrupt(INT_LINE_RIGHT);
+				ProcStatus.line_follow_int = 0;	
+			}
+		}	
+		else
+		{
+			if(ProcStatus.line_follow_int)
+			{
+				interrupt(INT_LINE_CENTER);	
+				ProcStatus.line_follow_int = 0;	
+			}
+		}	
+	}
+}
+
+void corner_detection() {
+	// This function simply checks the antenna values against the threshholds in the eeprom and 
+	// interrupts if nessisary.  The interrupt return messages are on the wiki and should kept up to date
+	// with any changes.
+	if(antMeasure[2].lt > antCalibration[2].lt + EE_corner_threshold)
+	{
+		if(ProcStatus.corner_detect_int)
+		{
+			interrupt(INT_CORNER_DETECT);
+			ProcStatus.corner_detect_int = 0;
+		}
+	}
+	else
+	{
+	if(ProcStatus.corner_detect_int)
+		{
+			interrupt(INT_CORNER_NO_DETECT);
+			ProcStatus.corner_detect_int = 0;
+		}			
+	}
+}
+
+void line_detection() {
+	// This function simply checks the antenna values against the threshholds in the eeprom and 
+	// interrupts if nessisary.  The interrupt return messages are on the wiki and should kept up to date
+	// with any changes.
+	
 }

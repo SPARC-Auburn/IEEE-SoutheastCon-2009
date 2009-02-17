@@ -6,5 +6,7 @@ void Init_Oscillator	(void);
 void Init_Interrupts	(void);
 void Init_I2C			(void);
 void Init_USART			(void);
+void Init_ADC			(void);
+void Init_Timers		(void);
 
 #endif

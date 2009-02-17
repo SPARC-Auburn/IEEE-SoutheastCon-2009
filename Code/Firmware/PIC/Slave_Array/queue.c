@@ -8,64 +8,123 @@
  */
 
 #include "queue.h"
+#include "hardware.h"
 
-#define BUFFER_SIZE 32
+#define TX_BUFFER_SIZE 125
+#define RX_BUFFER_SIZE 125
 #pragma udata QUEUE
-volatile unsigned char queue_buffer[BUFFER_SIZE];
+volatile unsigned char tx_buffer[TX_BUFFER_SIZE];
+volatile unsigned char rx_buffer[RX_BUFFER_SIZE];
 
 #pragma code
-volatile int count = 0;
-volatile int left = 0;
-volatile int right = 0;
+volatile unsigned char tx_count = 0;
+volatile unsigned char tx_read_ptr = 0;
+volatile unsigned char tx_write_ptr = 0;
 
-unsigned char isQueueEmpty() 
+volatile unsigned char rx_count = 0;
+volatile unsigned char rx_read_ptr = 0;
+volatile unsigned char rx_write_ptr = 1;
+
+volatile struct status QueueStatus;
+
+unsigned char isTXEmpty(void) 
 {
-	if(count > 0)
+	return QueueStatus.TxBufferEmpty;
+}
+
+unsigned char isRXEmpty(void)
+{
+	return QueueStatus.RxBufferEmpty;
+}	
+
+unsigned char isTXFull(void)
+{
+	return QueueStatus.TxBufferFull;
+}
+
+unsigned char isRXFull(void)
+{
+	return QueueStatus.RxBufferFull;
+}
+
+void pushTXQueue(unsigned char c)
+{
+	if(QueueStatus.TxBufferFull)
+	{
+		return;	
+	}
+	tx_buffer[tx_write_ptr] = c;
+	tx_count++;
+	QueueStatus.TxBufferEmpty = 0;
+	if(tx_count == TX_BUFFER_SIZE)
+	{
+		QueueStatus.TxBufferFull = 1;
+	}
+	tx_write_ptr++;
+	if(tx_write_ptr == TX_BUFFER_SIZE)
+	{
+		tx_write_ptr = 0;	
+	}
+}
+
+void pushRXQueue(unsigned char c)
+{
+	if(QueueStatus.RxBufferFull)
+	{
+		return;	
+	}	
+	rx_buffer[rx_write_ptr] = c;
+	rx_count++;
+	QueueStatus.RxBufferEmpty = 0;
+	if(rx_count == RX_BUFFER_SIZE)
+	{
+		QueueStatus.RxBufferFull = 1;
+	}
+	rx_write_ptr++;
+	if(rx_write_ptr == RX_BUFFER_SIZE)
+	{
+		rx_write_ptr = 0;	
+	}
+}
+
+unsigned char popTXQueue(unsigned char *c)
+{
+	if(QueueStatus.TxBufferEmpty)
 	{
 		return 0;
 	}
-	else
+	QueueStatus.TxBufferFull = 0;
+	*c = tx_buffer[tx_read_ptr];
+	tx_count--;
+	if(tx_count == 0)
 	{
-		return 1;
+		QueueStatus.TxBufferEmpty = 1;	
+	}	
+	tx_read_ptr++;
+	if(tx_read_ptr == TX_BUFFER_SIZE)
+	{
+		tx_read_ptr = 0;	
 	}
+	return 1;			
 }
 
-unsigned char isQueueFull()
+unsigned char popRXQueue(unsigned char *c)
 {
-	if(count == (BUFFER_SIZE - 1))
-	{
-		return 1;
-	}
-	else
+	if(QueueStatus.RxBufferEmpty)
 	{
 		return 0;
 	}
-}
-
-void pushQueue(unsigned char c)
-{
-	if(count != (BUFFER_SIZE - 1))
+	QueueStatus.RxBufferFull = 0;
+	*c = rx_buffer[rx_read_ptr];
+	rx_count--;
+	if(rx_count == 0)
 	{
-		queue_buffer[right] = c;
-		if(right == (BUFFER_SIZE - 1))
-		{
-			right = 0;
-		}
-		else
-		{
-			right++;
-		}
-		count++;
-	}
-}
-
-unsigned char popQueue()
-{
-	if(!isQueueEmpty())
+		QueueStatus.RxBufferEmpty = 1;	
+	}	
+	rx_read_ptr++;
+	if(rx_read_ptr == RX_BUFFER_SIZE)
 	{
-		count--;
-		left++;
-		return queue_buffer[left-1];
+		rx_read_ptr = 0;	
 	}
+	return 1;			
 }
-
