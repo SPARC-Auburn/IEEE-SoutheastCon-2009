@@ -7,7 +7,23 @@
  *
  */
 
-unsigned char isQueueEmpty(void);
-unsigned char isQueueFull(void);
-void pushQueue(unsigned char);
-unsigned char popQueue(void);
+struct status
+{
+	unsigned TxBufferFull  :1;
+	unsigned TxBufferEmpty :1;
+	unsigned RxBufferFull  :1;
+	unsigned RxBufferEmpty :1;
+	unsigned RxOverFlow :1;
+	unsigned RxError:1;				
+};
+
+void			SerialISR		(void);
+
+unsigned char 	isTXEmpty		(void);
+unsigned char	isRXEmpty		(void);
+unsigned char	isTXFull		(void);
+unsigned char	isRXFull		(void);
+void			pushTXQueue		(unsigned char c);
+void			pushRXQueue		(unsigned char c);
+unsigned char	popTXQueue		(unsigned char *c);
+unsigned char	popRXQueue		(unsigned char *c);

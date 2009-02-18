@@ -7,7 +7,6 @@
 int Init (void) 
 {	
 	Init_Oscillator();
-	Init_I2C();
 	Init_Interrupts();
 	Init_USART();
 	Init_Timers();
@@ -33,36 +32,30 @@ void Init_Interrupts(void)
 	INTCONbits.GIEH = 1; 	//high priority interrupt enabler
 }	
 
-void Init_I2C(void)
-{
-	#ifdef MASTER
-		OpenI2C(MASTER,SLEW_OFF);
-		// In Master Mode:
-		// Clock = Fosc/(4 * (SSPADD + 1))
-		// SSPADD = Fosc/(4 * Fi2c) - 1 = 8meg/4*100k - 1 = 19
-		// 19 = 0x13
-		// SSPADD = 19;
-		SSPADD = 19;
-	#endif
-	OpenI2C(SLAVE_7,SLEW_OFF);
-	SSPADD = 0x10;			// Slave address
-	PIR1bits.SSPIF = 0; 	// Clear the I2C 
-	PIE1bits.SSPIE = 1;		// Enable I2C Interrupt	
-}
-
 void Init_USART(void)
 {
-	int baud = 70;
+	// SPBRG = (Fosc/Baud)/4 - 1
+	// Fosc = 32000000
+	// Baud = 115200
+	// SPBRG = (32000000/115200)/4 - 1
+	// SPBRG = 277.778/4 - 1 = 69.4444 - 1 = 68.4444
+	
+	// Actual Baud = Fosc/(4*(SPBRG + 1)) = 32000000/(4*(68 + 1)) = 115942 baud
+	// Error = (115942-115200)/115200 * 100% = 0.6%
+	int baud = 68;
 	
 	TXSTA = 0;		// Reset registers
 	RCSTA = 0;
 	RCSTAbits.CREN = 1;		// Continuous Reception
 	TXSTAbits.BRGH = 1;		// High Baud Rate
-	BAUDCONbits.BRG16 = 1;
-	PIR1bits.TXIF = 0;
-	PIE1bits.RCIE = 0;		// No Receive Interrupt
+	BAUDCONbits.BRG16 = 1;	// 16-bit Baud Rate counter
+	
 	PIR1bits.RCIF = 0;
-	PIE1bits.TXIE = 0;		// No Transmit Interrupt
+	PIE1bits.RCIE = 1;		// Enable Receive Interrupt
+	IPR1bits.RCIP = 1;		// High Priority
+	PIR1bits.TXIF = 0;
+	PIE1bits.TXIE = 1;		// Enable Transmit Interrupt
+	IPR1bits.TXIP = 1;		// High Priority
 	
 	SPBRG = baud;			// Write the baud rate
 	SPBRGH = baud >> 8;

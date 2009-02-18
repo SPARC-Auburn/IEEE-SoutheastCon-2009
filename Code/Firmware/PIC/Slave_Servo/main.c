@@ -31,7 +31,7 @@ union Servo servo[4];
 volatile unsigned int timer1_reload, timer3_reload;
 volatile unsigned char timer1_mask, timer3_mask;
 
-unsigned char pwm_deadband = 15;		// Default value, can be varied through I2C
+unsigned char pwm_deadband = 15;		// Default value, can be varied through serial
 
 //***************************************************************************************************************
 //							high_isr
@@ -40,32 +40,9 @@ unsigned char pwm_deadband = 15;		// Default value, can be varied through I2C
 #pragma interrupt high_isr
 void high_isr(void)
 {
-	if(PIR1bits.SSPIF){		// If - SSP Module (I2C)
-		unsigned char c;
-		if(SSPSTATbits.R_W){	// If - Read from slave
-			if(!isQueueEmpty()){// Check if QUEUE is EMPTY
-				c = popQueue();	// Grab a char from the QUEUE
-				SSPBUF = c;		// Write the byte to the I2C bus
-			}
-		} 
-		else {				// Else - Write to Slave
-			if(SSPSTATbits.D_A){	// If - Data
-				if(SSPSTATbits.BF){		//If - Buffer Full
-					c = SSPBUF;	// Grab a char from the I2C Buffer
-					if(!isQueueFull()){	// Check if QUEUE is FULL
-						pushQueue(c);	// Write the char to the QUEUE
-					}
-				}	
-			} 
-			else {					// Else - Address
-				c = SSPBUF;	// Grab a char from the I2C Buffer (Dummy Read)	
-			}
-		}
-		PIR1bits.SSPIF = 0;		// Clear SSP Module Interrupt
-		//SSPCON1bits.CKP = 0;	// Release I2C Clock	
-	} 
-	else {				// Else - Bus Collision (I2C) 
-		PIR2bits.BCLIF = 0; 	// Clear Bus Collision Flag
+	if(PIR1bits.TXIF || PIR1bits.RCIF)
+	{
+		SerialISR();
 	}	
 }
 
@@ -179,16 +156,13 @@ void main (void)
 	servo[1].lt = 1500;
 	servo[2].lt = 1500;
 	servo[3].lt = 1500;
-	
-	TXString("\x0D\x0A");		// Put out a new line
-	TXString("Servos Initialized to 1500");	
-	TXString("\x0D\x0A");
+
 	
 	while(1)
 	{
-		if(!isQueueEmpty())
+		if(!isRXEmpty())
 		{
-			c = popQueue();
+			popRXQueue(&c);
 			#ifdef __DEBUG
 				TXString("popQueue() = ");
 				TXHex(c);
