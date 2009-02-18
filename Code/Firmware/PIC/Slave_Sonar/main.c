@@ -4,32 +4,11 @@
 /*
 Wiring Guide for PIC18F2685:
 
-	pin 6	-	(input) microswitch (active high)
-
-	pin 2	-	(output) LED
- 	pin 3	-	(output) LED
-	pin 4	-	(output) LED
-	pin 5	-	(output) LED
-
-	pin 21	-	(i/o) signal line for Parallax Sonar Module
-	pin 22	-	(i/o) signal line for Parallax Sonar Module
-	pin 23	-	(i/o) signal line for Parallax Sonar Module
-	pin 24	-	(i/o) signal line for Parallax Sonar Module
-
-Wiring Guide for PIC18F4685:
-
-	pin 6	-	(input) microswitch (active high)
-
-	pin 2	-	(output) LED
- 	pin 3	-	(output) LED
-	pin 4	-	(output) LED
-	pin 5	-	(output) LED
-
-	pin 36	-	(i/o) signal line for Parallax Sonar Module
-	pin 35	-	(i/o) signal line for Parallax Sonar Module
-	pin 34	-	(i/o) signal line for Parallax Sonar Module
-	pin 33	-	(i/o) signal line for Parallax Sonar Module
-
+	pin 2 - (i/o) signal line for Back Parallax Sonar Module 
+	pin 3 - (i/o) signal line for Front-Back Parallax Sonar Module
+	pin 4 - (i/o) signal line for Front-Front Parallax Sonar Module
+	
+	pin 6 - (input) microswitch (active high)
 
 
  
@@ -46,11 +25,13 @@ Wiring Guide for PIC18F4685:
 #include <stdlib.h>
 
 unsigned int pulseDuration = 0;
-unsigned int distance[] = {50,50,50,50};
+unsigned int distance[] = {50,50,50};
 int sonarIndex = 0;
 int i;
 char buffer[10];
-unsigned int thresholdInCentimeters = 7;
+unsigned int thresholdBack = 10;
+unsigned int thresholdFrontBack = 20;
+unsigned int thresholdFrontFront = 20;
 
 
 #pragma config OSC = IRCIO67,WDT = OFF, MCLRE = OFF
@@ -126,10 +107,6 @@ void main (void)
 	TXString("\x0D\x0A");		// Put out a new line
 	TXChar('>');	
 	
-	TRISAbits.TRISA0 = 0;				//set pin 2 as input for microswitch, and pins 3,4,5,6 as outputs for LEDs
-	TRISAbits.TRISA1 = 0;
-	TRISAbits.TRISA2 = 0;
-	TRISAbits.TRISA3 = 0;
 	TRISAbits.TRISA4 = 1;
 	
 	ADCON1 = 0X0F;
@@ -142,51 +119,42 @@ void main (void)
 
 while(1)
 {
+		
 	if(PORTAbits.RA4)
 	{
-		TXString("Microswitch Engaged");
-		TXString("\x0D\x0A");
-		
+		TXChar(0x40);			//send the interrupt code for "Microswitch Engaged"
+		TXString("\x0D\x0A");		
 								//start the 1st sonar measurement
 		sonarIndex = 0;		
 
-		TRISBbits.TRISB0 = 0; 	//set pin 21 to output for Parallax triggering sequence
+		TRISAbits.TRISA0 = 0; 	//set pin 2 to output for Parallax triggering sequence
 
-		PORTBbits.RB0 = 0;		//bring pin 21 low
+		PORTAbits.RA0 = 0;		//bring pin 2 low
 		Delay10TCYx(7);			//delay for ~2 microseconds
 
-		PORTBbits.RB0 = 1;  	//bring pin 21 high
+		PORTAbits.RA0 = 1;  	//bring pin 2 high
 		Delay10TCYx(16);		//delay for ~5 microseconds
 
-		PORTBbits.RB0 = 0;		//bring pin 21 low
+		PORTAbits.RA0 = 0;		//bring pin 2 low
 
-		TRISBbits.TRISB0 = 1; 	//set pin 21 to input for pulse readin
+		TRISAbits.TRISA0 = 1; 	//set pin 2 to input for pulse readin
 		
-		while(PORTBbits.RB0 == 0)
+		while(PORTAbits.RA0 == 0)
 		{	
-								//wait for the Parallax to bring pin 21 high				
+								//wait for the Parallax to bring pin 2 high				
 		}
 		
 		WriteTimer0( 0 );		//reset Timer0
 
-		while(PORTBbits.RB0 == 1)
+		while(PORTAbits.RA0 == 1)
 		{
-								//wait for the Parallax to bring pin 21 low
+								//wait for the Parallax to bring pin 2 low
 		}
 								//read the value in Timer0
 		pulseDuration = ReadTimer0();
 
 								//divide the microseconds by 58 to convert to centimeters
 		distance[sonarIndex] = pulseDuration / 58;						
-		
-		if(distance[sonarIndex] < thresholdInCentimeters)
-		{						//illuminate pin 3 LED if reading is less than 7cm
-			PORTAbits.RA3 = 1;
-		}
-		else
-		{
-			PORTAbits.RA3 = 0;
-		}	
 		
 								//output the duration of pulse received from the Parallax in centimeters
 //		TXString("Sonar Reading4:");
@@ -196,28 +164,28 @@ while(1)
 								//start 2nd sonar measurement
 		sonarIndex++;			
 		
-		TRISBbits.TRISB1 = 0; 	//set pin 22 to output for Parallax triggering sequence
+		TRISAbits.TRISA1 = 0; 	//set pin 3 to output for Parallax triggering sequence
 
-		PORTBbits.RB1 = 0;		//bring pin 22 low
+		PORTAbits.RA1 = 0;		//bring pin 3 low
 		Delay10TCYx(7);			//delay for ~2 microseconds
 
-		PORTBbits.RB1 = 1;  	//bring pin 22 high
+		PORTAbits.RA1 = 1;  	//bring pin 3 high
 		Delay10TCYx(16);		//delay for ~5 microseconds
 
-		PORTBbits.RB1 = 0;		//bring pin 22 low
+		PORTAbits.RA1 = 0;		//bring pin 3 low
 
-		TRISBbits.TRISB1 = 1; 	//set pin 22 to input for pulse readin
+		TRISAbits.TRISA1 = 1; 	//set pin 3 to input for pulse readin
 		
-		while(PORTBbits.RB1 == 0)
+		while(PORTAbits.RA1 == 0)
 		{	
-								//wait for the Parallax to bring pin 22 high				
+								//wait for the Parallax to bring pin 3 high				
 		}
 		
 		WriteTimer0( 0 );		//reset Timer0
 
-		while(PORTBbits.RB1 == 1)
+		while(PORTAbits.RA1 == 1)
 		{
-								//wait for the Parallax to bring pin 22 low
+								//wait for the Parallax to bring pin 3 low
 		}
 								//read the value in Timer0
 		pulseDuration = ReadTimer0();
@@ -225,16 +193,7 @@ while(1)
 								//divide the microseconds by 58 to convert to centimeters
 		distance[sonarIndex] = pulseDuration / 58;						
 
-								
-		if(distance[sonarIndex] < thresholdInCentimeters)
-		{						//illuminate pin 4 LED if reading is less than 7cm
-			PORTAbits.RA2 = 1;
-		}
-		else
-		{
-			PORTAbits.RA2 = 0; 
-		}		
-
+		
 								//output the duration of pulse received from the Parallax in centimeters
 //		TXString("Sonar Reading3:");
 //		TXDec_Int(distance[sonarIndex]);
@@ -243,28 +202,28 @@ while(1)
 								//start the 3rd sonar measurement
 		sonarIndex++;
 
-		TRISBbits.TRISB2 = 0; 	//set pin 23 to output for Parallax triggering sequence
+		TRISAbits.TRISA2 = 0; 	//set pin 4 to output for Parallax triggering sequence
 
-		PORTBbits.RB2 = 0;		//bring pin 23 low
+		PORTAbits.RA2 = 0;		//bring pin 4 low
 		Delay10TCYx(7);			//delay for ~2 microseconds
 
-		PORTBbits.RB2 = 1;  	//bring pin 23 high
+		PORTAbits.RA2 = 1;  	//bring pin 4 high
 		Delay10TCYx(16);		//delay for ~5 microseconds
 
-		PORTBbits.RB2 = 0;		//bring pin 23 low
+		PORTAbits.RA2 = 0;		//bring pin 4 low
 
-		TRISBbits.TRISB2 = 1; 	//set pin 23 to input for pulse readin
+		TRISAbits.TRISA2 = 1; 	//set pin 4 to input for pulse readin
 		
-		while(PORTBbits.RB2 == 0)
+		while(PORTAbits.RA2 == 0)
 		{	
-								//wait for the Parallax to bring pin 23 high				
+								//wait for the Parallax to bring pin 4 high				
 		}
 		
 		WriteTimer0( 0 );		//reset Timer0
 
-		while(PORTBbits.RB2 == 1)
+		while(PORTAbits.RA2 == 1)
 		{
-								//wait for the Parallax to bring pin 23 low
+								//wait for the Parallax to bring pin 4 low
 		}
 								//read the value in Timer0
 		pulseDuration = ReadTimer0();
@@ -272,86 +231,46 @@ while(1)
 								//divide the microseconds by 58 to convert to centimeters
 		distance[sonarIndex] = pulseDuration / 58;						
 		
-		if(distance[sonarIndex] < thresholdInCentimeters)
-		{						//illuminate pin 5 LED if reading is less than 7cm
-			PORTAbits.RA1 = 1;
-		}
-		else
-		{
-			PORTAbits.RA1 = 0; 
-		}		
-
 
 								//output the duration of pulse received from the Parallax in centimeters
 //		TXString("Sonar Reading:");
 //		TXDec_Int(distance[sonarIndex]);
 //		TXString("\x0D\x0A");
 
-								//start the 4rd sonar measurement
-		sonarIndex++;
 
-		TRISBbits.TRISB3 = 0; 	//set pin 24 to output for Parallax triggering sequence
-
-		PORTBbits.RB3 = 0;		//bring pin 24 low
-		Delay10TCYx(7);			//delay for ~2 microseconds
-
-		PORTBbits.RB3 = 1;  	//bring pin 24 high
-		Delay10TCYx(16);		//delay for ~5 microseconds
-
-		PORTBbits.RB3 = 0;		//bring pin 24 low
-
-		TRISBbits.TRISB3 = 1; 	//set pin 24 to input for pulse readin
 		
-		while(PORTBbits.RB3 == 0)
-		{	
-								//wait for the Parallax to bring pin 24 high				
-		}
-		
-		WriteTimer0( 0 );		//reset Timer0
-
-		while(PORTBbits.RB3 == 1)
+		if(distance[0] > thresholdBack)
 		{
-								//wait for the Parallax to bring pin 24 low
-		}
-								//read the value in Timer0
-		pulseDuration = ReadTimer0();
-
-								//divide the microseconds by 58 to convert to centimeters
-		distance[sonarIndex] = pulseDuration / 58;	
-
-		if(distance[sonarIndex] < thresholdInCentimeters)
-		{						//illuminate pin 6 LED if reading is less than 7cm
-			PORTAbits.RA0 = 1;
-		}
-		else
-		{
-			PORTAbits.RA0 = 0; 
-		}					
-
-								//output the duration of pulse received from the Parallax in centimeters
-//		TXString("Sonar Reading:");
-//		TXDec_Int(distance[sonarIndex]);
-//		TXString("\x0D\x0A");
-		
-		if(PORTAbits.RA0 & PORTAbits.RA1 & PORTAbits.RA2 & PORTAbits.RA3)
-		{
-			TXString("Plastic Bottle");			
+			TXChar(0x41);		//send code for "No Object"
+			TXString("\x0D\x0A");			
 		}	 
 		else
 		{
-			if(PORTAbits.RA0 & PORTAbits.RA1 & PORTAbits.RA2 & !PORTAbits.RA3)
+			if(distance[1] < thresholdFrontBack && distance[2] < thresholdFrontFront)
 			{
-				TXString("Glass Bottle");	
+				TXChar(0x44);	//send code for "Plastic Bottle"
+				TXString("\x0D\x0A");			
+	
 			}
 			else
 			{
-				if(PORTAbits.RA0 & PORTAbits.RA1 & !PORTAbits.RA2 & !PORTAbits.RA3)
+				if(distance[1] < thresholdFrontBack && distance[2] > thresholdFrontFront)
 				{
-					TXString("Aluminum Can");	
+					TXChar(0x43);	//send code for "Glass Bottle"
+					TXString("\x0D\x0A");	
 				}
 				else
 				{
-					TXString("Error");	
+					if(distance[1] > thresholdFrontBack && distance[2] > thresholdFrontFront)
+					{
+						TXChar(0x42);	//send code for "Aluminum Can"
+						TXString("\x0D\x0A");	
+					}
+					else
+					{
+						TXChar(0x45);	//send code for "Error - FrontFront Sonar is triggered, but FrontBack is not"
+						TXString("\x0D\x0A");	
+					}	
 				}			
 			}
 								
@@ -360,12 +279,10 @@ while(1)
 	}
 	else
 	{
-		TXString("Microswitch NOT Engaged");
-		TXString("\x0D\x0A");
+		//don't do shit
 	}
 	
-	//TXString("IT is HERE");
-	//Delay10KTCYx(8000);
+	
 }	
 
 }
