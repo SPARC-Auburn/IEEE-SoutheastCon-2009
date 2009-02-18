@@ -20,20 +20,19 @@
 #include "hardware.h"
 #include "queue.h"
 #include <delays.h>
-#include <math.h>
+
 
 
 
 
 //*****************************  INITIALIZE VARIABLES BEGIN *************************
 
-unsigned int result, thingOne, thingTwo;
 
-unsigned int resultArray[4] = {0,0,0};
+unsigned int resultArray[3] = {0,0,0};
 
-unsigned int calibrationArray[4] = {0,0,0};
+unsigned int calibrationArray[3] = {0,0,0};
 
-int differenceLineFollow, differenceCorner, differenceAngularRate;
+int differenceLineFollow, differenceCorner, differenceAngularRate, result, thingOne, thingTwo;
 
 
 								//  SET THRESHOLDS FOR THE LINE FOLLOWING AND CORNER DETECTION ALGORITHMS
@@ -41,9 +40,8 @@ const unsigned int thresholdLineFollow = 50;
 
 const unsigned int thresholdCorner = 30;
 
-const unsigned int thresholdLine = 20;
+const unsigned int thresholdLine = 50;
 
-const char slaveAddress = 11;
 
 
 							
@@ -60,66 +58,66 @@ unsigned int i = 0;				//  SET INDEX VALUE TO CONTROL NUMBER OF TIMES CALIBRATIO
 
 #pragma config OSC = IRCIO67,WDT = OFF, MCLRE = OFF
 
-#pragma code high_vector=0x08
-void high_vec(void)
-{
-	_asm goto high_isr _endasm
-}
-
-
-#pragma code low_vector=0x18
-void low_vec (void)
-{
-   _asm goto low_isr _endasm
-}
-
-#pragma code
-volatile unsigned char pointer;
-
-//***************************************************************************************************************
-//							high_isr
-//***************************************************************************************************************
-
-#pragma interrupt high_isr
-void high_isr(void)
-{
-	if(PIR1bits.SSPIF){		// If - SSP Module (I2C)
-		unsigned char c;
-		if(SSPSTATbits.R_W){	// If - Read from slave
-			if(!isQueueEmpty()){// Check if QUEUE is EMPTY
-				c = popQueue();	// Grab a char from the QUEUE
-				SSPBUF = c;		// Write the byte to the I2C bus
-			}
-		} 
-		else {				// Else - Write to Slave
-			if(SSPSTATbits.D_A){	// If - Data
-				if(SSPSTATbits.BF){		//If - Buffer Full
-					c = SSPBUF;	// Grab a char from the I2C Buffer
-					if(!isQueueFull()){	// Check if QUEUE is FULL
-						pushQueue(c);	// Write the char to the QUEUE
-					}
-				}	
-			} 
-			else {					// Else - Address
-				c = SSPBUF;	// Grab a char from the I2C Buffer (Dummy Read)	
-			}
-		}
-		PIR1bits.SSPIF = 0;		// Clear SSP Module Interrupt
-		//SSPCON1bits.CKP = 0;	// Release I2C Clock	
-	} 
-	else {				// Else - Bus Collision (I2C) 
-		PIR2bits.BCLIF = 0; 	// Clear Bus Collision Flag
-	}	
-}
-
-//***************************************************************************************************************
-//							low_isr
-//***************************************************************************************************************
-
-#pragma interruptlow low_isr
-void low_isr (void)
-{	
-}
+//#pragma code high_vector=0x08
+//void high_vec(void)
+//{
+//	_asm goto high_isr _endasm
+//}
+//
+//
+//#pragma code low_vector=0x18
+//void low_vec (void)
+//{
+//   _asm goto low_isr _endasm
+//}
+//
+//#pragma code
+//volatile unsigned char pointer;
+//
+////***************************************************************************************************************
+////							high_isr
+////***************************************************************************************************************
+//
+//#pragma interrupt high_isr
+//void high_isr(void)
+//{
+//	if(PIR1bits.SSPIF){		// If - SSP Module (I2C)
+//		unsigned char c;
+//		if(SSPSTATbits.R_W){	// If - Read from slave
+//			if(!isQueueEmpty()){// Check if QUEUE is EMPTY
+//				c = popQueue();	// Grab a char from the QUEUE
+//				SSPBUF = c;		// Write the byte to the I2C bus
+//			}
+//		} 
+//		else {				// Else - Write to Slave
+//			if(SSPSTATbits.D_A){	// If - Data
+//				if(SSPSTATbits.BF){		//If - Buffer Full
+//					c = SSPBUF;	// Grab a char from the I2C Buffer
+//					if(!isQueueFull()){	// Check if QUEUE is FULL
+//						pushQueue(c);	// Write the char to the QUEUE
+//					}
+//				}	
+//			} 
+//			else {					// Else - Address
+//				c = SSPBUF;	// Grab a char from the I2C Buffer (Dummy Read)	
+//			}
+//		}
+//		PIR1bits.SSPIF = 0;		// Clear SSP Module Interrupt
+//		//SSPCON1bits.CKP = 0;	// Release I2C Clock	
+//	} 
+//	else {				// Else - Bus Collision (I2C) 
+//		PIR2bits.BCLIF = 0; 	// Clear Bus Collision Flag
+//	}	
+//}
+//
+////***************************************************************************************************************
+////							low_isr
+////***************************************************************************************************************
+//
+//#pragma interruptlow low_isr
+//void low_isr (void)
+//{	
+//}
 
 //***************************************************************************************************************
 //							main
@@ -131,9 +129,6 @@ void main (void)
 	Init();
 	TXString("\x0D\x0A");		//Put out a new line
 	TXChar('>');	
-
-
-
 
 
 //************************************  SETUP A/D CONVERTER BEGIN  ***********************************
@@ -156,9 +151,6 @@ void main (void)
 
 
 
-
-
-
 //**********************************************  Calibration Cycle Begin	*********************************************	
 
 while(i < 3)
@@ -168,7 +160,7 @@ while(i < 3)
 //**********************************************  Left Antenna	*********************************************	
 
 
-		ADCON0 = 0x01;		//configure pin 2 as the analog input for the A/D converter
+		//ADCON0 = 0x01;		//configure pin 2 as the analog input for the A/D converter
 			
 							//start the A/D converter 
 		ADCON0bits.GO = 1;
@@ -277,55 +269,20 @@ while(i < 3)
 		
 		
 		
-		
-//**********************************************  Angular Rate Sensor	*********************************************	
-		
-							//configure pin 5 as the analog input for the A/D converter
-		ADCON0bits.CHS0 = 1;
-		
-		
-							//start the A/D converter 
-		ADCON0bits.GO = 1;
-							
-							//wait for the A/D converter to finish
-		while(ADCON0bits.GO)
-		{
-		}
-							
-		result = (int)ADRESL;		//type cast and store low A/D register results in unsigned integer variable
-		
-		if(ADRESH == 0x01)			//perform if statements to handle high A/D register results
-		{
-			result += 256;
-		}
-		if(ADRESH == 0x02)
-		{
-			result += 512;	
-		}
-		if(ADRESH == 0x03)
-		{
-			result += 768;	
-		}			
-					
-		calibrationArray[3] = result;
+	i++;
 	
+	Delay10KTCYx(99);		
 	
-		i++;
-		
-		Delay10KTCYx(990);		//delay before starting A/D converter again			
 }	
 
 //**********************************************  Calibration Cycle End	*********************************************	
 
-
-
-		
 		
 		
 //*********************  MAIN LOOP BEGIN (a.k.a. line following/corner detection)  **************************************		
 	while(1)
 		{	
-			
+				
 //**********************************************  Left Antenna	*********************************************	
 		
 			
@@ -445,36 +402,7 @@ while(i < 3)
 
 //**********************************************  Angular Rate Sensor	*********************************************	
 
-									//configure pin 5 as the analog input for the A/D converter
-			ADCON0bits.CHS0 = 1;
 			
-			
-								//start the A/D converter 
-			ADCON0bits.GO = 1;
-								
-								//wait for the A/D converter to finish
-			while(ADCON0bits.GO)
-			{
-			}
-								
-			result = (int)ADRESL;		//type cast and store low A/D register results in unsigned integer variable
-			
-			if(ADRESH == 0x01)			//perform if statements to handle high A/D register results
-			{
-				result += 256;
-			}
-			if(ADRESH == 0x02)
-			{
-				result += 512;	
-			}
-			if(ADRESH == 0x03)
-			{
-				result += 768;	
-			}			
-						
-			resultArray[3] = result;
-		
-		
 		
 					
 //******************************  LINE FOLLOWING ALGORITHM BEGIN **********************************
@@ -526,7 +454,7 @@ while(i < 3)
 								
 			
 			thingOne = calibrationArray[2] + thresholdCorner;
-			thingTwo = calibrationArray[2] - 5;
+			thingTwo = calibrationArray[2] - 15;
 								
 										//perform if statements based on "differenceCorner" value to provide appropriate instuctions
 			if(resultArray[2] > thingOne)
@@ -559,19 +487,7 @@ while(i < 3)
 
 //***********************************  ANGULAR RATE DATA HANDLING BEGIN *********************************	
 			
-		//	differenceAngularRate = 
-			
-			
-			
-			/*What I need to do:
-			
-				- get the differenence of the analog output
-				- determine time period overwhich
-				
-
-			
-			*/
-
+		
 
 
 //***********************************  ANGULAR RATE DATA HANDLING END *********************************	
@@ -587,18 +503,7 @@ while(i < 3)
 
 //***********************************  DEBUGGING SERIAL OUTPUT BEGIN *********************************	
 		
-//			TXDec_Int(resultArray[0]);
-//			TXString("\x0D\x0A");
-			TXDec_Int(resultArray[3]);
-			TXString("\x0D\x0A");
-			TXString("\x0D\x0A");
-			TXDec_Int(calibrationArray[3]);
-			TXString("\x0D\x0A");
-//			TXDec_Int(calibrationArray[1]);
-//			TXString("\x0D\x0A");
-//			TXString("\x0D\x0A");
-//			TXDec_Int(differenceLineFollow);
-			
+					
 //***********************************  DEBUGGING SERIAL OUTPUT END *********************************
 								
 								
@@ -606,11 +511,13 @@ while(i < 3)
 								
 								
 								
-			Delay10KTCYx(99);		//delay before starting A/D converter again
+		Delay10KTCYx(99);		//delay before starting A/D converter again
 			
 			
 			
 		}
 		
+	
+
 //***********************  END MAIN LOOP (a.k.a. line following)  ************************************		
 }

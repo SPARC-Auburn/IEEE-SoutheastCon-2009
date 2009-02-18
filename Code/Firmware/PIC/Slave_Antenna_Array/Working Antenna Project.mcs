@@ -4,7 +4,7 @@ Version=1.0
 [File000]
 Location=K:\SPaRC code repository\Firmware\PIC\Slave_Antenna_Array\main.o
 Folder=Intermediary
-DeviceName=PIC18F4685
+DeviceName=PIC18F2685
 LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
 LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
 LanguageToolLocation=C:\MCC18\bin\mcc18.exe
@@ -17,7 +17,7 @@ DebugOptions=-D__DEBUG
 [File001]
 Location=K:\SPaRC code repository\Firmware\PIC\Slave_Antenna_Array\init.o
 Folder=Intermediary
-DeviceName=PIC18F4685
+DeviceName=PIC18F2685
 LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
 LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
 LanguageToolLocation=C:\MCC18\bin\mcc18.exe
@@ -30,7 +30,7 @@ DebugOptions=-D__DEBUG
 [File002]
 Location=K:\SPaRC code repository\Firmware\PIC\Slave_Antenna_Array\serial.o
 Folder=Intermediary
-DeviceName=PIC18F4685
+DeviceName=PIC18F2685
 LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
 LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
 LanguageToolLocation=C:\MCC18\bin\mcc18.exe
@@ -43,7 +43,7 @@ DebugOptions=-D__DEBUG
 [File003]
 Location=K:\SPaRC code repository\Firmware\PIC\Slave_Antenna_Array\queue.o
 Folder=Intermediary
-DeviceName=PIC18F4685
+DeviceName=PIC18F2685
 LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
 LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
 LanguageToolLocation=C:\MCC18\bin\mcc18.exe
@@ -56,7 +56,7 @@ DebugOptions=-D__DEBUG
 [File004]
 Location=K:\SPaRC code repository\Firmware\PIC\Slave_Antenna_Array\Working Antenna Project.cof
 Folder=Output
-DeviceName=PIC18F4685
+DeviceName=PIC18F2685
 LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
 LanguageToolID={96C98149-AA1B-4CF9-B967-FAE79CAB663C}
 LanguageToolLocation=C:\MCC18\bin\mplink.exe
@@ -69,7 +69,7 @@ DebugOptions=/z__MPLAB_DEBUG=1
 [File005]
 Location=K:\SPaRC code repository\Firmware\PIC\Slave_Antenna_Array\Working Antenna Project.hex
 Folder=Output
-DeviceName=PIC18F4685
+DeviceName=PIC18F2685
 LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
 LanguageToolID={96C98149-AA1B-4CF9-B967-FAE79CAB663C}
 LanguageToolLocation=C:\MCC18\bin\mplink.exe

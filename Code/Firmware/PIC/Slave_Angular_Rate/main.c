@@ -35,7 +35,6 @@ int calibrationAverage, readingAverage, differenceAD, i, result, angle;
 
 float deltaAngle;
 
-union int_byte result_union;
 
 
 //****************************  INITIALIZE VARIABLES END ***********************
@@ -46,7 +45,7 @@ union int_byte result_union;
 
 
 
-#pragma config OSC = IRCIO67,WDT = OFF, MCLRE = ON
+#pragma config OSC = IRCIO67,WDT = OFF, MCLRE = OFF
 
 #pragma code high_vector=0x08
 void high_vec(void)
@@ -145,11 +144,6 @@ OpenTimer1( TIMER_INT_OFF & 	//initialize timer0 for: - interupt disabled
             T0_SOURCE_INT &		//						 - based on internal oscillator
             T0_PS_1_2 );		//						 - 2X prescaler to give sonar measurement 1 microsecond accuracy
             
-OpenTimer3( TIMER_INT_OFF & 	//initialize timer0 for: - interupt disabled
-            T0_16BIT &           //					 	 - 16 bit timer
-            T0_SOURCE_INT &		//						 - based on internal oscillator
-            T0_PS_1_2 );		//						 - 2X prescaler to give sonar measurement 1 microsecond accuracy
-            
 
 
 
@@ -237,42 +231,49 @@ calibrationAverage = calibrationAccumulator/100;
 
 angle = 0;        						//intialize angle to zero
 deltaAngle = 0;
-
-WriteTimer1(60533);
+WriteTimer1(0);
 
 //**********************************************  Main Loop Begin   *************************************************
 while(1)
 	{
 		i = 0;
 		readingAccumulator =0;		
-		INTCONbits.TMR0IF = 0;
-		WriteTimer3(0);
-		WriteTimer0(64533);
+		WriteTimer0(0);
 		
-		while(!INTCONbits.TMR0IF)
-		{	
-			if(i < 16)
-			{
-				ADCON0bits.GO = 1;			//start the A/D converter 
-							
-				while(ADCON0bits.GO)		//wait for the A/D converter to finish
-				{
-				}
+		while(ReadTimer0() < 1000)
+		{
+			ADCON0bits.GO = 1;			//start the A/D converter 
 								
-				result_union.bt[0] =ADRESL;
-				result_union.bt[1] =ADRESH;
+										
+			while(ADCON0bits.GO)		//wait for the A/D converter to finish
+			{
+			}
+								
+			result = (int)ADRESL;		//type cast and store low A/D register results in unsigned integer variable
 			
-				readingAccumulator += result_union.lt;
+			if(ADRESH == 0x01)			//perform if statements to handle high A/D register results
+			{
+				result += 256;
+			}
+			if(ADRESH == 0x02)
+			{
+				result += 512;	
+			}
+			if(ADRESH == 0x03)
+			{
+				result += 768;	
+			}
 			
-				Delay1TCY();				//MINIMUM delay before starting A/D converter again
-				Delay1TCY();
+			readingAccumulator += result;
 			
-				i++;
-			}				
+			Delay1TCY();				//MINIMUM delay before starting A/D converter again
+			Delay1TCY();
+			
+			i++;			
 		}	
 		//WriteTimer0(0);
 										//get average reading over the sample period of 1 millisecond
-		readingAverage = (int)(readingAccumulator >> 4);
+		readingAverage = (int)(readingAccumulator / i);
 						
 										//compute the variation from the calibration value
 		differenceAD = readingAverage - calibrationAverage;
@@ -287,7 +288,8 @@ while(1)
 		}
 		
 		
-		if(PIR1bits.TMR1IF)						//every 5 milliseconds check deltaAngle to determine distance traveled
+		
+		if(ReadTimer1() > 5000)						//every 5 milliseconds check deltaAngle to determine distance traveled
 		{	
 			if(deltaAngle > 1 || deltaAngle < -1);  //if deltaAngle is greater than abs(1)
 			{
@@ -308,11 +310,10 @@ while(1)
 				deltaAngle -= (int)deltaAngle;		//subtract integer from the float to yeild leftover fraction
 			}
 			
-			WriteTimer1(60533);
-			PIR1bits.TMR1IF = 0;	
+			WriteTimer1(0);	
 		}
 												
-		result = ReadTimer3();								
+		//result = ReadTimer0();								
 		TXDec_Int(angle);
 		TXString("\x0D\x0A");
 		//Delay10KTCYx(999);		
