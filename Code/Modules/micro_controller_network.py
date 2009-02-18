@@ -19,6 +19,7 @@ log = logging.getLogger('MCN')
 master_log = logging.getLogger('Master Node')
 # Configs
 import configs
+import configobj
 global config, enable
 config = configs.get_config('Micro Controller Network')
 enabled = config['enabled']
@@ -35,28 +36,30 @@ else:
 
 # Static Functions #
 def init():
-	global config, initialized, master_nodes
-	master_nodes = {}
-	master_nodes['master'] = MasterNode(serial = config['serial_port'], baud_rate = config['baud_rate'])
+	global config, initialized, micro_controllers
+	micro_controllers = {}
+	for x in config:
+		if type(config[x]) is configobj.Section:
+			micro_controllers[x] = MicroController(serial = config[x]['serial_port'], baud_rate = config[x]['baud_rate'])
 	initialized = True
 	
-def get_object(id = 'master'):
-	global master_nodes, initialized
+def get_object(id):
+	global micro_controllers, initialized
 	if not initialized:
 		log.critial("The micro_controller_network.init() method has to be called before retrieving objects.")
 		exit(1)
 	try:
-		return master_nodes[id]
+		return micro_controllers[id]
 	except KeyError:
 		log.error("You provided an invalid id for any of the available Master Nodes.  Please double check the names in the config files.")
 		
 # Classes #
-class MasterNode:
+class MicroController:
 	'''
 		This is the class that represents and provides access to the master 
 		node of a micro controller network.
 		'''
-	def __init__(self, serial='', baud_rate = 19200):
+	def __init__(self, serial='', baud_rate = 115200):
 		'''
 			Constructor - opens serial port given and initializes the master node.
 			'''
@@ -72,10 +75,11 @@ class MasterNode:
 				log.error("Unable to open serial port %s: %s" % (serial, e))
 		self.send_lock = Lock()
 		self.debugging = debug(self.serial)
-		self.debugging.start()
+		if self.serial.isOpen():
+			self.debugging.start()
 		return
 	
-	def send(self, address, msg):
+	def send(self, msg):
 		''''
 			Sends a msg to a micro controller at the given address.
 			Address must be a byte.
@@ -86,20 +90,17 @@ class MasterNode:
 		if not enabled:
 			return
 		if type(msg) is not list:
-			log.error("Messages sent to the master node must be a list of bytes!")
+			log.error("Messages sent to the micro controller must be a list of bytes!")
 			return
 		
 		# Implementation
-		message = '['
-		message += '0h'
-		message += address
+		message = ''
 		for x in msg:
-			message += ' 0h'
 			message += x
-		message += ']'
 		self.send_lock.acquire()
 		master_log.debug("Sending message: %s" % message)
-		self.serial.write(message+'\r')
+		if self.serial.isOpen():
+			self.serial.write(message+'\r')
 		self.send_lock.release()
 		return
 		
@@ -116,8 +117,10 @@ class debug(Thread):
 		self.stop = False
 		
 	def run(self):
+		input = ''
 		while not self.stop:
-			input = self.serial.readline()
+			if self.serial.isOpen():
+				input = self.serial.readline()
 			self.processInput(input)
 			
 	def shutdown(self):

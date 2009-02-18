@@ -62,8 +62,7 @@ def critical(msg):
 	
 # Misc Functions
 def shutdown():
-	master_node.shutdown()
-	pass
+	servo_micro.shutdown()
 
 
 # Initilization #
@@ -97,7 +96,7 @@ mc = saber.get_object()
 # MCN
 import micro_controller_network as mcn
 mcn.init()
-master_node = mcn.get_object()
+servo_micro = mcn.get_object('servo')
 # Servo Controller
 import servo_controller as sc
 sc.init()

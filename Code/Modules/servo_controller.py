@@ -22,18 +22,18 @@ import configobj
 global config, enable
 config = configs.get_config('Servo Controller')
 enabled = config['enabled']
+mc_name = config['micro_controller']
 # micro_controller_network
 import micro_controller_network
 
 # Static Functions #
 def init():
-	global config, initialized, servos, address, mcn
+	global config, initialized, servos, mc
 	servos = {}
 	for x in config:
 		if type(config[x]) is configobj.Section:
 			servos[x] = Servo(config = config[x])
-	address = config['address']
-	mcn = micro_controller_network.get_object()
+	mc = micro_controller_network.get_object(mc_name)
 	initialized = True
 	
 def get_object(id):
@@ -77,7 +77,7 @@ class Servo:
 		'''
 			Moves the servo to the given position in uSeconds.
 			'''
-		global enabled, mcn, address
+		global enabled, mc
 		if not enabled:
 			return
 		log.debug("Moving to position: %i" % position)
@@ -91,7 +91,7 @@ class Servo:
 		for x in range(len(position)):
 			if x % 2 is 1:
 				msg.append(position[x-1:x+1])
-		mcn.send(address, msg)
+		mc.send(msg)
 		return
 		
 	def move(self, position = 0.0):
