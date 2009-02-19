@@ -98,7 +98,7 @@ class MicroController:
 		for x in msg:
 			message += x
 		self.send_lock.acquire()
-		master_log.debug("Sending message: %s" % hex.encode(message))
+		master_log.debug("Sending message: %s" % message.encode('hex'))
 		if self.serial.isOpen():
 			self.serial.write(message+'\r')
 		self.send_lock.release()
