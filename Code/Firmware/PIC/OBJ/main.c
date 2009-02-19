@@ -86,6 +86,7 @@ void main (void)
 //                          setup
 //***************************************************************************************************************
 	Init();	
+	initQueue();
 
 	TRISAbits.TRISA4 = 1;		// set pin 6 as input for microswitch
 	

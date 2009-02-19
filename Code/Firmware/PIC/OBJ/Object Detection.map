@@ -1,5 +1,5 @@
 MPLINK 4.22, Linker
-Linker Map File - Created Thu Feb 19 02:10:38 2009
+Linker Map File - Created Thu Feb 19 15:59:48 2009
 
                                  Section Info
                   Section       Type    Address   Location Size(Bytes)
@@ -30,23 +30,23 @@ Linker Map File - Created Thu Feb 19 02:10:38 2009
             .code_c018i.o       code   0x000016    program   0x000000
                low_vector       code   0x000018    program   0x000006
                    .cinit    romdata   0x00001e    program   0x000026
-           .code_serial.o       code   0x000044    program   0x000698
-             .code_main.o       code   0x0006dc    program   0x00044a
-            .code_queue.o       code   0x000b26    program   0x000244
-               _cinit_scn       code   0x000d6a    program   0x00009e
-             .code_init.o       code   0x000e08    program   0x000078
-           .code_t0read.o       code   0x000e80    program   0x00003e
-          .code_t0write.o       code   0x000ebe    program   0x000038
-           .code_t0open.o       code   0x000ef6    program   0x000038
-             D10KTCYXCODE       code   0x000f2e    program   0x00002e
-         .code_fxd1616u.o       code   0x000f5c    program   0x00002c
-             _startup_scn       code   0x000f88    program   0x00001c
-         .code_fxd0808u.o       code   0x000fa4    program   0x00001c
-              D10TCYXCODE       code   0x000fc0    program   0x000016
-             .stringtable    romdata   0x000fd6    program   0x000016
-                    .code       code   0x000fec    program   0x00000e
-        .idata_serial.o_i    romdata   0x000ffa    program   0x000010
-          .idata_main.o_i    romdata   0x00100a    program   0x000015
+           .code_serial.o       code   0x000044    program   0x00069a
+             .code_main.o       code   0x0006de    program   0x00044e
+            .code_queue.o       code   0x000b2c    program   0x000244
+               _cinit_scn       code   0x000d70    program   0x00009e
+             .code_init.o       code   0x000e0e    program   0x000078
+           .code_t0read.o       code   0x000e86    program   0x00003e
+          .code_t0write.o       code   0x000ec4    program   0x000038
+           .code_t0open.o       code   0x000efc    program   0x000038
+             D10KTCYXCODE       code   0x000f34    program   0x00002e
+         .code_fxd1616u.o       code   0x000f62    program   0x00002c
+             _startup_scn       code   0x000f8e    program   0x00001c
+         .code_fxd0808u.o       code   0x000faa    program   0x00001c
+              D10TCYXCODE       code   0x000fc6    program   0x000016
+             .stringtable    romdata   0x000fdc    program   0x000016
+                    .code       code   0x000ff2    program   0x00000e
+        .idata_serial.o_i    romdata   0x001000    program   0x000010
+          .idata_main.o_i    romdata   0x001010    program   0x000015
     .config_300001_main.o    romdata   0x300001    program   0x000001
     .config_300003_main.o    romdata   0x300003    program   0x000001
     .config_300005_main.o    romdata   0x300005    program   0x000001
@@ -100,112 +100,112 @@ Linker Map File - Created Thu Feb 19 02:10:38 2009
                                Start         End      
                            ---------   ---------      
                             0x000000    0x000014      
-                            0x000018    0x00101e      
+                            0x000018    0x001024      
                             0x300001    0x300001      
                             0x300003    0x300003      
                             0x300005    0x300005      
-            4127 out of 99352 program addresses used, program memory utilization is 4%
+            4133 out of 99352 program addresses used, program memory utilization is 4%
 
 
 
                               Symbols - Sorted by Name
                      Name    Address   Location    Storage File                     
                 ---------  ---------  ---------  --------- ---------                
-                   D10K_1   0x000f3a    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
-                    D10Kl   0x000f46    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
-                    D10Kx   0x000f38    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
-                    D10_1   0x000fd0    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
-                     D10x   0x000fc8    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
-             Delay10KTCYx   0x000f2e    program     extern C:\MCC18\src\traditional\delays\d10ktcyx.asm
-              Delay10TCYx   0x000fc0    program     extern C:\MCC18\src\traditional\delays\d10tcyx.asm
-                 FXD0808U   0x000fa4    program     extern C:\MCC18\src\traditional\math\fxd0808u.c
-                 FXD1616U   0x000f5c    program     extern C:\MCC18\src\traditional\math\fxd1616u.c
-                     Init   0x000e08    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\init.c
-          Init_Interrupts   0x000e22    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\init.c
-          Init_Oscillator   0x000e1c    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\init.c
-               Init_USART   0x000e2a    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\init.c
-               OpenTimer0   0x000ef6    program     extern C:\MCC18\src\pmc_common\Timers\t0open.c
-                   RXChar   0x000052    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\serial.c
-                  RXReady   0x000044    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\serial.c
-               ReadTimer0   0x000e80    program     extern C:\MCC18\src\pmc_common\Timers\t0read.c
-                SerialISR   0x000b42    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-                    TXBin   0x0000c6    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\serial.c
-                TXBin_Int   0x000136    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\serial.c
-                   TXChar   0x00006e    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\serial.c
-                    TXDec   0x0001ce    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\serial.c
-                TXDec_Int   0x000282    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\serial.c
-                    TXHex   0x00054e    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\serial.c
-                TXHex_Int   0x0005c2    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\serial.c
-                 TXString   0x000088    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\serial.c
-              WriteTimer0   0x000ebe    program     extern C:\MCC18\src\pmc_common\Timers\t0write.c
-       _D10KTCYXCODE_0010   0x000f3e    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
-       _D10KTCYXCODE_001C   0x000f4a    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
-        _D10TCYXCODE_000A   0x000fca    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
-        _D10TCYXCODE_000C   0x000fcc    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
-        _D10TCYXCODE_000E   0x000fce    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
-       ___case_0_lbl00014   0x000832    program     static                          
-       ___case_1_lbl00015   0x00083a    program     static                          
-      ___case_48_lbl00016   0x000844    program     static                          
-         ___else_lbl00012   0x000808    program     static                          
-         ___else_lbl00020   0x00089c    program     static                          
-         ___else_lbl00022   0x0008b2    program     static                          
-           ___if_lbl00011   0x000820    program     static                          
-           ___if_lbl00017   0x00085c    program     static                          
-           ___if_lbl00018   0x0008b0    program     static                          
-           ___if_lbl00019   0x0008b0    program     static                          
-           ___if_lbl00021   0x0008b8    program     static                          
+                   D10K_1   0x000f40    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
+                    D10Kl   0x000f4c    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
+                    D10Kx   0x000f3e    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
+                    D10_1   0x000fd6    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
+                     D10x   0x000fce    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
+             Delay10KTCYx   0x000f34    program     extern C:\MCC18\src\traditional\delays\d10ktcyx.asm
+              Delay10TCYx   0x000fc6    program     extern C:\MCC18\src\traditional\delays\d10tcyx.asm
+                 FXD0808U   0x000faa    program     extern C:\MCC18\src\traditional\math\fxd0808u.c
+                 FXD1616U   0x000f62    program     extern C:\MCC18\src\traditional\math\fxd1616u.c
+                     Init   0x000e0e    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\init.c
+          Init_Interrupts   0x000e28    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\init.c
+          Init_Oscillator   0x000e22    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\init.c
+               Init_USART   0x000e30    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\init.c
+               OpenTimer0   0x000efc    program     extern C:\MCC18\src\pmc_common\Timers\t0open.c
+                   RXChar   0x000052    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\serial.c
+                  RXReady   0x000044    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\serial.c
+               ReadTimer0   0x000e86    program     extern C:\MCC18\src\pmc_common\Timers\t0read.c
+                SerialISR   0x000b48    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+                    TXBin   0x0000c8    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\serial.c
+                TXBin_Int   0x000138    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\serial.c
+                   TXChar   0x00006e    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\serial.c
+                    TXDec   0x0001d0    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\serial.c
+                TXDec_Int   0x000284    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\serial.c
+                    TXHex   0x000550    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\serial.c
+                TXHex_Int   0x0005c4    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\serial.c
+                 TXString   0x00008a    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\serial.c
+              WriteTimer0   0x000ec4    program     extern C:\MCC18\src\pmc_common\Timers\t0write.c
+       _D10KTCYXCODE_0010   0x000f44    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
+       _D10KTCYXCODE_001C   0x000f50    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
+        _D10TCYXCODE_000A   0x000fd0    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
+        _D10TCYXCODE_000C   0x000fd2    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
+        _D10TCYXCODE_000E   0x000fd4    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
+       ___case_0_lbl00014   0x000838    program     static                          
+       ___case_1_lbl00015   0x000840    program     static                          
+      ___case_48_lbl00016   0x00084a    program     static                          
+         ___else_lbl00012   0x00080e    program     static                          
+         ___else_lbl00020   0x0008a2    program     static                          
+         ___else_lbl00022   0x0008b8    program     static                          
+           ___if_lbl00011   0x000826    program     static                          
+           ___if_lbl00017   0x000862    program     static                          
+           ___if_lbl00018   0x0008b6    program     static                          
+           ___if_lbl00019   0x0008b6    program     static                          
+           ___if_lbl00021   0x0008be    program     static                          
        ___return_lbl00000   0x00000c    program     static                          
        ___return_lbl00000   0x000004    program     static                          
-       ___return_lbl00000   0x000f86    program     static                          
-       ___return_lbl00000   0x000fbe    program     static                          
+       ___return_lbl00000   0x000f8c    program     static                          
+       ___return_lbl00000   0x000fc4    program     static                          
        ___return_lbl00001   0x00001c    program     static                          
-       ___return_lbl00001   0x000fa2    program     static                          
-       ___return_lbl00002   0x000e06    program     static                          
-       ___return_lbl00006   0x0008ba    program     static                          
-   ___switchexit_lbl00013   0x00084e    program     static                          
-        ___while_lbl00007   0x0007d2    program     static                          
-        ___while_lbl00008   0x0008ba    program     static                          
-        ___while_lbl00009   0x0007d2    program     static                          
-        ___while_lbl00010   0x000850    program     static                          
-               __config_0   0x300001    program     static K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-               __config_1   0x300003    program     static K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-               __config_2   0x300005    program     static K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
+       ___return_lbl00001   0x000fa8    program     static                          
+       ___return_lbl00002   0x000e0c    program     static                          
+       ___return_lbl00006   0x0008c0    program     static                          
+   ___switchexit_lbl00013   0x000854    program     static                          
+        ___while_lbl00007   0x0007d8    program     static                          
+        ___while_lbl00008   0x0008c0    program     static                          
+        ___while_lbl00009   0x0007d8    program     static                          
+        ___while_lbl00010   0x000856    program     static                          
+               __config_0   0x300001    program     static C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+               __config_1   0x300003    program     static C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+               __config_2   0x300005    program     static C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
                    __init   0x000006    program     extern C:\MCC18\src\traditional\stdclib\__init.c
-               __string_0   0x000fdc    program     static K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-               __string_0   0x000fe9    program     static K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\serial.c
-               __string_1   0x000fd9    program     static K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-               __string_1   0x000fe6    program     static K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\serial.c
-               __string_2   0x000fd6    program     static K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-            __zero_memory   0x000fec    program     extern C:\MCC18\src\traditional\proc\p18F2685.asm
-                _do_cinit   0x000d6a    program     extern C:\MCC18\src\traditional\startup\c018i.c
+               __string_0   0x000fe2    program     static C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+               __string_0   0x000fef    program     static C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\serial.c
+               __string_1   0x000fdf    program     static C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+               __string_1   0x000fec    program     static C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\serial.c
+               __string_2   0x000fdc    program     static C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+            __zero_memory   0x000ff2    program     extern C:\MCC18\src\traditional\proc\p18F2685.asm
+                _do_cinit   0x000d70    program     extern C:\MCC18\src\traditional\startup\c018i.c
                    _entry   0x000000    program     extern C:\MCC18\src\traditional\startup\c018i.c
-                 _startup   0x000f88    program     extern C:\MCC18\src\traditional\startup\c018i.c
-               clear_loop   0x000ff2    program     static C:\MCC18\src\traditional\proc\p18F2685.asm
-                copy_loop   0x000ddc    program     static                          
-            copy_one_byte   0x000de2    program     static                          
-                     done   0x000e06    program     static                          
-             done_copying   0x000df0    program     static                          
-                  endloop   0x000fba    program     static                          
-                  endloop   0x000f82    program     static                          
-                 high_isr   0x0006dc    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-                 high_vec   0x000008    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-                initQueue   0x000b26    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-                isRXEmpty   0x000c10    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-                 isRXFull   0x000c28    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-                isTXEmpty   0x000c02    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-                 isTXFull   0x000c1e    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-                     loop   0x000f98    program     static                          
-                     loop   0x000f66    program     static                          
-                     loop   0x000fac    program     static                          
-                  low_isr   0x00077e    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-                  low_vec   0x000018    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-                     main   0x0007a4    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-               poll_sonar   0x0008bc    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-               popRXQueue   0x000d12    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-               popTXQueue   0x000cba    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-              pushRXQueue   0x000c78    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-              pushTXQueue   0x000c36    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-                     test   0x000d84    program     static                          
+                 _startup   0x000f8e    program     extern C:\MCC18\src\traditional\startup\c018i.c
+               clear_loop   0x000ff8    program     static C:\MCC18\src\traditional\proc\p18F2685.asm
+                copy_loop   0x000de2    program     static                          
+            copy_one_byte   0x000de8    program     static                          
+                     done   0x000e0c    program     static                          
+             done_copying   0x000df6    program     static                          
+                  endloop   0x000fc0    program     static                          
+                  endloop   0x000f88    program     static                          
+                 high_isr   0x0006de    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+                 high_vec   0x000008    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+                initQueue   0x000b2c    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+                isRXEmpty   0x000c16    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+                 isRXFull   0x000c2e    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+                isTXEmpty   0x000c08    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+                 isTXFull   0x000c24    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+                     loop   0x000f9e    program     static                          
+                     loop   0x000f6c    program     static                          
+                     loop   0x000fb2    program     static                          
+                  low_isr   0x000780    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+                  low_vec   0x000018    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+                     main   0x0007a6    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+               poll_sonar   0x0008c2    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+               popRXQueue   0x000d18    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+               popTXQueue   0x000cc0    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+              pushRXQueue   0x000c7e    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+              pushTXQueue   0x000c3c    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+                     test   0x000d8a    program     static                          
                    ADCON0   0x000fc2       data     extern C:\MCC18\src\traditional\proc\p18F2685.asm
                ADCON0bits   0x000fc2       data     extern C:\MCC18\src\traditional\proc\p18F2685.asm
                    ADCON1   0x000fc1       data     extern C:\MCC18\src\traditional\proc\p18F2685.asm
@@ -474,7 +474,7 @@ Linker Map File - Created Thu Feb 19 02:10:38 2009
                      FSR2   0x000fd9       data     extern C:\MCC18\src\traditional\proc\p18F2685.asm
                     FSR2H   0x000fda       data     extern C:\MCC18\src\traditional\proc\p18F2685.asm
                     FSR2L   0x000fd9       data     extern C:\MCC18\src\traditional\proc\p18F2685.asm
-                 HEXASCII   0x0001f0       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\serial.c
+                 HEXASCII   0x0001f0       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\serial.c
                   HLVDCON   0x000fd2       data     extern C:\MCC18\src\traditional\proc\p18F2685.asm
               HLVDCONbits   0x000fd2       data     extern C:\MCC18\src\traditional\proc\p18F2685.asm
                     INDF0   0x000fef       data     extern C:\MCC18\src\traditional\proc\p18F2685.asm
@@ -552,8 +552,8 @@ Linker Map File - Created Thu Feb 19 02:10:38 2009
                      PROD   0x000ff3       data     extern C:\MCC18\src\traditional\proc\p18F2685.asm
                     PRODH   0x000ff4       data     extern C:\MCC18\src\traditional\proc\p18F2685.asm
                     PRODL   0x000ff3       data     extern C:\MCC18\src\traditional\proc\p18F2685.asm
-               ProcStatus   0x000096       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-              QueueStatus   0x0000a9       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
+               ProcStatus   0x000096       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+              QueueStatus   0x0000a9       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
                      RCON   0x000fd0       data     extern C:\MCC18\src\traditional\proc\p18F2685.asm
                  RCONbits   0x000fd0       data     extern C:\MCC18\src\traditional\proc\p18F2685.asm
                     RCREG   0x000fae       data     extern C:\MCC18\src\traditional\proc\p18F2685.asm
@@ -942,36 +942,36 @@ Linker Map File - Created Thu Feb 19 02:10:38 2009
                   __REMB1   0x000002       data     extern C:\MCC18\src\traditional\math\aarg.asm
                   __REMB2   0x000001       data     extern C:\MCC18\src\traditional\math\aarg.asm
                   __REMB3   0x000000       data     extern C:\MCC18\src\traditional\math\aarg.asm
-                  __tmp_0   0x000010       data     static K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-                  __tmp_0   0x000010       data     static K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\serial.c
-                  __tmp_0   0x000010       data     static K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\init.c
-                  __tmp_0   0x000010       data     static K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
+                  __tmp_0   0x000010       data     static C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+                  __tmp_0   0x000010       data     static C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\serial.c
+                  __tmp_0   0x000010       data     static C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\init.c
+                  __tmp_0   0x000010       data     static C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
                   __tmp_0   0x000010       data     static C:\MCC18\src\pmc_common\Timers\t0read.c
-                        c   0x000083       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
+                        c   0x000083       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
                 curr_byte   0x00009c       data     static C:\MCC18\src\traditional\startup\c018i.c
                curr_entry   0x00009e       data     static C:\MCC18\src\traditional\startup\c018i.c
-       current_parameters   0x000060       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.h
-             current_proc   0x000097       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
+       current_parameters   0x000060       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.h
+             current_proc   0x000097       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
                  data_ptr   0x0000a0       data     static C:\MCC18\src\traditional\startup\c018i.c
-                 distance   0x000086       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-                        i   0x000081       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-          parameter_count   0x000080       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.h
-           paramter_count   0x000098       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
+                 distance   0x000086       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+                        i   0x000081       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+          parameter_count   0x000080       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.h
+           paramter_count   0x000098       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
                      prom   0x000099       data     static C:\MCC18\src\traditional\startup\c018i.c
-            pulseDuration   0x000084       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-                rx_buffer   0x000178       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-                 rx_count   0x0000a6       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-              rx_read_ptr   0x0000a7       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-             rx_write_ptr   0x0000a8       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-               sonarIndex   0x00008c       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-              switchCount   0x000094       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-            thresholdBack   0x00008e       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-       thresholdFrontBack   0x000090       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-      thresholdFrontFront   0x000092       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-                tx_buffer   0x000100       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-                 tx_count   0x0000a3       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-              tx_read_ptr   0x0000a4       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-             tx_write_ptr   0x0000a5       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
+            pulseDuration   0x000084       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+                rx_buffer   0x000178       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+                 rx_count   0x0000a6       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+              rx_read_ptr   0x0000a7       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+             rx_write_ptr   0x0000a8       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+               sonarIndex   0x00008c       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+              switchCount   0x000094       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+            thresholdBack   0x00008e       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+       thresholdFrontBack   0x000090       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+      thresholdFrontFront   0x000092       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+                tx_buffer   0x000100       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+                 tx_count   0x0000a3       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+              tx_read_ptr   0x0000a4       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+             tx_write_ptr   0x0000a5       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
 
 
 
@@ -981,98 +981,98 @@ Linker Map File - Created Thu Feb 19 02:10:38 2009
                    _entry   0x000000    program     extern C:\MCC18\src\traditional\startup\c018i.c
        ___return_lbl00000   0x000004    program     static                          
                    __init   0x000006    program     extern C:\MCC18\src\traditional\stdclib\__init.c
-                 high_vec   0x000008    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
+                 high_vec   0x000008    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
        ___return_lbl00000   0x00000c    program     static                          
-                  low_vec   0x000018    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
+                  low_vec   0x000018    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
        ___return_lbl00001   0x00001c    program     static                          
-                  RXReady   0x000044    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\serial.c
-                   RXChar   0x000052    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\serial.c
-                   TXChar   0x00006e    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\serial.c
-                 TXString   0x000088    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\serial.c
-                    TXBin   0x0000c6    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\serial.c
-                TXBin_Int   0x000136    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\serial.c
-                    TXDec   0x0001ce    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\serial.c
-                TXDec_Int   0x000282    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\serial.c
-                    TXHex   0x00054e    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\serial.c
-                TXHex_Int   0x0005c2    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\serial.c
-                 high_isr   0x0006dc    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-                  low_isr   0x00077e    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-                     main   0x0007a4    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-        ___while_lbl00009   0x0007d2    program     static                          
-        ___while_lbl00007   0x0007d2    program     static                          
-         ___else_lbl00012   0x000808    program     static                          
-           ___if_lbl00011   0x000820    program     static                          
-       ___case_0_lbl00014   0x000832    program     static                          
-       ___case_1_lbl00015   0x00083a    program     static                          
-      ___case_48_lbl00016   0x000844    program     static                          
-   ___switchexit_lbl00013   0x00084e    program     static                          
-        ___while_lbl00010   0x000850    program     static                          
-           ___if_lbl00017   0x00085c    program     static                          
-         ___else_lbl00020   0x00089c    program     static                          
-           ___if_lbl00018   0x0008b0    program     static                          
-           ___if_lbl00019   0x0008b0    program     static                          
-         ___else_lbl00022   0x0008b2    program     static                          
-           ___if_lbl00021   0x0008b8    program     static                          
-        ___while_lbl00008   0x0008ba    program     static                          
-       ___return_lbl00006   0x0008ba    program     static                          
-               poll_sonar   0x0008bc    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-                initQueue   0x000b26    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-                SerialISR   0x000b42    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-                isTXEmpty   0x000c02    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-                isRXEmpty   0x000c10    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-                 isTXFull   0x000c1e    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-                 isRXFull   0x000c28    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-              pushTXQueue   0x000c36    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-              pushRXQueue   0x000c78    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-               popTXQueue   0x000cba    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-               popRXQueue   0x000d12    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-                _do_cinit   0x000d6a    program     extern C:\MCC18\src\traditional\startup\c018i.c
-                     test   0x000d84    program     static                          
-                copy_loop   0x000ddc    program     static                          
-            copy_one_byte   0x000de2    program     static                          
-             done_copying   0x000df0    program     static                          
-                     done   0x000e06    program     static                          
-       ___return_lbl00002   0x000e06    program     static                          
-                     Init   0x000e08    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\init.c
-          Init_Oscillator   0x000e1c    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\init.c
-          Init_Interrupts   0x000e22    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\init.c
-               Init_USART   0x000e2a    program     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\init.c
-               ReadTimer0   0x000e80    program     extern C:\MCC18\src\pmc_common\Timers\t0read.c
-              WriteTimer0   0x000ebe    program     extern C:\MCC18\src\pmc_common\Timers\t0write.c
-               OpenTimer0   0x000ef6    program     extern C:\MCC18\src\pmc_common\Timers\t0open.c
-             Delay10KTCYx   0x000f2e    program     extern C:\MCC18\src\traditional\delays\d10ktcyx.asm
-                    D10Kx   0x000f38    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
-                   D10K_1   0x000f3a    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
-       _D10KTCYXCODE_0010   0x000f3e    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
-                    D10Kl   0x000f46    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
-       _D10KTCYXCODE_001C   0x000f4a    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
-                 FXD1616U   0x000f5c    program     extern C:\MCC18\src\traditional\math\fxd1616u.c
-                     loop   0x000f66    program     static                          
-                  endloop   0x000f82    program     static                          
-       ___return_lbl00000   0x000f86    program     static                          
-                 _startup   0x000f88    program     extern C:\MCC18\src\traditional\startup\c018i.c
-                     loop   0x000f98    program     static                          
-       ___return_lbl00001   0x000fa2    program     static                          
-                 FXD0808U   0x000fa4    program     extern C:\MCC18\src\traditional\math\fxd0808u.c
-                     loop   0x000fac    program     static                          
-                  endloop   0x000fba    program     static                          
-       ___return_lbl00000   0x000fbe    program     static                          
-              Delay10TCYx   0x000fc0    program     extern C:\MCC18\src\traditional\delays\d10tcyx.asm
-                     D10x   0x000fc8    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
-        _D10TCYXCODE_000A   0x000fca    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
-        _D10TCYXCODE_000C   0x000fcc    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
-        _D10TCYXCODE_000E   0x000fce    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
-                    D10_1   0x000fd0    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
-               __string_2   0x000fd6    program     static K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-               __string_1   0x000fd9    program     static K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-               __string_0   0x000fdc    program     static K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-               __string_1   0x000fe6    program     static K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\serial.c
-               __string_0   0x000fe9    program     static K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\serial.c
-            __zero_memory   0x000fec    program     extern C:\MCC18\src\traditional\proc\p18F2685.asm
-               clear_loop   0x000ff2    program     static C:\MCC18\src\traditional\proc\p18F2685.asm
-               __config_0   0x300001    program     static K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-               __config_1   0x300003    program     static K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-               __config_2   0x300005    program     static K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
+                  RXReady   0x000044    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\serial.c
+                   RXChar   0x000052    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\serial.c
+                   TXChar   0x00006e    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\serial.c
+                 TXString   0x00008a    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\serial.c
+                    TXBin   0x0000c8    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\serial.c
+                TXBin_Int   0x000138    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\serial.c
+                    TXDec   0x0001d0    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\serial.c
+                TXDec_Int   0x000284    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\serial.c
+                    TXHex   0x000550    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\serial.c
+                TXHex_Int   0x0005c4    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\serial.c
+                 high_isr   0x0006de    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+                  low_isr   0x000780    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+                     main   0x0007a6    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+        ___while_lbl00009   0x0007d8    program     static                          
+        ___while_lbl00007   0x0007d8    program     static                          
+         ___else_lbl00012   0x00080e    program     static                          
+           ___if_lbl00011   0x000826    program     static                          
+       ___case_0_lbl00014   0x000838    program     static                          
+       ___case_1_lbl00015   0x000840    program     static                          
+      ___case_48_lbl00016   0x00084a    program     static                          
+   ___switchexit_lbl00013   0x000854    program     static                          
+        ___while_lbl00010   0x000856    program     static                          
+           ___if_lbl00017   0x000862    program     static                          
+         ___else_lbl00020   0x0008a2    program     static                          
+           ___if_lbl00018   0x0008b6    program     static                          
+           ___if_lbl00019   0x0008b6    program     static                          
+         ___else_lbl00022   0x0008b8    program     static                          
+           ___if_lbl00021   0x0008be    program     static                          
+        ___while_lbl00008   0x0008c0    program     static                          
+       ___return_lbl00006   0x0008c0    program     static                          
+               poll_sonar   0x0008c2    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+                initQueue   0x000b2c    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+                SerialISR   0x000b48    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+                isTXEmpty   0x000c08    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+                isRXEmpty   0x000c16    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+                 isTXFull   0x000c24    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+                 isRXFull   0x000c2e    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+              pushTXQueue   0x000c3c    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+              pushRXQueue   0x000c7e    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+               popTXQueue   0x000cc0    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+               popRXQueue   0x000d18    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+                _do_cinit   0x000d70    program     extern C:\MCC18\src\traditional\startup\c018i.c
+                     test   0x000d8a    program     static                          
+                copy_loop   0x000de2    program     static                          
+            copy_one_byte   0x000de8    program     static                          
+             done_copying   0x000df6    program     static                          
+                     done   0x000e0c    program     static                          
+       ___return_lbl00002   0x000e0c    program     static                          
+                     Init   0x000e0e    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\init.c
+          Init_Oscillator   0x000e22    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\init.c
+          Init_Interrupts   0x000e28    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\init.c
+               Init_USART   0x000e30    program     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\init.c
+               ReadTimer0   0x000e86    program     extern C:\MCC18\src\pmc_common\Timers\t0read.c
+              WriteTimer0   0x000ec4    program     extern C:\MCC18\src\pmc_common\Timers\t0write.c
+               OpenTimer0   0x000efc    program     extern C:\MCC18\src\pmc_common\Timers\t0open.c
+             Delay10KTCYx   0x000f34    program     extern C:\MCC18\src\traditional\delays\d10ktcyx.asm
+                    D10Kx   0x000f3e    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
+                   D10K_1   0x000f40    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
+       _D10KTCYXCODE_0010   0x000f44    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
+                    D10Kl   0x000f4c    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
+       _D10KTCYXCODE_001C   0x000f50    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
+                 FXD1616U   0x000f62    program     extern C:\MCC18\src\traditional\math\fxd1616u.c
+                     loop   0x000f6c    program     static                          
+                  endloop   0x000f88    program     static                          
+       ___return_lbl00000   0x000f8c    program     static                          
+                 _startup   0x000f8e    program     extern C:\MCC18\src\traditional\startup\c018i.c
+                     loop   0x000f9e    program     static                          
+       ___return_lbl00001   0x000fa8    program     static                          
+                 FXD0808U   0x000faa    program     extern C:\MCC18\src\traditional\math\fxd0808u.c
+                     loop   0x000fb2    program     static                          
+                  endloop   0x000fc0    program     static                          
+       ___return_lbl00000   0x000fc4    program     static                          
+              Delay10TCYx   0x000fc6    program     extern C:\MCC18\src\traditional\delays\d10tcyx.asm
+                     D10x   0x000fce    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
+        _D10TCYXCODE_000A   0x000fd0    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
+        _D10TCYXCODE_000C   0x000fd2    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
+        _D10TCYXCODE_000E   0x000fd4    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
+                    D10_1   0x000fd6    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
+               __string_2   0x000fdc    program     static C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+               __string_1   0x000fdf    program     static C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+               __string_0   0x000fe2    program     static C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+               __string_1   0x000fec    program     static C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\serial.c
+               __string_0   0x000fef    program     static C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\serial.c
+            __zero_memory   0x000ff2    program     extern C:\MCC18\src\traditional\proc\p18F2685.asm
+               clear_loop   0x000ff8    program     static C:\MCC18\src\traditional\proc\p18F2685.asm
+               __config_0   0x300001    program     static C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+               __config_1   0x300003    program     static C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+               __config_2   0x300005    program     static C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
                  __AARGB7   0x000000       data     extern C:\MCC18\src\traditional\math\aarg.asm
                   __REMB3   0x000000       data     extern C:\MCC18\src\traditional\math\aarg.asm
                  __AARGB6   0x000001       data     extern C:\MCC18\src\traditional\math\aarg.asm
@@ -1094,41 +1094,41 @@ Linker Map File - Created Thu Feb 19 02:10:38 2009
                      SIGN   0x00000e       data     extern C:\MCC18\src\traditional\math\cmath18.asm
                 __FPFLAGS   0x00000f       data     extern C:\MCC18\src\traditional\math\cmath18.asm
             __FPFLAGSbits   0x00000f       data     extern C:\MCC18\src\traditional\math\cmath18.asm
-                  __tmp_0   0x000010       data     static K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-                  __tmp_0   0x000010       data     static K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\serial.c
-                  __tmp_0   0x000010       data     static K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\init.c
-                  __tmp_0   0x000010       data     static K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
+                  __tmp_0   0x000010       data     static C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+                  __tmp_0   0x000010       data     static C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\serial.c
+                  __tmp_0   0x000010       data     static C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\init.c
+                  __tmp_0   0x000010       data     static C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
                   __tmp_0   0x000010       data     static C:\MCC18\src\pmc_common\Timers\t0read.c
             DelayCounter2   0x000014       data     extern C:\MCC18\src\traditional\delays\delayd2.asm
             DelayCounter1   0x000015       data     extern C:\MCC18\src\traditional\delays\delayd1.asm
-       current_parameters   0x000060       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.h
-          parameter_count   0x000080       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.h
-                        i   0x000081       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-                        c   0x000083       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-            pulseDuration   0x000084       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-                 distance   0x000086       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-               sonarIndex   0x00008c       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-            thresholdBack   0x00008e       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-       thresholdFrontBack   0x000090       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-      thresholdFrontFront   0x000092       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-              switchCount   0x000094       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-               ProcStatus   0x000096       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-             current_proc   0x000097       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
-           paramter_count   0x000098       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\main.c
+       current_parameters   0x000060       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.h
+          parameter_count   0x000080       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.h
+                        i   0x000081       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+                        c   0x000083       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+            pulseDuration   0x000084       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+                 distance   0x000086       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+               sonarIndex   0x00008c       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+            thresholdBack   0x00008e       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+       thresholdFrontBack   0x000090       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+      thresholdFrontFront   0x000092       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+              switchCount   0x000094       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+               ProcStatus   0x000096       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+             current_proc   0x000097       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
+           paramter_count   0x000098       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.c
                      prom   0x000099       data     static C:\MCC18\src\traditional\startup\c018i.c
                 curr_byte   0x00009c       data     static C:\MCC18\src\traditional\startup\c018i.c
                curr_entry   0x00009e       data     static C:\MCC18\src\traditional\startup\c018i.c
                  data_ptr   0x0000a0       data     static C:\MCC18\src\traditional\startup\c018i.c
-                 tx_count   0x0000a3       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-              tx_read_ptr   0x0000a4       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-             tx_write_ptr   0x0000a5       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-                 rx_count   0x0000a6       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-              rx_read_ptr   0x0000a7       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-             rx_write_ptr   0x0000a8       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-              QueueStatus   0x0000a9       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-                tx_buffer   0x000100       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-                rx_buffer   0x000178       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\queue.c
-                 HEXASCII   0x0001f0       data     extern K:\SPaRC code repository\Firmware\PIC\Slave_Object_Detect\serial.c
+                 tx_count   0x0000a3       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+              tx_read_ptr   0x0000a4       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+             tx_write_ptr   0x0000a5       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+                 rx_count   0x0000a6       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+              rx_read_ptr   0x0000a7       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+             rx_write_ptr   0x0000a8       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+              QueueStatus   0x0000a9       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+                tx_buffer   0x000100       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+                rx_buffer   0x000178       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.c
+                 HEXASCII   0x0001f0       data     extern C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\serial.c
                  RXF6SIDH   0x000d60       data     extern C:\MCC18\src\traditional\proc\p18F2685.asm
              RXF6SIDHbits   0x000d60       data     extern C:\MCC18\src\traditional\proc\p18F2685.asm
              RXF6SIDLbits   0x000d61       data     extern C:\MCC18\src\traditional\proc\p18F2685.asm
