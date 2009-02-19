@@ -90,7 +90,7 @@ class Servo:
 		if not enabled:
 			return
 		log.debug("Moving to position: %i" % position)
-		self.pointer = int(self.dec2hex(self.pointer))
+		self.pointer = self.dec2hex(int(self.pointer))
 		position = self.dec2hex(position)
 		if len(position) is not 2:
 			position += dec2hex(0)
