@@ -366,6 +366,58 @@ ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
 TraceCmdString=
 DebugOptions=-D__DEBUG
 [File028]
+Location=K:\SPaRC code repository\Firmware\PIC\Slave_Array\main.o
+Folder=Intermediary
+DeviceName=PIC18F4685
+LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
+LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
+LanguageToolLocation=C:\MCC18\bin\mcc18.exe
+PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
+SOLK=<src>|main.c|init.c|serial.c|queue.c||<obj>||<lib>||<lkr>||
+SuiteArgsString=
+ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
+TraceCmdString=
+DebugOptions=-D__DEBUG
+[File029]
+Location=K:\SPaRC code repository\Firmware\PIC\Slave_Array\init.o
+Folder=Intermediary
+DeviceName=PIC18F4685
+LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
+LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
+LanguageToolLocation=C:\MCC18\bin\mcc18.exe
+PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
+SOLK=<src>|main.c|init.c|serial.c|queue.c||<obj>||<lib>||<lkr>||
+SuiteArgsString=
+ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
+TraceCmdString=
+DebugOptions=-D__DEBUG
+[File030]
+Location=K:\SPaRC code repository\Firmware\PIC\Slave_Array\serial.o
+Folder=Intermediary
+DeviceName=PIC18F4685
+LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
+LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
+LanguageToolLocation=C:\MCC18\bin\mcc18.exe
+PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
+SOLK=<src>|main.c|init.c|serial.c|queue.c||<obj>||<lib>||<lkr>||
+SuiteArgsString=
+ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
+TraceCmdString=
+DebugOptions=-D__DEBUG
+[File031]
+Location=K:\SPaRC code repository\Firmware\PIC\Slave_Array\queue.o
+Folder=Intermediary
+DeviceName=PIC18F4685
+LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
+LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
+LanguageToolLocation=C:\MCC18\bin\mcc18.exe
+PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
+SOLK=<src>|main.c|init.c|serial.c|queue.c||<obj>||<lib>||<lkr>||
+SuiteArgsString=
+ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
+TraceCmdString=
+DebugOptions=-D__DEBUG
+[File032]
 Location=C:\SVN\Code\Firmware\PIC\Slave_Template\Node.cof
 Folder=Output
 DeviceName=PIC18F4685
@@ -378,7 +430,7 @@ SuiteArgsString=
 ToolArgsString=/o"$(BINDIR_)$(TARGETBASE).cof" /M"$(BINDIR_)$(TARGETBASE).map" /W
 TraceCmdString=
 DebugOptions=/z__MPLAB_DEBUG=1
-[File029]
+[File033]
 Location=C:\SVN\Code\Firmware\PIC\Slave_Template\Node.hex
 Folder=Output
 DeviceName=PIC18F4685
@@ -391,7 +443,7 @@ SuiteArgsString=
 ToolArgsString=/o"$(BINDIR_)$(TARGETBASE).cof" /M"$(BINDIR_)$(TARGETBASE).map" /W
 TraceCmdString=
 DebugOptions=/z__MPLAB_DEBUG=1
-[File030]
+[File034]
 Location=C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\Node.cof
 Folder=Output
 DeviceName=PIC18F4685
@@ -404,7 +456,7 @@ SuiteArgsString=
 ToolArgsString=/o"$(BINDIR_)$(TARGETBASE).cof" /M"$(BINDIR_)$(TARGETBASE).map" /W
 TraceCmdString=
 DebugOptions=/z__MPLAB_DEBUG=1 /z__MPLAB_DEBUGGER_PICKIT2=1 /z__ICD2RAM=1
-[File031]
+[File035]
 Location=C:\Documents and Settings\Administrator\Desktop\Code\Firmware\PIC\Slave_Template\Node.hex
 Folder=Output
 DeviceName=PIC18F4685
@@ -417,7 +469,7 @@ SuiteArgsString=
 ToolArgsString=/o"$(BINDIR_)$(TARGETBASE).cof" /M"$(BINDIR_)$(TARGETBASE).map" /W
 TraceCmdString=
 DebugOptions=/z__MPLAB_DEBUG=1 /z__MPLAB_DEBUGGER_PICKIT2=1 /z__ICD2RAM=1
-[File032]
+[File036]
 Location=C:\Users\matt\Desktop\SPaRC Subversion\Code\Firmware\PIC\Slave_Hall_Effect\Node.cof
 Folder=Output
 DeviceName=PIC18F4685
@@ -430,7 +482,7 @@ SuiteArgsString=
 ToolArgsString=/o"$(BINDIR_)$(TARGETBASE).cof" /M"$(BINDIR_)$(TARGETBASE).map" /W
 TraceCmdString=
 DebugOptions=/z__MPLAB_DEBUG=1
-[File033]
+[File037]
 Location=C:\Users\matt\Desktop\SPaRC Subversion\Code\Firmware\PIC\Slave_Hall_Effect\Node.hex
 Folder=Output
 DeviceName=PIC18F4685
@@ -443,7 +495,7 @@ SuiteArgsString=
 ToolArgsString=/o"$(BINDIR_)$(TARGETBASE).cof" /M"$(BINDIR_)$(TARGETBASE).map" /W
 TraceCmdString=
 DebugOptions=/z__MPLAB_DEBUG=1
-[File034]
+[File038]
 Location=K:\SPaRC Subversion\Code\Firmware\PIC\Slave_Hall_Effect\Node.cof
 Folder=Output
 DeviceName=PIC18F4685
@@ -456,7 +508,7 @@ SuiteArgsString=
 ToolArgsString=/o"$(BINDIR_)$(TARGETBASE).cof" /M"$(BINDIR_)$(TARGETBASE).map" /W
 TraceCmdString=
 DebugOptions=/z__MPLAB_DEBUG=1
-[File035]
+[File039]
 Location=K:\SPaRC Subversion\Code\Firmware\PIC\Slave_Hall_Effect\Node.hex
 Folder=Output
 DeviceName=PIC18F4685
@@ -469,7 +521,7 @@ SuiteArgsString=
 ToolArgsString=/o"$(BINDIR_)$(TARGETBASE).cof" /M"$(BINDIR_)$(TARGETBASE).map" /W
 TraceCmdString=
 DebugOptions=/z__MPLAB_DEBUG=1
-[File036]
+[File040]
 Location=C:\Users\matt\Desktop\Antenna Project\Antenna Project.cof
 Folder=Output
 DeviceName=PIC18F4685
@@ -482,7 +534,7 @@ SuiteArgsString=
 ToolArgsString=/o"$(BINDIR_)$(TARGETBASE).cof" /M"$(BINDIR_)$(TARGETBASE).map" /W
 TraceCmdString=
 DebugOptions=/z__MPLAB_DEBUG=1
-[File037]
+[File041]
 Location=C:\Users\matt\Desktop\Antenna Project\Antenna Project.hex
 Folder=Output
 DeviceName=PIC18F4685
@@ -495,7 +547,7 @@ SuiteArgsString=
 ToolArgsString=/o"$(BINDIR_)$(TARGETBASE).cof" /M"$(BINDIR_)$(TARGETBASE).map" /W
 TraceCmdString=
 DebugOptions=/z__MPLAB_DEBUG=1
-[File038]
+[File042]
 Location=K:\Working Antenna Project\Working Antenna Project.cof
 Folder=Output
 DeviceName=PIC18F4685
@@ -508,7 +560,7 @@ SuiteArgsString=
 ToolArgsString=/o"$(BINDIR_)$(TARGETBASE).cof" /M"$(BINDIR_)$(TARGETBASE).map" /W
 TraceCmdString=
 DebugOptions=/z__MPLAB_DEBUG=1
-[File039]
+[File043]
 Location=K:\Working Antenna Project\Working Antenna Project.hex
 Folder=Output
 DeviceName=PIC18F4685
@@ -521,7 +573,7 @@ SuiteArgsString=
 ToolArgsString=/o"$(BINDIR_)$(TARGETBASE).cof" /M"$(BINDIR_)$(TARGETBASE).map" /W
 TraceCmdString=
 DebugOptions=/z__MPLAB_DEBUG=1
-[File040]
+[File044]
 Location=C:\Users\matt\Desktop\Antenna_Angular\Antenna_Angular.cof
 Folder=Output
 DeviceName=PIC18F4685
@@ -534,8 +586,34 @@ SuiteArgsString=
 ToolArgsString=/o"$(BINDIR_)$(TARGETBASE).cof" /M"$(BINDIR_)$(TARGETBASE).map" /W
 TraceCmdString=
 DebugOptions=/z__MPLAB_DEBUG=1
-[File041]
+[File045]
 Location=C:\Users\matt\Desktop\Antenna_Angular\Antenna_Angular.hex
+Folder=Output
+DeviceName=PIC18F4685
+LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
+LanguageToolID={96C98149-AA1B-4CF9-B967-FAE79CAB663C}
+LanguageToolLocation=C:\MCC18\bin\mplink.exe
+PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
+SOLK=<src>|main.c|init.c|serial.c|queue.c||<obj>||<lib>||<lkr>||
+SuiteArgsString=
+ToolArgsString=/o"$(BINDIR_)$(TARGETBASE).cof" /M"$(BINDIR_)$(TARGETBASE).map" /W
+TraceCmdString=
+DebugOptions=/z__MPLAB_DEBUG=1
+[File046]
+Location=K:\SPaRC code repository\Firmware\PIC\Slave_Array\Working Antenna Project.cof
+Folder=Output
+DeviceName=PIC18F4685
+LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
+LanguageToolID={96C98149-AA1B-4CF9-B967-FAE79CAB663C}
+LanguageToolLocation=C:\MCC18\bin\mplink.exe
+PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
+SOLK=<src>|main.c|init.c|serial.c|queue.c||<obj>||<lib>||<lkr>||
+SuiteArgsString=
+ToolArgsString=/o"$(BINDIR_)$(TARGETBASE).cof" /M"$(BINDIR_)$(TARGETBASE).map" /W
+TraceCmdString=
+DebugOptions=/z__MPLAB_DEBUG=1
+[File047]
+Location=K:\SPaRC code repository\Firmware\PIC\Slave_Array\Working Antenna Project.hex
 Folder=Output
 DeviceName=PIC18F4685
 LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
