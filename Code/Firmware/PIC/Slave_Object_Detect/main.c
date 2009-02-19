@@ -99,7 +99,7 @@ void main (void)
 	
 	Delay10KTCYx(99);
 	
-	TXString("RST \x0A\x0D");
+	TXString("RST OBJ\x0A\x0D");
 	
 //***************************************************************************************************************
 //                          loop
@@ -143,6 +143,17 @@ void main (void)
 			ProcStatus.sonar_poll_enabled = 0;
 		}
 		
+		TRISAbits.TRISA0 = 0;
+		TRISAbits.TRISA1 = 0;
+		TRISAbits.TRISA2 = 0;
+		
+		
+		
+		PORTAbits.RA0 = 1;
+		PORTAbits.RA1 = 1;
+		PORTAbits.RA2 = 1;		
+		
+		
 		//If microswitch is engaged then send respective value
 		if(PORTAbits.RA4)
 		{
@@ -169,7 +180,7 @@ void main (void)
 
 void poll_sonar(void)
 {
-									//start the 1st sonar measurement
+								//start the 1st sonar measurement
 		sonarIndex = 0;		
 
 		TRISAbits.TRISA0 = 0; 	//set pin 2 to output for Parallax triggering sequence

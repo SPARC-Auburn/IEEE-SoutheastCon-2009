@@ -21,7 +21,7 @@ void TXChar(char c){
 void TXString(const rom char *s){
 	do{
 		TXChar(*s);
-	} while( *s++);	
+	} while( *(++s));	
 }		
 
 void TXBin(unsigned char c){

@@ -29,12 +29,13 @@ void Init_Interrupts(void)
 
 void Init_USART(void)
 {
-	int baud = 25;
+	int baud = 16;
 	
 	TXSTA = 0;		// Reset registers
 	RCSTA = 0;
 	RCSTAbits.CREN = 1;		// Continuous Reception
 	TXSTAbits.BRGH = 1;		// High Baud Rate
+	BAUDCONbits.BRG16 = 1;
 	PIR1bits.TXIF = 0;
 	PIE1bits.RCIE = 0;		// No Receive Interrupt
 	PIR1bits.RCIF = 0;
