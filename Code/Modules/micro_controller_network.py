@@ -40,7 +40,7 @@ def init():
 	micro_controllers = {}
 	for x in config:
 		if type(config[x]) is configobj.Section:
-			micro_controllers[x] = MicroController(serial = config[x]['serial_port'], baud_rate = config[x]['baud_rate'])
+			micro_controllers[x] = MicroController(name = x, serial = config[x]['serial_port'], baud_rate = config[x]['baud_rate'])
 	initialized = True
 	
 def get_object(id):
@@ -59,11 +59,14 @@ class MicroController:
 		This is the class that represents and provides access to the master 
 		node of a micro controller network.
 		'''
-	def __init__(self, serial='', baud_rate = 115200):
+	def __init__(self, name = None, serial='', baud_rate = 115200):
 		'''
 			Constructor - opens serial port given and initializes the master node.
 			'''
 		global enabled
+		self.name = name
+		if name is None:
+			name = 'Unamed micro controller'
 		self.serial = Serial()
 		self.serial.port = serial
 		self.serial.baudrate = baud_rate
@@ -74,7 +77,7 @@ class MicroController:
 			except Exception as e:
 				log.error("Unable to open serial port %s: %s" % (serial, e))
 		self.send_lock = Lock()
-		self.debugging = debug(self.serial)
+		self.debugging = debug(self.name, self.serial)
 		if self.serial.isOpen():
 			self.debugging.start()
 		return
@@ -111,8 +114,9 @@ class MicroController:
 		
 		
 class debug(Thread):
-	def __init__(self, serial):
+	def __init__(self, name, serial):
 		Thread.__init__(self)
+		self.name = name
 		self.serial = serial
 		self.stop = False
 		
@@ -128,7 +132,7 @@ class debug(Thread):
 		return
 	
 	def processInput(self, input):
-		if len(input) > 2:
-			log.debug("MCN: %s" % input)
+		if input[0:2] == 'RST':
+			log.info("Micro Controller %s reset.", self.name)
 		return
 		
