@@ -60,17 +60,7 @@ void Init_USART(void)
 }
 
 void Init_Timers(void)
-{
-	OpenTimer1(     TIMER_INT_ON   			&
-					T1_8BIT_RW              & 
-					T1_SOURCE_INT   		& 
-					T1_PS_1_2               & 
-					T1_OSC1EN_OFF   		&
-					T1_SYNC_EXT_OFF);
-					
-	PIR1bits.TMR1IF = 0;
-	IPR1bits.TMR1IP = 0;
-	PIE1bits.TMR1IE	= 1;	
+{	
 }	
 
 void Init_ADC(void)

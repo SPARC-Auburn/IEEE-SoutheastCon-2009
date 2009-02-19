@@ -89,23 +89,23 @@ void main (void)
 
 	if(isWDTTO())
 	{
-		TXString("RST SERVO - WDT\x0A\x0D");
+		TXString("RST ARRAY - WDT\x0A\x0D");
 	}
 	else if(isMCLR())
 	{
-		TXString("RST SERVO - MCLR\x0A\x0D");	
+		TXString("RST ARRAY - MCLR\x0A\x0D");	
 	}
 	else if(isPOR())	
 	{
-		TXString("RST SERVO - POR\x0A\x0D");
+		TXString("RST ARRAY - POR\x0A\x0D");
 	}
 	else if(isBOR())
 	{
-		TXString("RST SERVO - BOR\x0A\x0D");
+		TXString("RST ARRAY - BOR\x0A\x0D");
 	}
 	else
 	{
-		TXString("RST SERVO\x0A\x0D");	
+		TXString("RST ARRAY\x0A\x0D");	
 	}	
 	StatusReset();
 	
@@ -194,6 +194,9 @@ void read_antennas(void) {
 	// The other functions will use these readings to chack against thresholds set in the eeprom.
 	unsigned char channel;
 	channel = 0;
+	#ifdef __DEBUG
+		TXString("Reading Antennas: ");
+	#endif
 	while(channel < 3)
 	{
 		ADCON0 = ((channel << 2) & 0b00111100) |
@@ -202,9 +205,18 @@ void read_antennas(void) {
 		while(ADCON0bits.GO){}		//wait for the A/D converter to finish
 		antMeasure[channel].bt[0] = ADRESL;
 		antMeasure[channel].bt[1] = ADRESH;
-		Delay10TCYx(1);		//delay before starting A/D converter again
+		
+		#ifdef __DEBUG
+			Delay10TCYx(1);		//delay before starting A/D converter again
+			TXDec_Int(antMeasure[channel].lt);
+			TXChar(' ');
+		#endif
+		
 		channel++;
-	}		
+	}
+	#ifdef __DEBUG
+		TXString("\x0A\x0D");
+	#endif		
 }
 
 void read_ars(void) {
