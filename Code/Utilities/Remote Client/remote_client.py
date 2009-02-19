@@ -28,12 +28,12 @@ joy_config = config['Joystick']
 SENSITIVITY = float(joy_config['Sensitivity'])
 SERVO_SENSITIVITY = float(joy_config['Servo_Sensitivity'])
 INVERT_X = joy_config['Invert_X']
-if INVERT_X is 'True':
+if INVERT_X == 'True':
 	INVERT_X = True
 else:
 	INVERT_X = False
 INVERT_Y = joy_config['Invert_Y']
-if INVERT_Y is 'True':
+if INVERT_Y == 'True':
 	INVERT_Y = True
 else:
 	INVERT_Y = False
