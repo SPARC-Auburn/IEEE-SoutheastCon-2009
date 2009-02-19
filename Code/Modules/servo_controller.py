@@ -72,6 +72,15 @@ class Servo:
 			self.max = int(config['max'])
 			self.min = int(config['min'])
 		return
+		
+	def dec2hex(self, dec):
+		'''
+			Converts a given decimal number to hex.
+			'''
+		hex = '%X' % dec
+		if len(hex)%2 is 1: #Prevents Odd-length error with decode.
+			hex = '0'+hex
+		return hex.decode("hex")
 				
 	def move_to_position(self,position = 1500):
 		'''
@@ -81,16 +90,13 @@ class Servo:
 		if not enabled:
 			return
 		log.debug("Moving to position: %i" % position)
-		position = '%X' % position
-		if len(position) % 2 is 1:
-			position = '0' + position
-		msg = []
-		if len(self.pointer) <= 1:
-			self.pointer = '0' + self.pointer
+		self.pointer = self.dec2hex(self.pointer)
+		position = self.dec2hex(position)
+		if len(position) is not 2:
+			position += dec2hex(0)
 		msg.append(self.pointer)
-		for x in range(len(position)):
-			if x % 2 is 1:
-				msg.append(position[x-1:x+1])
+		msg.append(position[0:1])
+		msg.append(position[1:2])
 		mc.send(msg)
 		return
 		
