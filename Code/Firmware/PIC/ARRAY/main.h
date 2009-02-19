@@ -2,6 +2,8 @@
 #define MAIN_H
 
 #define SLAVE
+#define ADC_DELAY	1000			// Delay between readings in microseconds.
+#define ARS_SAMPLES	8
 
 void	high_isr 		(void);
 void	high_vec 		(void);
@@ -17,20 +19,8 @@ void	line_follow		(void);
 void	corner_detection(void);
 void	line_detection	(void);
 
-struct proc_status {
-	unsigned ProcessInProgress			:1;
-	unsigned cal_ant_enabled			:1;
-	unsigned line_follow_enabled		:1;
-	unsigned corner_detection_enabled	:1;
-	unsigned line_detection_enabled		:1;
-};
-
 union int_byte
 {
 	unsigned int lt;
 	unsigned char bt[2];
 };	
-
-unsigned char current_proc;
-unsigned char current_parameters[32];
-unsigned char parameter_count;

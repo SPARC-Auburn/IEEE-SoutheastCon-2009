@@ -1,8 +1,8 @@
 #include "hardware.h"
 #include "init.h"
 #include "serial.h"
-#include "i2c.h"
-#include "timers.h"
+#include "main.h"
+
 
 int Init (void) 
 {	
@@ -20,6 +20,7 @@ int Init (void)
 void Init_Oscillator(void)
 {
 	OSCCON = 0b01110000; //configure PIC to primary oscillator block at 8MHz
+	OSCTUNEbits.PLLEN = 1;	// Enable the PLL for 32MHz
 }
 
 void Init_Interrupts(void)
@@ -31,7 +32,15 @@ void Init_Interrupts(void)
 
 void Init_USART(void)
 {
-	int baud = 16;
+	// SPBRG = (Fosc/Baud)/4 - 1
+	// Fosc = 32000000
+	// Baud = 115200
+	// SPBRG = (32000000/115200)/4 - 1
+	// SPBRG = 277.778/4 - 1 = 69.4444 - 1 = 68.4444
+	
+	// Actual Baud = Fosc/(4*(SPBRG + 1)) = 32000000/(4*(68 + 1)) = 115942 baud
+	// Error = (115942-115200)/115200 * 100% = 0.6%
+	unsigned int baud = 68;
 	
 	TXSTA = 0;		// Reset registers
 	RCSTA = 0;
@@ -60,7 +69,17 @@ void Init_USART(void)
 }
 
 void Init_Timers(void)
-{	
+{
+	OpenTimer0(	TIMER_INT_OFF	&
+				T0_16BIT		&
+				T0_SOURCE_INT	&
+				T0_PS_1_8);
+	
+	WriteTimer0(65536-ADC_DELAY);
+				
+	INTCONbits.TMR0IF = 0;
+	INTCON2bits.TMR0IP = 0;	// Low Priority
+	INTCONbits.TMR0IE = 0;	//Enable Interrupt		
 }	
 
 void Init_ADC(void)
@@ -70,12 +89,11 @@ void Init_ADC(void)
 	TRISAbits.TRISA2 = 1;
 	TRISAbits.TRISA3 = 1;		
 	
-	
-	ADCON0 = 0x01;				//turn on the A/D converter, and configure pin 2 as the analog input for the A/D converter								
-								
-	ADCON1 = 0x0D;				//configure reference voltages to Vdd and Vss, and configure pins 2 and 3 as 
-								//analog pins and configure pins 4 and 5 as digital pins
-	
-	ADCON2 = 0xA9;				//configure A/D converter result registers as right justified, acquisition time set to 12 times
-								//the AD timer, AD timer set to 1/8th the oscillator frequency	
+	OpenADC( 	ADC_FOSC_32      	&
+         		ADC_RIGHT_JUST   	&
+         		ADC_12_TAD,
+         		ADC_CH0				&
+                ADC_REF_VDD_VSS  	&
+         		ADC_INT_OFF,
+         		ADC_4ANA  );
 }	
