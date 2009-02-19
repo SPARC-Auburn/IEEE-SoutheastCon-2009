@@ -1,17 +1,34 @@
-  //************************************************************************************************
-//	Node:		Generic Template
+//************************************************************************************************
+//	Node:		Servo Controller
+//	Author:		Michael Carroll
+//				m@auburn.edu
+//	
+//	Purpose:	Control 4 hobby servos using a version of PWM.
+//
+//	Command Format:
+//		<byte 0>	Servo Number (1-4)
+//		<byte 1>	Servo position high byte
+//		<byte 2>	Servo position low byte
+//
+//	Connections:
+//		Pin 2 (PORTA_PIN0)	-	Servo 1
+//		Pin 3 (PORTA_PIN1)	-	Servo 2
+//		Pin 4 (PORTA_PIN2)	-	Servo 3
+//		Pin 5 (PORTA_PIN3)	-	Servo 4
 //************************************************************************************************
 
 #include "main.h"
-#include "i2c.h"
 #include "init.h"
-#include "timers.h"
 #include "serial.h"
 #include "hardware.h"
 #include "queue.h"
-#include "delays.h"
 
-#pragma config OSC = IRCIO67,WDT = OFF, MCLRE = ON
+// Use Internal Oscillator, Watchdog Timer, MCLR, and Brown Out Detect
+#pragma config OSC = IRCIO67
+#pragma config WDT = ON, WDTPS=32768
+#pragma config MCLRE = ON
+#pragma config BOREN = BOHW,BORV = 3
+
 
 #pragma code high_vector=0x08
 void high_vec(void)
@@ -28,6 +45,7 @@ void low_vec (void)
 
 #pragma code
 
+// Define Variables
 union Servo servo[4];
 unsigned int timer1_reload, timer3_reload;
 unsigned char timer1_mask, timer3_mask;
@@ -154,40 +172,46 @@ void main (void)
 	Init();
 	initQueue();
 
-	Delay10KTCYx(1000);
+	Delay10KTCYx(10);		// Build in a delay to prevent weird serial characters
 
 	servo[0].lt = 1500;
 	servo[1].lt = 1500;
 	servo[2].lt = 1500;
 	servo[3].lt = 1500;
-
-	TXString("\x0A\x0D");
-	TXString("RST \x0A\x0D");
+	
+	if(isWDTTO())
+	{
+		TXString("RST SERVO - WDT\x0A\x0D");
+	}
+	else if(isMCLR())
+	{
+		TXString("RST SERVO - MCLR\x0A\x0D");	
+	}
+	else if(isPOR())	
+	{
+		TXString("RST SERVO - POR\x0A\x0D");
+	}
+	else if(isBOR())
+	{
+		TXString("RST SERVO - BOR\x0A\x0D");
+	}
+	else
+	{
+		TXString("RST SERVO\x0A\x0D");	
+	}	
+	StatusReset();
 	
 	while(1)
 	{
+		ClrWdt();
 		if(!isRXEmpty())
 		{
 			popRXQueue(&c);
-			#ifdef __DEBUG
-				TXString("popQueue() = ");
-				TXHex(c);
-				TXString("\x0A\x0D");
-			#endif
 			
-			if(count == 0 && c == 0x00)
-			{
-				Reset();
-			}
-			else if(count == 0 && c < 5 && c > 0)
+			if(count == 0 && c < 5 && c > 0)
 			{
 				pointer = c - 1;
 				count++;
-				#ifdef __DEBUG
-					TXString("pointer = ");
-					TXHex(c);
-					TXString("\x0A\x0D");
-				#endif
 			}
 			else if(count == 1)
 			{
@@ -198,20 +222,17 @@ void main (void)
 			{
 				temp.bt[0] = c;
 				servo[pointer].lt = temp.lt;
-				TXDec(pointer);
+				TXDec(pointer+1);
 				TXChar(' ');
 				TXDec_Int(servo[pointer].lt);
-				TXString("\x0A\x0D");
-				#ifdef __DEBUG
-					TXString("Servo Set: ");
-					TXDec(pointer);
-					TXString("  To Position: ");
-					TXDec_Int(servo[pointer].lt);
-					TXString("\x0A\x0D");
-				#endif	
+				TXString("\x0A\x0D");	
 
 				count = 0;			
-			}					
+			}
+			else if( c == 0x00)
+			{
+				Reset();
+			}						
 		}		
 	}
 }

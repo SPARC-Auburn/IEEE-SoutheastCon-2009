@@ -1,8 +1,6 @@
 #include "hardware.h"
 #include "init.h"
 #include "serial.h"
-#include "i2c.h"
-#include "timers.h"
 
 int Init (void) 
 {	
