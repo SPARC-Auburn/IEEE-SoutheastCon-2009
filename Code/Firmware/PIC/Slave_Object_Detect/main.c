@@ -1,11 +1,13 @@
 //************************************************************************************************
 //	Node:		MAGNETIC FEILD DETECTION
 /*
-	Wiring Instructions:
+	Wiring Guide for PIC18F2685:
+
+	pin 2 - (i/o) signal line for Back Parallax Sonar Module 
+	pin 3 - (i/o) signal line for Front-Back Parallax Sonar Module
+	pin 4 - (i/o) signal line for Front-Front Parallax Sonar Module
 	
-	pin 2:   left antenna
-	pin 3:   right antenna
-	pin 4:   front antenna
+	pin 6 - (input) microswitch (active high)
 */
 //************************************************************************************************
 
@@ -27,6 +29,7 @@ int i;
 unsigned int thresholdBack = 10;
 unsigned int thresholdFrontBack = 20;
 unsigned int thresholdFrontFront = 20;
+unsigned int switchCount = 0;
 
 volatile struct proc_status ProcStatus = {0,0};
 unsigned char current_proc = 0;
@@ -56,31 +59,10 @@ void low_vec (void)
 
 #pragma interrupt high_isr
 void high_isr(void)
-{
-	if(PIR1bits.SSPIF){		// If - SSP Module (I2C)
-		unsigned char c;
-		if(SSPSTATbits.R_W){	// If - Read from slave
-			popTXQueue(&c);
-			SSPBUF = c;
-		} 
-		else {				// Else - Write to Slave
-			if(SSPSTATbits.D_A){	// If - Data
-				if(SSPSTATbits.BF){		//If - Buffer Full
-					c = SSPBUF;	// Grab a char from the I2C Buffer
-					if(!isRXFull()){	// Check if QUEUE is FULL
-						pushRXQueue(c);	// Write the char to the QUEUE
-					}
-				}	
-			} 
-			else {					// Else - Address
-				c = SSPBUF;	// Grab a char from the I2C Buffer (Dummy Read)	
-			}
-		}
-		PIR1bits.SSPIF = 0;		// Clear SSP Module Interrupt
-		//SSPCON1bits.CKP = 0;	// Release I2C Clock	
-	} 
-	else {				// Else - Bus Collision (I2C) 
-		PIR2bits.BCLIF = 0; 	// Clear Bus Collision Flag
+{	
+	if(PIR1bits.TXIF || PIR1bits.RCIF)
+	{
+		SerialISR();
 	}	
 }
 
@@ -90,8 +72,7 @@ void high_isr(void)
 
 #pragma interruptlow low_isr
 void low_isr (void)
-{
-	
+{	
 }
 
 //***************************************************************************************************************
@@ -117,6 +98,8 @@ void main (void)
 
 	
 	Delay10KTCYx(99);
+	
+	TXString("RST \x0A\x0D");
 	
 //***************************************************************************************************************
 //                          loop
@@ -163,9 +146,21 @@ void main (void)
 		//If microswitch is engaged then send respective value
 		if(PORTAbits.RA4)
 		{
-			TXChar(0x40);			//send the code for "Microswitch Engaged"
-			TXString("\x0D\x0A");
-		}	
+			if(switchCount == SWITCH_THRESHOLD)
+			{
+				TXChar(0x40);
+				TXString("\x0A\x0D");
+				switchCount++;
+			} else if (switchCount < SWITCH_THRESHOLD)
+			{
+				switchCount++;
+			}	
+			
+		}
+		else
+		{
+			switchCount = 0;	
+		}		
 		
 	}
 }

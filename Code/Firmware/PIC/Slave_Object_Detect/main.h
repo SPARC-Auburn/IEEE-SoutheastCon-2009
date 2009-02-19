@@ -3,6 +3,8 @@
 
 #define SLAVE
 
+#define SWITCH_THRESHOLD 20
+
 void	high_isr 		(void);
 void	high_vec 		(void);
 void 	low_vec  		(void);
