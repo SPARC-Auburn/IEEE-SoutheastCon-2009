@@ -22,24 +22,7 @@
 #pragma config MCLRE = ON
 #pragma config BOREN = BOHW,BORV = 3
 
-// Union arrays for antennas
-union int_byte antCalibration[3] = {0,0,0};
-union int_byte antMeasure[3] = {0,0,0};
 
-// Unions for angular rate sensor
-union int_byte arsCalibration = 0;
-union int_byte arsMeasure[10];
-
-unsigned char adc_pointer = 0;
-unsigned char ars_pointer = 0;
-long angle = 0;
-long angle_temp = 0;
-
-
-int EE_line_threshold = 20;							// 20
-int EE_line_follow_threshold = 50;					// 50
-unsigned char EE_corner_threshold = 30;				// 30
-unsigned int EE_interrupt_throttle = 5000;				// 5000
 
 #pragma code high_vector=0x08
 void high_vec(void)
@@ -55,6 +38,26 @@ void low_vec (void)
 }
 
 #pragma code
+
+// Union arrays for antennas
+union int_byte antCalibration[3] = {0,0,0};
+union int_byte antMeasure[3] = {0,0,0};
+
+// Unions for angular rate sensor
+union int_byte arsCalibration = 0;
+union int_byte arsMeasure = 0;
+
+unsigned char adc_pointer = 0;
+unsigned char ars_pointer = 0;
+long angle = 0;
+long angle_temp = 0;
+
+unsigned char adc_channel[4] = {0b10000111,0b10001111,0b10010111,0b10011111};
+
+int EE_line_threshold = 20;							// 20
+int EE_line_follow_threshold = 50;					// 50
+unsigned char EE_corner_threshold = 30;				// 30
+unsigned int EE_interrupt_throttle = 5000;				// 5000
 
 //***************************************************************************************************************
 //							high_isr
@@ -81,21 +84,15 @@ void low_isr (void)
 		int temp = ReadADC(); 
 		if(adc_pointer < 3)
 		{
-			antMeasure[adc_pointer].lt = temp;	
+			antMeasure[adc_pointer].lt = temp;
 			adc_pointer++;
-		}	
-		else if(adc_pointer == 3)
+		} 
+		else 
 		{
-			arsMeasure[ars_pointer].lt = temp;
 			angle += temp - arsCalibration.lt;
-			ars_pointer++;
-			if(ars_pointer == ARS_SAMPLES)
-			{
-				ars_pointer = 0;	
-			}	
-			adc_pointer = 0;		
+			adc_pointer = 0;
 		}	
-		SelChanConvADC(adc_pointer);		
+		SelChanConvADC(adc_channel[adc_pointer]);		
 		WriteTimer0(65536-ADC_DELAY);
 		INTCONbits.TMR0IF = 0;
 	}	
@@ -105,11 +102,12 @@ void low_isr (void)
 //							main
 //***************************************************************************************************************
 unsigned char c;
+
 void main (void)
 {
 	Init();
 	initQueue();
-	
+		
 	Delay10KTCYx(1);		// Build in a delay to prevent weird serial characters
 
 	if(isWDTTO())
@@ -146,6 +144,7 @@ void main (void)
 		TXChar(' ');
 		TXString("\x0D\x0A ARS Value: ");
 		TXDec_Int(arsCalibration.lt);
+		TXString("\x0D\x0A");
 	#endif
 		
 	INTCONbits.TMR0IF = 0;
@@ -155,20 +154,19 @@ void main (void)
 	{
 		ClrWdt();
 		Delay10KTCYx(20);
-		#ifdef __DEBUG
-			TXString("Antenna Values: ");
-			TXDec_Int(antMeasure[0].lt);
-			TXChar(' ');
-			TXDec_Int(antMeasure[1].lt);
-			TXChar(' ');
-			TXDec_Int(antMeasure[2].lt);
-			TXString("\x0D\x0A");
-		#endif
-		
-		#ifdef __DEBUG
-			TXString("Angle Value: ");
-			angle_temp = angle/250;
-			
+        
+        TXString("Calibration Complete, Antenna Values: ");
+		TXDec_Int(antMeasure[0].lt);
+		TXChar(' ');
+		TXDec_Int(antMeasure[1].lt);
+		TXChar(' ');
+		TXDec_Int(antMeasure[2].lt);
+		TXChar(' ');
+		// Here is where we can put an angle/magicNumber command.
+		//TXString(" ARS Value: ");
+		//TXDec_Int(arsCalibration.lt);
+		TXString("\x0D\x0A");
+
 	}		
 }	
 
@@ -179,7 +177,7 @@ void cal_ant(void)
 	Delay10KTCYx(2);
 	while(adc_pointer < 3)
 	{
-		SetChanADC(adc_pointer);
+		SetChanADC(adc_channel[adc_pointer]);
 		ConvertADC();
 		while( BusyADC() );
 		antCalibration[adc_pointer].lt = ReadADC();
@@ -194,10 +192,11 @@ void cal_ars(void)
 	for(i = 0; i < 8; i++)
 	{
 		adc_pointer = 3;
-		SetChanADC(adc_pointer);
+		SetChanADC(adc_channel[adc_pointer]);
 		ConvertADC();
 		while( BusyADC() );
 		temp += ReadADC();
 	}
 	temp = (temp >> 3);	
+	arsCalibration.lt = temp;
 }			
