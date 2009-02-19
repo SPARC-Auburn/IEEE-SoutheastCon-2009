@@ -82,7 +82,7 @@ class Servo:
 			hex = '0'+hex
 		return hex.decode("hex")
 				
-	def move_to_position(self,position = 1500):
+	def move_to_position(self, position = 1500):
 		'''
 			Moves the servo to the given position in uSeconds.
 			'''
@@ -90,7 +90,7 @@ class Servo:
 		if not enabled:
 			return
 		log.debug("Moving to position: %i" % position)
-		self.pointer = self.dec2hex(self.pointer)
+		self.pointer = int(self.dec2hex(self.pointer))
 		position = self.dec2hex(position)
 		if len(position) is not 2:
 			position += dec2hex(0)
