@@ -235,10 +235,12 @@ unsigned char Get_7266_Flags(int addr)
 	int i;
 	char flags;
 	TRISD = 0xFF;
-	PORTA = 0x0D;				//CD = 1, XY = 0, RD = 1, WR = 1, CS = 0
+	PORTA = 0x1D;				//CD = 1, XY = 0, RD = 1, WR = 1, CS = 1
 	PORTAbits.RA2 = 0;			//pull RD low to read
+	PORTAbits.RA4 = 0;
 	flags = PORTD;				//Read value of flags
 	PORTAbits.RA2 = 1;			//restore CS high
+	PORTAbits.RA4 = 1;
 	TRISD = 0;
 	return flags;
 } 
