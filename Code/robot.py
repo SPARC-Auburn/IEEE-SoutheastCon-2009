@@ -14,7 +14,10 @@ sys.path.append("Libraries")
 sys.path.append("Modules")
 
 # Imports #
-import sys
+# Signal
+import signal
+# Time
+from time import *
 #print "arguments", sys.argv
 # Logging
 import logging
@@ -43,6 +46,28 @@ def both(speed):
 		
 def move(speed, direction):
 	mc.move(speed, direction)
+	
+# Servo Related Functions
+def arm_up():
+	arm_servo.move(-1.0)
+	
+def arm_down():
+	arm_servo.move(1.0)
+	
+def gripper_open():
+	gripper_servo.move(-1.0)
+	
+def gripper_close():
+	gripper_servo.move(1.0)
+	
+def sorter_left():
+	sorter_servo(-1.0)
+
+def sorter_right():
+	sorter_servo(1.0)
+	
+def sorter_center():
+	sorter_servo(0)
 
 # Logging Related Functions
 def debug(msg):
@@ -61,8 +86,13 @@ def critical(msg):
 	brain_log.critical(msg)
 	
 # Misc Functions
+def shutdown_signal(signal, frame):
+	shutdown()
+	
 def shutdown():
 	servo_micro.shutdown()
+	log.info("Robot.py has shutdown cleanly.")
+	sys.exit(0)
 
 
 # Initilization #
@@ -89,6 +119,7 @@ configs.init(configFile)
 config = configs.get_config()
 
 # Initialize modules #
+
 # Sabertooth2x10
 import sabertooth2x10 as saber
 saber.init()
@@ -104,7 +135,7 @@ arm_servo = sc.get_object('Arm Servo')
 sorter_servo = sc.get_object('Sorter Servo')
 gripper_servo = sc.get_object('Gripper Servo')
 
-
+signal.signal(signal.SIGINT, shutdown_signal)
 
 # Done
 log.info("Robot.py has been loaded.")

@@ -8,8 +8,6 @@
 '''
 	Module for interfacing with the Micro Controller Network.
 	TODO:
-	* Controlling lights and switches
-	* Handleing Interrupts from Master Node.
 	'''
 
 # Imports #
@@ -20,11 +18,13 @@ master_log = logging.getLogger('Master Node')
 # Configs
 import configs
 import configobj
-global config, enable
+global config, enabled
 config = configs.get_config('Micro Controller Network')
 enabled = config['enabled']
 # Threading
 from threading import Thread, Lock
+# Queue
+import Queue
 # PySerial
 if enabled:
 	try:
@@ -63,23 +63,41 @@ class MicroController:
 		'''
 			Constructor - opens serial port given and initializes the master node.
 			'''
-		global enabled
+		global config
+		#Name
 		self.name = name
 		if name is None:
 			name = 'Unamed micro controller'
+		#Serial
 		self.serial = Serial()
 		self.serial.port = serial
 		self.serial.baudrate = baud_rate
 		self.serial.timeout = 1
-		if enabled:
+		self.enabled = config[name]['enabled']
+		if self.enabled:
 			try:
 				self.serial.open()
 			except Exception as e:
 				log.error("Unable to open serial port %s: %s" % (serial, e))
 		self.send_lock = Lock()
-		self.debugging = debug(self.name, self.serial)
+		#Services
+		self.services = []
+		#Threading
+		self.debugging = debug(self.name, self)
 		if self.serial.isOpen():
 			self.debugging.start()
+		return
+		
+	def register(self, obj):
+		self.services.append(obj)
+		
+	def handleMsg(self, msg):
+		for service in self.services:
+			for return_code in service.return_codes:
+				if msg[0:1] == return_code:
+					service.notify(service.return_codes[return_code], msg)
+					return
+		log.error("Unregistered return code received: %s", msg)
 		return
 	
 	def send(self, msg):
@@ -90,7 +108,7 @@ class MicroController:
 			Bytes must be a 2 char string representing two hex digits.
 			'''
 		# Checks
-		if not enabled:
+		if not self.enabled:
 			return
 		if type(msg) is not list:
 			log.error("Messages sent to the micro controller must be a list of bytes!")
@@ -108,16 +126,18 @@ class MicroController:
 		return
 		
 	def shutdown(self):
+		log.info("Micro Controller %s is shutting down.", self.name)
 		self.debugging.shutdown()
-		self.debugging.join()
+		if self.debugging.is_alive():
+			self.debugging.join()
 		return
 		
 		
 class debug(Thread):
-	def __init__(self, name, serial):
+	def __init__(self, name, mc):
 		Thread.__init__(self)
 		self.name = name
-		self.serial = serial
+		self.serial = mc.serial
 		self.stop = False
 		
 	def run(self):
@@ -134,5 +154,7 @@ class debug(Thread):
 	def processInput(self, input):
 		if input[0:2] == 'RST':
 			log.info("Micro Controller %s reset.", self.name)
+		else
+			mc.handleMsg(input)
 		return
 		
