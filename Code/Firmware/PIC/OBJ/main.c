@@ -19,6 +19,7 @@
 #include "queue.h"
 #include "op_codes.h"
 #include "timers.h"
+#include "reset.h"
 #include <delays.h>
 #include <math.h>
 
@@ -100,7 +101,27 @@ void main (void)
 	
 	Delay10KTCYx(99);
 	
-	TXString("RST OBJ\x0A\x0D");
+	if(isWDTTO())
+	{
+		TXString("RST OBJ - WDT\x0A\x0D");
+	}
+	else if(isMCLR())
+	{
+		TXString("RST OBJ - MCLR\x0A\x0D");	
+	}
+	else if(isPOR())	
+	{
+		TXString("RST OBJ - POR\x0A\x0D");
+	}
+	else if(isBOR())
+	{
+		TXString("RST OBJ - BOR\x0A\x0D");
+	}
+	else
+	{
+		TXString("RST OBJ\x0A\x0D");	
+	}	
+	StatusReset();
 	
 //***************************************************************************************************************
 //                          loop
@@ -108,6 +129,7 @@ void main (void)
 	while(1) {
 		// *** Handle everything currently in the queue. *** //
 		while(!isRXEmpty()) {
+		
 			if(ProcStatus.ProcessInProgress) {
 				popRXQueue(&c);
 				current_parameters[parameter_count] = c;
@@ -117,6 +139,8 @@ void main (void)
 				ProcStatus.ProcessInProgress = 1;
 				popRXQueue(&c);
 				current_proc = c;
+				TXChar(c);
+				TXString("\x0A\x0D");
 			}
 			switch(current_proc) {
 				case RESET_OP:
@@ -128,9 +152,12 @@ void main (void)
 					ProcStatus.ProcessInProgress = 0;
 					parameter_count = 0;
 					break;
-				case POLE_SONAR_OP:
+				case POLL_SONAR_OP:
 					ProcStatus.sonar_poll_enabled = 1;
 					ProcStatus.ProcessInProgress = 0;					
+					break;
+				default:
+					ProcStatus.ProcessInProgress = 0;
 					break;
 			}
 		}
@@ -144,23 +171,13 @@ void main (void)
 			ProcStatus.sonar_poll_enabled = 0;
 		}
 		
-		TRISAbits.TRISA0 = 0;
-		TRISAbits.TRISA1 = 0;
-		TRISAbits.TRISA2 = 0;
-		
-		
-		
-		PORTAbits.RA0 = 1;
-		PORTAbits.RA1 = 1;
-		PORTAbits.RA2 = 1;		
-		
 		
 		//If microswitch is engaged then send respective value
 		if(PORTAbits.RA4)
 		{
 			if(switchCount == SWITCH_THRESHOLD)
 			{
-				TXChar(0x40);
+				TXChar(0x70);
 				TXString("\x0A\x0D");
 				switchCount++;
 			} else if (switchCount < SWITCH_THRESHOLD)
@@ -298,14 +315,14 @@ void poll_sonar(void)
 		
 		if(distance[0] > thresholdBack)
 		{
-			TXChar(0x41);		//send code for "No Object"
+			TXChar(SONAR_NO_OBJECT);		//send code for "No Object"
 			TXString("\x0D\x0A");			
 		}	 
 		else
 		{
 			if(distance[1] < thresholdFrontBack && distance[2] < thresholdFrontFront)
 			{
-				TXChar(0x44);	//send code for "Plastic Bottle"
+				TXChar(SONAR_PLASTIC);	//send code for "Plastic Bottle"
 				TXString("\x0D\x0A");			
 	
 			}
@@ -313,19 +330,19 @@ void poll_sonar(void)
 			{
 				if(distance[1] < thresholdFrontBack && distance[2] > thresholdFrontFront)
 				{
-					TXChar(0x43);	//send code for "Glass Bottle"
+					TXChar(SONAR_GLASS);	//send code for "Glass Bottle"
 					TXString("\x0D\x0A");	
 				}
 				else
 				{
 					if(distance[1] > thresholdFrontBack && distance[2] > thresholdFrontFront)
 					{
-						TXChar(0x42);	//send code for "Aluminum Can"
+						TXChar(SONAR_ALUMINUM);	//send code for "Aluminum Can"
 						TXString("\x0D\x0A");	
 					}
 					else
 					{
-						TXChar(0x45);	//send code for "Error - FrontFront Sonar is triggered, but FrontBack is not"
+						TXChar(SONAR_ERROR);	//send code for "Error - FrontFront Sonar is triggered, but FrontBack is not"
 						TXString("\x0D\x0A");	
 					}	
 				}			

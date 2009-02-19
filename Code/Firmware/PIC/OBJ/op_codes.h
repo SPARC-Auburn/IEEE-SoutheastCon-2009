@@ -1,9 +1,14 @@
-#define 	RESET_OP				0x00
-#define 	EEPROM_WR_OP			0x01
-#define		EEPROM_RD_OP			0x02
+#define 	RESET_OP				0x30
+#define 	EEPROM_WR_OP			0x31
+#define		EEPROM_RD_OP			0x32
 
-#define		POLE_SONAR_OP			0x30
+#define		POLL_SONAR_OP			0x60		// `
 
+#define		SONAR_NO_OBJECT			0x71		// q
+#define		SONAR_PLASTIC			0x74		// t
+#define		SONAR_GLASS				0x73
+#define		SONAR_ALUMINUM			0x72
+#define		SONAR_ERROR				0x75
 
 
 

@@ -35,12 +35,11 @@ void Init_USART(void)
 	RCSTA = 0;
 	RCSTAbits.CREN = 1;		// Continuous Reception
 	TXSTAbits.BRGH = 1;		// High Baud Rate
-	BAUDCONbits.BRG16 = 1;
-	PIR1bits.TXIF = 0;
-	PIE1bits.RCIE = 0;		// No Receive Interrupt
-	PIR1bits.RCIF = 0;
-	PIE1bits.TXIE = 0;		// No Transmit Interrupt
+	BAUDCONbits.BRG16 = 1;	// 16-bit Baud Rate counter
 	
+	TXSTAbits.TXEN = 0;
+	RCSTAbits.SPEN = 0;	
+
 	SPBRG = baud;			// Write the baud rate
 	SPBRGH = baud >> 8;
 	
@@ -48,7 +47,14 @@ void Init_USART(void)
 	RCSTAbits.SPEN = 1;		// Enable RX
 	
 	TRISCbits.TRISC6 = 0;	// Set Data Directions for PortC pins
-	TRISCbits.TRISC7 = 1;	
+	TRISCbits.TRISC7 = 1;
+
+	PIR1bits.RCIF = 0;
+	PIE1bits.RCIE = 1;		// Enable Receive Interrupt
+	IPR1bits.RCIP = 1;		// High Priority
+	PIR1bits.TXIF = 0;
+	PIE1bits.TXIE = 1;		// Enable Transmit Interrupt
+	IPR1bits.TXIP = 1;		// High Priority	
 	
 }
 
