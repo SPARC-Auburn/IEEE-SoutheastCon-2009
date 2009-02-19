@@ -137,6 +137,7 @@ class debug(Thread):
 	def __init__(self, name, mc):
 		Thread.__init__(self)
 		self.name = name
+		self.mc = mc
 		self.serial = mc.serial
 		self.stop = False
 		
@@ -154,7 +155,7 @@ class debug(Thread):
 	def processInput(self, input):
 		if input[0:2] == 'RST':
 			log.info("Micro Controller %s reset.", self.name)
-		else
-			mc.handleMsg(input)
+		elif input != '':
+			self.mc.handleMsg(input)
 		return
 		
