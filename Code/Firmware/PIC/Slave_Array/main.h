@@ -23,10 +23,6 @@ struct proc_status {
 	unsigned line_follow_enabled		:1;
 	unsigned corner_detection_enabled	:1;
 	unsigned line_detection_enabled		:1;
-	
-	unsigned line_follow_int			:1;
-	unsigned corner_detect_int			:1;
-	unsigned line_detect_int			:1; 
 };
 
 union int_byte

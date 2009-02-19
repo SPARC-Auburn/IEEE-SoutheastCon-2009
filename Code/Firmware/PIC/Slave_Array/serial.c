@@ -1,5 +1,6 @@
 #include "hardware.h"
 #include "serial.h"
+#include "queue.h"
 
 char RXReady(void){
 	if(PIR1bits.RCIF)
@@ -14,14 +15,13 @@ char RXChar(void){
 }	
 
 void TXChar(char c){
-	TXREG = c;
-	while(!TXSTAbits.TRMT);
+	pushTXQueue(c);
 }
 
 void TXString(const rom char *s){
 	do{
 		TXChar(*s);
-	} while( *s++);	
+	} while( *(++s));	
 }		
 
 void TXBin(unsigned char c){
@@ -77,21 +77,13 @@ void TXDec_Int(unsigned int c){
 	unsigned int b;
 	
 	b = c;
-	if(b/10000){
-		TXChar(b/10000+'0');
-	}
+	TXChar(b/10000+'0');
 	b = b - (b/10000) * 10000;
-	if(b/1000){
-		TXChar(b/1000+'0');
-	}
+	TXChar(b/1000+'0');
 	b = b - (b/1000) * 1000;		
-	if(b/100){
-		TXChar(b/100+'0');
-	}
+	TXChar(b/100+'0');
 	b = b - (b/100) * 100;
-	if(b/10){
-		TXChar(b/10+'0');
-	}
+	TXChar(b/10+'0');
 	b = b - (b/10) * 10;
 	TXChar(b + '0');
 }
