@@ -17,6 +17,7 @@ struct status
 	unsigned RxError:1;				
 };
 
+void			initQueue		(void);
 void			SerialISR		(void);
 
 unsigned char 	isTXEmpty		(void);

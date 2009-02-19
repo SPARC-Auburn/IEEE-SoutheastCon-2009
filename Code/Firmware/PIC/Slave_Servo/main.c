@@ -9,6 +9,7 @@
 #include "serial.h"
 #include "hardware.h"
 #include "queue.h"
+#include "delays.h"
 
 #pragma config OSC = IRCIO67,WDT = OFF, MCLRE = ON
 
@@ -28,8 +29,8 @@ void low_vec (void)
 #pragma code
 
 union Servo servo[4];
-volatile unsigned int timer1_reload, timer3_reload;
-volatile unsigned char timer1_mask, timer3_mask;
+unsigned int timer1_reload, timer3_reload;
+unsigned char timer1_mask, timer3_mask;
 
 unsigned char pwm_deadband = 15;		// Default value, can be varied through serial
 
@@ -151,12 +152,17 @@ void main (void)
 	union Servo temp;
 	
 	Init();
+	initQueue();
+
+	Delay10KTCYx(1000);
 
 	servo[0].lt = 1500;
 	servo[1].lt = 1500;
 	servo[2].lt = 1500;
 	servo[3].lt = 1500;
 
+	TXString("\x0A\x0D");
+	TXString("RST \x0A\x0D");
 	
 	while(1)
 	{
@@ -169,7 +175,11 @@ void main (void)
 				TXString("\x0A\x0D");
 			#endif
 			
-			if(count == 0 && c < 5 && c > 0)
+			if(count == 0 && c == 0x00)
+			{
+				Reset();
+			}
+			else if(count == 0 && c < 5 && c > 0)
 			{
 				pointer = c - 1;
 				count++;
@@ -188,6 +198,10 @@ void main (void)
 			{
 				temp.bt[0] = c;
 				servo[pointer].lt = temp.lt;
+				TXDec(pointer);
+				TXChar(' ');
+				TXDec_Int(servo[pointer].lt);
+				TXString("\x0A\x0D");
 				#ifdef __DEBUG
 					TXString("Servo Set: ");
 					TXDec(pointer);

@@ -13,19 +13,37 @@
 #define TX_BUFFER_SIZE 120
 #define RX_BUFFER_SIZE 120
 #pragma udata QUEUE
-volatile unsigned char tx_buffer[TX_BUFFER_SIZE];
-volatile unsigned char rx_buffer[RX_BUFFER_SIZE];
+unsigned char tx_buffer[TX_BUFFER_SIZE];
+unsigned char rx_buffer[RX_BUFFER_SIZE];
 
 #pragma code
-volatile unsigned char tx_count = 0;
-volatile unsigned char tx_read_ptr = 0;
-volatile unsigned char tx_write_ptr = 0;
+unsigned char tx_count = 0;
+unsigned char tx_read_ptr = 0;
+unsigned char tx_write_ptr = 0;
 
-volatile unsigned char rx_count = 0;
-volatile unsigned char rx_read_ptr = 0;
-volatile unsigned char rx_write_ptr = 0;
+unsigned char rx_count = 0;
+unsigned char rx_read_ptr = 0;
+unsigned char rx_write_ptr = 0;
 
-volatile struct status QueueStatus = {0,1,0,1,0,0};
+struct status QueueStatus = {0,1,0,1,0,0};
+
+void initQueue(void)
+{
+	tx_count = 0;
+	tx_read_ptr = 0;
+	tx_write_ptr = 0;
+	
+	rx_count = 0;
+	rx_read_ptr = 0;
+	rx_write_ptr = 0;
+
+	QueueStatus.TxBufferFull = 0;
+	QueueStatus.TxBufferEmpty = 1;
+	QueueStatus.RxBufferFull = 0;
+	QueueStatus.RxBufferEmpty = 1;
+	QueueStatus.RxOverFlow = 0;
+	QueueStatus.RxError = 0;
+}
 
 void SerialISR(void)
 {
