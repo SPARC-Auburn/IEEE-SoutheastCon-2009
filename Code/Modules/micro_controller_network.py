@@ -155,7 +155,7 @@ class debug(Thread):
 	def processInput(self, input):
 		if input[0:2] == 'RST':
 			log.info("Micro Controller %s reset.", self.name)
-		elif input != '':
+		elif input != '' or input != '\r' or input != '\n':
 			self.mc.handleMsg(input)
 		return
 		
