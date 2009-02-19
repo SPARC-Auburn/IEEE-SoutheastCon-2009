@@ -3,6 +3,7 @@
 
 #define SLAVE
 
+
 int		init 			(void);
 void	Init_Oscillator		(void);
 void	Init_Interrupts		(void);

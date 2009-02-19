@@ -101,18 +101,20 @@ void low_isr (void)
 //							main
 //***************************************************************************************************************
 
+unsigned char c;
+
 void main (void)
 {
 	Init();
 	TXString("\x0D\x0A");		// Put out a new line
 	TXChar('>');	
 	
-	TRISAbits.TRISA4 = 1;
+	TRISAbits.TRISA4 = 1;		// set pin 6 as input for 
 	
 	ADCON1 = 0X0F;
 		
 	OpenTimer0( TIMER_INT_OFF & //initialize timer0 for: - interupt disabled
-            T0_16BIT &           //					 	 - 8 bit timer
+            T0_16BIT &           //					 	 - 16 bit timer
             T0_SOURCE_INT &		//						 - based on internal oscillator
             T0_PS_1_2 );		//						 - 8X prescaler to give sonar measurement 1 microsecond accuracy
 

@@ -21,21 +21,19 @@
 #include <math.h>
 
 
-// Union arrays for antennas
-union int_byte antCalibration[3] = {0,0,0};
-union int_byte antMeasure[3] = {0,0,0};
-// Unions for angular rate sensor
-union int_byte arsCalibration = 0;
-union int_byte arsMeasure = 0;
+unsigned int pulseDuration = 0;
+unsigned int distance[] = {50,50,50};
+int sonarIndex = 0;
+int i;
+unsigned int thresholdBack = 10;
+unsigned int thresholdFrontBack = 20;
+unsigned int thresholdFrontFront = 20;
 
-volatile struct proc_status ProcStatus = {0,0,0,0,0,1,1,1};
+
+volatile struct proc_status ProcStatus = {0,0};
 unsigned char current_proc = 0;
 unsigned char paramter_count = 0;
 
-int EE_line_threshold = 20;							// 20
-int EE_line_follow_threshold = 50;					// 50
-unsigned char EE_corner_threshold = 30;				// 30
-unsigned int EE_interrupt_throttle = 5000;				// 5000
 
 #pragma config OSC = IRCIO67,WDT = OFF, MCLRE = ON
 
@@ -95,14 +93,7 @@ void high_isr(void)
 #pragma interruptlow low_isr
 void low_isr (void)
 {
-	if(PIR1bits.TMR1IF)
-	{
-		ProcStatus.line_follow_int = 1;
-		ProcStatus.corner_detect_int = 1;
-		ProcStatus.line_detect_int = 1;
-		WriteTimer1(65535 - EE_interrupt_throttle);	
-		PIR1bits.TMR1IF = 0;
-	}
+	
 }
 
 //***************************************************************************************************************
@@ -127,7 +118,8 @@ void main (void)
 				popRXQueue(&c);
 				current_proc = c;
 			}
-			switch(current_proc) {
+			switch(current_proc) 
+			{
 				case RESET_OP:
 					Reset();
 					ProcStatus.ProcessInProgress = 0;
@@ -137,199 +129,178 @@ void main (void)
 					ProcStatus.ProcessInProgress = 0;
 					parameter_count = 0;
 					break;
-				case CAL_ANT_OP:
-					ProcStatus.cal_ant_enabled = 1;
-					break;
-				case LINE_FOLLOW_OP:
-					if(parameter_count = 1) {
-						ProcStatus.line_follow_enabled = current_parameters[0];
-						ProcStatus.ProcessInProgress = 0;
-						parameter_count = 0;
-					}
-					break;
-				case CORNER_DETECTION_OP:
-					if(parameter_count = 1) {
-						ProcStatus.corner_detection_enabled = current_parameters[0];
-						ProcStatus.ProcessInProgress = 0;
-						parameter_count = 0;
-					}
-					break;
-				case LINE_DETECTION_OP:
-					if(parameter_count = 1) {
-						ProcStatus.line_detection_enabled = current_parameters[0];
-						ProcStatus.ProcessInProgress = 0;
-						parameter_count = 0;
-					}
+				case POLE_SONAR_OP:
+					ProcStatus.sonar_poll_enabled = 1;
+					ProcStatus.ProcessInProgress = 0;					
 					break;
 			}
 		}
 		// *** Handle execution loop. *** //
-		// If calibration needs to be run
-		if(ProcStatus.cal_ant_enabled) {
-			cal_ant();
-			ProcStatus.cal_ant_enabled = 0;
+		// if poll sonar is enabled
+		if(ProcStatus.sonar_poll_enabled) 
+		{
+			poll_sonar();
+			ProcStatus.sonar_poll_enabled = 0;
 		}
 		
-		// Read the Antennas
-		read_antennas();
 		
-		// If line following is enabled
-		if(ProcStatus.line_follow_enabled) {
-			line_follow();
-		}
 		
-		// If corner detection is enabled
-		if(ProcStatus.corner_detection_enabled) {
-			corner_detection();
-		}
 		
-		// If line detection is enabled
-		if(ProcStatus.line_detection_enabled) {
-			line_detection();
-		}
 	}
 }
 
+void sonar_poll(void)
+{
+									//start the 1st sonar measurement
+		sonarIndex = 0;		
 
-void read_antennas(void) {
-	// This method should read the antennas values and store them in global variables.
-	// The other functions will use these readings to chack against thresholds set in the eeprom.
-	unsigned char channel;
-	channel = 0;
-	while(channel < 3)
-	{
-		ADCON0 = ((channel << 2) & 0b00111100) |
-          				(ADCON0 & 0b11000011);
-		ADCON0bits.GO = 1;			//start the A/D converter 
-		while(ADCON0bits.GO){}		//wait for the A/D converter to finish
-		antMeasure[channel].bt[0] = ADRESL;
-		antMeasure[channel].bt[1] = ADRESH;
-		Delay10TCYx(1);		//delay before starting A/D converter again
-		channel++;
-	}		
-}
+		TRISAbits.TRISA0 = 0; 	//set pin 2 to output for Parallax triggering sequence
 
-void read_ars(void) {
-	
-}	
+		PORTAbits.RA0 = 0;		//bring pin 2 low
+		Delay10TCYx(7);			//delay for ~2 microseconds
 
-void interrupt(char c) {
-	pushTXQueue(c);
+		PORTAbits.RA0 = 1;  	//bring pin 2 high
+		Delay10TCYx(16);		//delay for ~5 microseconds
 
-	LATB &= 0b11111110;
-	Delay10TCYx(1);
-	LATB |= 0b00000001;
-}
+		PORTAbits.RA0 = 0;		//bring pin 2 low
 
-void cal_ars(void) {
-	unsigned char i = 0;
-	while(i < 3)
-	{		
-		ADCON0 = ((3 << 2) & 0b00111100) |
-           				(ADCON0 & 0b11000011);					 
-		ADCON0bits.GO = 1;			//start the A/D converter
-		while(ADCON0bits.GO){}		//wait for the A/D converter to finish
-		arsCalibration.bt[0] = ADRESL;
-		arsCalibration.bt[1] = ADRESH;
-		i++;
-		Delay10KTCYx(990);		//delay before starting A/D converter again		
-	}
-}		
-
-void cal_ant(void) {
-	unsigned char i = 0;
-	unsigned char channel;	
-	while(i < 3)
-	{	
-		channel = 0;
-		while(channel < 3)
-		{
-			ADCON0 = ((channel << 2) & 0b00111100) |
-           				(ADCON0 & 0b11000011);
-			ADCON0bits.GO = 1;			//start the A/D converter 
-			while(ADCON0bits.GO){}		//wait for the A/D converter to finish
-			antCalibration[channel].bt[0] = ADRESL;
-			antCalibration[channel].bt[1] = ADRESH;
-			Delay10TCYx(1);		//delay before starting A/D converter again
-			channel++;
+		TRISAbits.TRISA0 = 1; 	//set pin 2 to input for pulse readin
+		
+		while(PORTAbits.RA0 == 0)
+		{	
+								//wait for the Parallax to bring pin 2 high				
 		}
-		i++;
-		Delay10TCYx(990);		//delay before starting A/D converter again		
-	}	
-}
+		
+		WriteTimer0( 0 );		//reset Timer0
 
-void line_follow() {
-	// This function simply checks the antenna values against the threshholds in the eeprom and 
-	// interrupts if nessisary.  The interrupt return messages are on the wiki and should kept up to date
-	// with any changes.
-	
-	int differenceLineFollow;
-	differenceLineFollow = 0;
-	
-	if(antMeasure[0].lt < (antCalibration[0].lt + EE_line_threshold) && 
-		antMeasure[1].lt  < (antCalibration[1].lt + EE_line_threshold))
-	{
-		if(ProcStatus.line_follow_int)
+		while(PORTAbits.RA0 == 1)
 		{
-			interrupt(INT_LINE_ERROR);
-			ProcStatus.line_follow_int = 0;	
+								//wait for the Parallax to bring pin 2 low
 		}
-	}	
-	else
-	{
-		differenceLineFollow = antMeasure[0].lt - antMeasure[1].lt;
-		if(differenceLineFollow > EE_line_follow_threshold)
+								//read the value in Timer0
+		pulseDuration = ReadTimer0();
+
+								//divide the microseconds by 58 to convert to centimeters
+		distance[sonarIndex] = pulseDuration / 58;						
+		
+								//output the duration of pulse received from the Parallax in centimeters
+//		TXString("Sonar Reading4:");
+//		TXDec_Int(distance[sonarIndex]);		
+//		TXString("\x0D\x0A");
+
+								//start 2nd sonar measurement
+		sonarIndex++;			
+		
+		TRISAbits.TRISA1 = 0; 	//set pin 3 to output for Parallax triggering sequence
+
+		PORTAbits.RA1 = 0;		//bring pin 3 low
+		Delay10TCYx(7);			//delay for ~2 microseconds
+
+		PORTAbits.RA1 = 1;  	//bring pin 3 high
+		Delay10TCYx(16);		//delay for ~5 microseconds
+
+		PORTAbits.RA1 = 0;		//bring pin 3 low
+
+		TRISAbits.TRISA1 = 1; 	//set pin 3 to input for pulse readin
+		
+		while(PORTAbits.RA1 == 0)
+		{	
+								//wait for the Parallax to bring pin 3 high				
+		}
+		
+		WriteTimer0( 0 );		//reset Timer0
+
+		while(PORTAbits.RA1 == 1)
 		{
-			if(ProcStatus.line_follow_int)
-			{
-				interrupt(INT_LINE_LEFT);
-				ProcStatus.line_follow_int = 0;		
-			}
-		}	
-		else if(differenceLineFollow > EE_line_follow_threshold)
+								//wait for the Parallax to bring pin 3 low
+		}
+								//read the value in Timer0
+		pulseDuration = ReadTimer0();
+
+								//divide the microseconds by 58 to convert to centimeters
+		distance[sonarIndex] = pulseDuration / 58;						
+
+		
+								//output the duration of pulse received from the Parallax in centimeters
+//		TXString("Sonar Reading3:");
+//		TXDec_Int(distance[sonarIndex]);
+//		TXString("\x0D\x0A");
+
+								//start the 3rd sonar measurement
+		sonarIndex++;
+
+		TRISAbits.TRISA2 = 0; 	//set pin 4 to output for Parallax triggering sequence
+
+		PORTAbits.RA2 = 0;		//bring pin 4 low
+		Delay10TCYx(7);			//delay for ~2 microseconds
+
+		PORTAbits.RA2 = 1;  	//bring pin 4 high
+		Delay10TCYx(16);		//delay for ~5 microseconds
+
+		PORTAbits.RA2 = 0;		//bring pin 4 low
+
+		TRISAbits.TRISA2 = 1; 	//set pin 4 to input for pulse readin
+		
+		while(PORTAbits.RA2 == 0)
+		{	
+								//wait for the Parallax to bring pin 4 high				
+		}
+		
+		WriteTimer0( 0 );		//reset Timer0
+
+		while(PORTAbits.RA2 == 1)
 		{
-			if(ProcStatus.line_follow_int)
-			{
-				interrupt(INT_LINE_RIGHT);
-				ProcStatus.line_follow_int = 0;	
-			}
-		}	
+								//wait for the Parallax to bring pin 4 low
+		}
+								//read the value in Timer0
+		pulseDuration = ReadTimer0();
+
+								//divide the microseconds by 58 to convert to centimeters
+		distance[sonarIndex] = pulseDuration / 58;						
+		
+
+								//output the duration of pulse received from the Parallax in centimeters
+//		TXString("Sonar Reading:");
+//		TXDec_Int(distance[sonarIndex]);
+//		TXString("\x0D\x0A");
+
+
+		
+		if(distance[0] > thresholdBack)
+		{
+			TXChar(0x41);		//send code for "No Object"
+			TXString("\x0D\x0A");			
+		}	 
 		else
 		{
-			if(ProcStatus.line_follow_int)
+			if(distance[1] < thresholdFrontBack && distance[2] < thresholdFrontFront)
 			{
-				interrupt(INT_LINE_CENTER);	
-				ProcStatus.line_follow_int = 0;	
-			}
-		}	
-	}
-}
-
-void corner_detection() {
-	// This function simply checks the antenna values against the threshholds in the eeprom and 
-	// interrupts if nessisary.  The interrupt return messages are on the wiki and should kept up to date
-	// with any changes.
-	if(antMeasure[2].lt > antCalibration[2].lt + EE_corner_threshold)
-	{
-		if(ProcStatus.corner_detect_int)
-		{
-			interrupt(INT_CORNER_DETECT);
-			ProcStatus.corner_detect_int = 0;
-		}
-	}
-	else
-	{
-	if(ProcStatus.corner_detect_int)
-		{
-			interrupt(INT_CORNER_NO_DETECT);
-			ProcStatus.corner_detect_int = 0;
-		}			
-	}
-}
-
-void line_detection() {
-	// This function simply checks the antenna values against the threshholds in the eeprom and 
-	// interrupts if nessisary.  The interrupt return messages are on the wiki and should kept up to date
-	// with any changes.
+				TXChar(0x44);	//send code for "Plastic Bottle"
+				TXString("\x0D\x0A");			
 	
-}
+			}
+			else
+			{
+				if(distance[1] < thresholdFrontBack && distance[2] > thresholdFrontFront)
+				{
+					TXChar(0x43);	//send code for "Glass Bottle"
+					TXString("\x0D\x0A");	
+				}
+				else
+				{
+					if(distance[1] > thresholdFrontBack && distance[2] > thresholdFrontFront)
+					{
+						TXChar(0x42);	//send code for "Aluminum Can"
+						TXString("\x0D\x0A");	
+					}
+					else
+					{
+						TXChar(0x45);	//send code for "Error - FrontFront Sonar is triggered, but FrontBack is not"
+						TXString("\x0D\x0A");	
+					}	
+				}			
+			}
+								
+		}
+	
+}	
