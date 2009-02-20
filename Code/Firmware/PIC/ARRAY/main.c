@@ -54,10 +54,16 @@ long angle_temp = 0;
 
 unsigned char adc_channel[4] = {0b10000111,0b10001111,0b10010111,0b10011111};
 
-int EE_line_threshold = 20;							// 20
-int EE_line_follow_threshold = 50;					// 50
-unsigned char EE_corner_threshold = 30;				// 30
-unsigned int EE_interrupt_throttle = 5000;				// 5000
+
+struct proc_status ProcStatus = {0,0,0,0,0};
+unsigned char current_proc = 0;
+unsigned char paramter_count = 0;
+
+
+int EE_line_threshold = 50;							// 50
+int EE_line_follow_threshold = 20;					// 50
+unsigned char EE_corner_threshold = 50;				// 30
+unsigned int EE_interrupt_throttle = 5000;			// 5000
 
 //***************************************************************************************************************
 //							high_isr
@@ -132,8 +138,11 @@ void main (void)
 	}	
 	StatusReset();
 	
+	Delay10KTCYx(20);
+	
 	cal_ant();
 	cal_ars();
+	
 	#ifdef __DEBUG
 		TXString("Calibration Complete, Antenna Values: ");
 		TXDec_Int(antCalibration[0].lt);
@@ -153,20 +162,70 @@ void main (void)
 	while(1)
 	{
 		ClrWdt();
-		Delay10KTCYx(20);
+		
+		// *** Handle everything currently in the queue. *** //
+		while(!isRXEmpty()) {
+			if(ProcStatus.ProcessInProgress) {
+				popRXQueue(&c);
+				current_parameters[parameter_count] = c;
+				parameter_count++;
+			}
+			else {
+				ProcStatus.ProcessInProgress = 1;
+				popRXQueue(&c);
+				current_proc = c;
+			}
+			switch(current_proc) {
+				case RESET_OP:
+					Reset();
+					ProcStatus.ProcessInProgress = 0;
+					break;
+				case EEPROM_WR_OP:
+					// Do EEPROM_WR stuff here
+					ProcStatus.ProcessInProgress = 0;
+					parameter_count = 0;
+					break;
+				case LINE_FOLLOW_OP:
+					if(parameter_count = 1) {
+						ProcStatus.line_follow_enabled = current_parameters[0];
+						ProcStatus.ProcessInProgress = 0;
+						parameter_count = 0;
+					}
+					break;
+				case CORNER_DETECTION_OP:
+					if(parameter_count = 1) {
+						ProcStatus.corner_detection_enabled = current_parameters[0];
+						ProcStatus.ProcessInProgress = 0;
+						parameter_count = 0;
+					}
+					break;
+				case LINE_DETECTION_OP:
+					if(parameter_count = 1) {
+						ProcStatus.line_detection_enabled = current_parameters[0];
+						ProcStatus.ProcessInProgress = 0;
+						parameter_count = 0;
+					}
+					break;
+			}
+		}
+		
+		// *** Handle execution loop. *** //
+				
+		// If line following is enabled
+		if(ProcStatus.line_follow_enabled) {
+			line_follow();
+		}
+		
+		// If corner detection is enabled
+		if(ProcStatus.corner_detection_enabled) {
+			corner_detection();
+		}
+		
+		// If line detection is enabled
+		if(ProcStatus.line_detection_enabled) {
+			line_detection();
+		}
         
-        TXString("Calibration Complete, Antenna Values: ");
-		TXDec_Int(antMeasure[0].lt);
-		TXChar(' ');
-		TXDec_Int(antMeasure[1].lt);
-		TXChar(' ');
-		TXDec_Int(antMeasure[2].lt);
-		TXChar(' ');
-		angle_temp = angle/MagicNumber;
-		// Here is where we can put an angle/magicNumber command.
-		//TXString(" ARS Value: ");
-		//TXDec_Int(arsCalibration.lt);
-		TXString("\x0D\x0A");
 
 	}		
 }	
@@ -200,4 +259,56 @@ void cal_ars(void)
 	}
 	temp = (temp >> 3);	
 	arsCalibration.lt = temp;
+}
+
+void line_follow() {
+	// This function simply checks the antenna values against the threshholds in the eeprom and 
+	// interrupts if nessisary.  The interrupt return messages are on the wiki and should kept up to date
+	// with any changes.
+	
+	int differenceLineFollow;
+	differenceLineFollow = 0;
+	
+	if(antMeasure[0].lt < (antCalibration[0].lt + EE_line_threshold) && 
+		antMeasure[1].lt  < (antCalibration[1].lt + EE_line_threshold))
+	{
+		interrupt(INT_LINE_ERROR);
+	}	
+	else
+	{
+		differenceLineFollow = antMeasure[0].lt - antMeasure[1].lt;
+		if(differenceLineFollow > EE_line_follow_threshold)
+		{
+			interrupt(INT_LINE_LEFT);	
+		}	
+		else if(differenceLineFollow > EE_line_follow_threshold)
+		{
+			interrupt(INT_LINE_RIGHT);
+		}	
+		else
+		{
+			interrupt(INT_LINE_CENTER);	
+		}	
+	}
+}
+
+void corner_detection() {
+	// This function simply checks the antenna values against the threshholds in the eeprom and 
+	// interrupts if nessisary.  The interrupt return messages are on the wiki and should kept up to date
+	// with any changes.
+	if(antMeasure[2].lt > antCalibration[2].lt + EE_corner_threshold)
+	{
+		interrupt(INT_CORNER_DETECT);
+	}
+	else
+	{
+		interrupt(INT_CORNER_NO_DETECT);			
+	}
+}
+
+void line_detection() {
+	// This function simply checks the antenna values against the threshholds in the eeprom and 
+	// interrupts if nessisary.  The interrupt return messages are on the wiki and should kept up to date
+	// with any changes.
+	
 }			
