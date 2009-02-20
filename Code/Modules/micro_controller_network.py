@@ -56,7 +56,7 @@ def get_object(id):
 # Classes #
 class MicroController:
 	'''
-		This is the class that represents and provides access to the master 
+		This is the class that represents and provides access to a master 
 		node of a micro controller network.
 		'''
 	def __init__(self, name = None, serial='', baud_rate = 115200):
@@ -153,9 +153,10 @@ class debug(Thread):
 		return
 	
 	def processInput(self, input):
-		if input[0:2] == 'RST':
+		input = input.strip()
+		if len(input) > 2 and input[0:2] == 'RST':
 			log.info("Micro Controller %s reset.", self.name)
-		elif input != '' or input != '\r' or input != '\n':
+		elif input != '' and input != '\r' and input != '\n':
 			self.mc.handleMsg(input)
 		return
 		
