@@ -33,12 +33,12 @@ from threading import Event
 import micro_controller_network
 
 # Static Variables
-return_codes = {0x70:'Micro Switch Triggered',
-				0x71:'No Object',
-				0x72:'Can',
-				0x73:'Glass',
-				0x74:'Plastic',
-				0x75:'Detection Error'}
+return_codes = {'\x70':'Micro Switch Triggered',
+				'\x71':'No Object',
+				'\x72':'Can',
+				'\x73':'Glass',
+				'\x74':'Plastic',
+				'\x75':'Detection Error'}
 
 # Static Functions #
 def init():
