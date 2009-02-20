@@ -231,9 +231,9 @@ void poll_sonar(void)
 		distance[sonarIndex] = pulseDuration / 58;						
 		
 								//output the duration of pulse received from the Parallax in centimeters
-//		TXString("Sonar Reading4:");
-//		TXDec_Int(distance[sonarIndex]);		
-//		TXString("\x0D\x0A");
+		TXString("Back Sonar Reading:");
+		TXDec_Int(distance[sonarIndex]);		
+		TXString("\x0D\x0A");
 
 								//start 2nd sonar measurement
 		sonarIndex++;			
@@ -269,9 +269,9 @@ void poll_sonar(void)
 
 		
 								//output the duration of pulse received from the Parallax in centimeters
-//		TXString("Sonar Reading3:");
-//		TXDec_Int(distance[sonarIndex]);
-//		TXString("\x0D\x0A");
+		TXString("Front-Back Sonar Reading:");
+		TXDec_Int(distance[sonarIndex]);
+		TXString("\x0D\x0A");
 
 								//start the 3rd sonar measurement
 		sonarIndex++;
@@ -307,9 +307,9 @@ void poll_sonar(void)
 		
 
 								//output the duration of pulse received from the Parallax in centimeters
-//		TXString("Sonar Reading:");
-//		TXDec_Int(distance[sonarIndex]);
-//		TXString("\x0D\x0A");
+		TXString("Front-Front Sonar Reading:");
+		TXDec_Int(distance[sonarIndex]);
+		TXString("\x0D\x0A");
 
 
 		
