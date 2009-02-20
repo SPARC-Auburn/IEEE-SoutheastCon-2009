@@ -75,7 +75,7 @@ class ObjDetection:
 	def check_obj(self):
 		object = None
 		self.obj_detected.clear()
-		mc.send(0x60)
+		mc.send('\x60')
 		self.obj_detected.wait(5)
 		if object is None:
 			log.error("Timed out while waiting for object detection to return.")
