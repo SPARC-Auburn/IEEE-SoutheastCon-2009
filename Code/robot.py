@@ -128,13 +128,17 @@ mc = saber.get_object()
 import micro_controller_network as mcn
 mcn.init()
 servo_micro = mcn.get_object('Servo Control')
-obj_detection = mcn.get_object('Obj Detection')
+od_micro = mcn.get_object('Obj Detection')
 # Servo Controller
 import servo_controller as sc
 sc.init()
 arm_servo = sc.get_object('Arm Servo')
 sorter_servo = sc.get_object('Sorter Servo')
 gripper_servo = sc.get_object('Gripper Servo')
+# Object Detection
+import object_detection
+object_detection.init()
+obj_detection = object_detection.get_object()
 
 signal.signal(signal.SIGINT, shutdown_signal)
 

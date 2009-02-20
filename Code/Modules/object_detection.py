@@ -48,7 +48,7 @@ def init():
 	mc.register(obj_detection)
 	initialized = True
 	
-def get_object(id):
+def get_object(id = None):
 	global initialized, obj_detection
 	if not initialized:
 		log.critial("The object_detection.init() method has to be called before retrieving objects.")
