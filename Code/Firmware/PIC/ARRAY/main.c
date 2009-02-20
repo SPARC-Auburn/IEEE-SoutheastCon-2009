@@ -162,6 +162,7 @@ void main (void)
 		TXChar(' ');
 		TXDec_Int(antMeasure[2].lt);
 		TXChar(' ');
+		angle_temp = angle/MagicNumber;
 		// Here is where we can put an angle/magicNumber command.
 		//TXString(" ARS Value: ");
 		//TXDec_Int(arsCalibration.lt);
