@@ -127,7 +127,8 @@ mc = saber.get_object()
 # MCN
 import micro_controller_network as mcn
 mcn.init()
-servo_micro = mcn.get_object('servo')
+servo_micro = mcn.get_object('Servo Control')
+obj_detection = mcn.get_object('Obj Detection')
 # Servo Controller
 import servo_controller as sc
 sc.init()
