@@ -43,6 +43,7 @@ void low_vec (void)
 union int_byte antCalibration[3] = {0,0,0};
 union int_byte antMeasure[3] = {0,0,0};
 
+
 // Unions for angular rate sensor
 union int_byte arsCalibration = 0;
 union int_byte arsMeasure = 0;
@@ -56,14 +57,21 @@ unsigned char adc_channel[4] = {0b10000111,0b10001111,0b10010111,0b10011111};
 
 
 struct proc_status ProcStatus = {0,0,0,0,0};
+unsigned char current_parameters[32];
 unsigned char current_proc = 0;
-unsigned char paramter_count = 0;
+unsigned char parameter_count = 0;
 
 
-int EE_line_threshold = 50;							// 50
-int EE_line_follow_threshold = 20;					// 50
-unsigned char EE_corner_threshold = 50;				// 30
+int EE_line_threshold = 30;							// 30
+int EE_line_follow_threshold = 20;					// 20
+unsigned char EE_corner_threshold = 40;				// 40
 unsigned int EE_interrupt_throttle = 5000;			// 5000
+
+int antResults[3] = {0,0,0};
+int differenceLineFollow = 0;
+
+
+int antenna_adjustment = 35;                     // difference between left and right antenna readings initialized to 35, but should be set by calibration
 
 //***************************************************************************************************************
 //							high_isr
@@ -138,7 +146,8 @@ void main (void)
 	}	
 	StatusReset();
 	
-	Delay10KTCYx(20);
+	//  ********* Wait 20,000 instruction cycles for all analog signals (mainly the antennas) to settle out before calibration cycles************
+	Delay10KTCYx(2);
 	
 	cal_ant();
 	cal_ars();
@@ -234,7 +243,7 @@ void main (void)
 void cal_ant(void)
 {
 	adc_pointer = 0;
-	Delay10KTCYx(2);
+
 	while(adc_pointer < 3)
 	{
 		SetChanADC(adc_channel[adc_pointer]);
@@ -242,7 +251,10 @@ void cal_ant(void)
 		while( BusyADC() );
 		antCalibration[adc_pointer].lt = ReadADC();
 		adc_pointer++;
-	}	
+	}
+	
+	//  ******  Get difference between left and right antenna base readings (essential for line following)  *********
+	antenna_adjustment = antCalibration[0].lt - antCalibration[1].lt;	
 }
 
 void cal_ars(void)
@@ -261,27 +273,40 @@ void cal_ars(void)
 	arsCalibration.lt = temp;
 }
 
+void interrupt(char c) {
+	pushTXQueue(c);
+	TXString("\x0D\x0A");
+}
+
 void line_follow() {
 	// This function simply checks the antenna values against the threshholds in the eeprom and 
 	// interrupts if nessisary.  The interrupt return messages are on the wiki and should kept up to date
 	// with any changes.
 	
-	int differenceLineFollow;
-	differenceLineFollow = 0;
+	//left antenna to antResults[0]
+	//right antenna to antResults[1]
 	
-	if(antMeasure[0].lt < (antCalibration[0].lt + EE_line_threshold) && 
-		antMeasure[1].lt  < (antCalibration[1].lt + EE_line_threshold))
+	antResults[0] = antMeasure[0].lt;
+	antResults[1] = antMeasure[1].lt;
+	
+		
+	if(antResults[0] < (antCalibration[0].lt + EE_line_threshold) && 
+		antResults[1]  < (antCalibration[1].lt + EE_line_threshold))
 	{
 		interrupt(INT_LINE_ERROR);
 	}	
 	else
 	{
-		differenceLineFollow = antMeasure[0].lt - antMeasure[1].lt;
+		//   ******  First adjust right antenna reading, and then get differnece between the left and right antenna readings
+		differenceLineFollow = antResults[0] - (antResults[1] + antenna_adjustment);
+		
+		
+		//  ******  line follow threshold adjusts the amount
 		if(differenceLineFollow > EE_line_follow_threshold)
 		{
 			interrupt(INT_LINE_LEFT);	
 		}	
-		else if(differenceLineFollow > EE_line_follow_threshold)
+		else if(differenceLineFollow < (EE_line_follow_threshold * -1))
 		{
 			interrupt(INT_LINE_RIGHT);
 		}	
@@ -296,7 +321,7 @@ void corner_detection() {
 	// This function simply checks the antenna values against the threshholds in the eeprom and 
 	// interrupts if nessisary.  The interrupt return messages are on the wiki and should kept up to date
 	// with any changes.
-	if(antMeasure[2].lt > antCalibration[2].lt + EE_corner_threshold)
+	if(antMeasure[2].lt > (antCalibration[2].lt + EE_corner_threshold))
 	{
 		interrupt(INT_CORNER_DETECT);
 	}
@@ -311,4 +336,19 @@ void line_detection() {
 	// interrupts if nessisary.  The interrupt return messages are on the wiki and should kept up to date
 	// with any changes.
 	
+	if(antMeasure[0].lt > (antCalibration[0].lt + EE_line_threshold)) 
+	{
+		interrupt(INT_LINE_DETECT_LEFT);
+	}
+	
+	if(antMeasure[1].lt > (antCalibration[1].lt + EE_line_threshold))
+	{
+		interrupt(INT_LINE_DETECT_RIGHT);
+	}
+	
+	if(antMeasure[2].lt > (antCalibration[2].lt + EE_corner_threshold))
+	{
+		interrupt(INT_LINE_DETECT_FRONT);
+	}	
+			
 }			

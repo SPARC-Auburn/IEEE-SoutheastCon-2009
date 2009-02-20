@@ -25,13 +25,9 @@ union int_byte
 	unsigned char bt[2];
 };	
 struct proc_status {
-    unsigned ProcessInProgress                      :1;
-    unsigned cal_ant_enabled                        :1;
+    unsigned ProcessInProgress              :1;
+    unsigned cal_ant_enabled                :1;
     unsigned line_follow_enabled            :1;
     unsigned corner_detection_enabled       :1;
     unsigned line_detection_enabled         :1;
 };
-
-unsigned char current_proc;
-unsigned char current_parameters[32];
-unsigned char parameter_count;
