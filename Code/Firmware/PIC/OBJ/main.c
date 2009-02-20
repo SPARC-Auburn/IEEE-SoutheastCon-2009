@@ -1,5 +1,5 @@
 //************************************************************************************************
-//	Node:		MAGNETIC FEILD DETECTION
+//	Node:		Object detection code
 /*
 	Wiring Guide for PIC18F2685:
 
@@ -12,29 +12,38 @@
 //************************************************************************************************
 
 #include "main.h"
-#include "i2c.h"
 #include "init.h"
 #include "serial.h"
 #include "hardware.h"
 #include "queue.h"
 #include "op_codes.h"
-#include "timers.h"
-#include "reset.h"
-#include <delays.h>
-#include <math.h>
+#include "eealloc.h"
 
 unsigned int pulseDuration = 0;
 unsigned int distance[] = {50,50,50};
 int sonarIndex = 0;
 int i;
-unsigned int thresholdBack = 10;
-unsigned int thresholdFrontBack = 20;
-unsigned int thresholdFrontFront = 20;
+
+
 unsigned int switchCount = 0;
+
+// Variables that are stored in the EEPROM
+unsigned int switch_threshold = 1;
+unsigned int sonar_divider = 1;
+unsigned int thresholdFrontFront = 0;
+unsigned int thresholdFrontBack = 0;
+unsigned int thresholdBack = 0;
+
+
 
 volatile struct proc_status ProcStatus = {0,0};
 unsigned char current_proc = 0;
-unsigned char paramter_count = 0;
+unsigned char parameter_count = 0;
+unsigned char current_parameters[32];
+
+int EEP_count = -1;
+int EEP_address = 0;
+char EEP_offset = 0;
 
 
 #pragma config OSC = IRCIO67,WDT = OFF, MCLRE = ON
@@ -86,9 +95,10 @@ void main (void)
 //***************************************************************************************************************
 //                          setup
 //***************************************************************************************************************
+	Refresh_EEPROM();
 	Init();	
 	initQueue();
-
+	
 	TRISAbits.TRISA4 = 1;		// set pin 6 as input for microswitch
 	
 	ADCON1 = 0X0F;				// make sure all pins function as digital
@@ -148,9 +158,34 @@ void main (void)
 					ProcStatus.ProcessInProgress = 0;
 					break;
 				case EEPROM_WR_OP:
-					// Do EEPROM_WR stuff here
-					ProcStatus.ProcessInProgress = 0;
-					parameter_count = 0;
+					if(parameter_count == 3)
+					{
+						EEP_count = current_parameters[2];	
+					}	
+					
+					if(EEP_count != -1 && parameter_count == EEP_count + 3)
+					{
+						EEP_address = (current_parameters[0] << 8) | current_parameters[1];
+						EEP_offset = 0;
+						while(EEP_offset + 3 < EEP_count)
+						{
+							Write_b_eep(EEP_address + EEP_offset, current_parameters[EEP_offset + 3]);	
+						}
+						EEP_count = -1;
+						Refresh_EEPROM();
+						ProcStatus.ProcessInProgress = 0;
+						parameter_count = 0;	
+					}	
+					break;
+				case EEPROM_RD_OP:
+					if(parameter_count == 2)
+					{
+						EEP_address = (current_parameters[0] << 8) | current_parameters[1];	
+						TXString("0 ");
+						TXChar(Read_b_eep(EEP_address));
+						ProcStatus.ProcessInProgress = 0;
+						parameter_count = 0;
+					}	
 					break;
 				case POLL_SONAR_OP:
 					ProcStatus.sonar_poll_enabled = 1;
@@ -171,16 +206,15 @@ void main (void)
 			ProcStatus.sonar_poll_enabled = 0;
 		}
 		
-		
 		//If microswitch is engaged then send respective value
 		if(PORTAbits.RA4)
 		{
-			if(switchCount == SWITCH_THRESHOLD)
+			if(switchCount == switch_threshold)
 			{
 				TXChar(0x70);
 				TXString("\x0A\x0D");
 				switchCount++;
-			} else if (switchCount < SWITCH_THRESHOLD)
+			} else if (switchCount < switch_threshold)
 			{
 				switchCount++;
 			}	
@@ -189,12 +223,19 @@ void main (void)
 		else
 		{
 			switchCount = 0;	
-		}		
-		
+		}			
 	}
 }
 
 
+void Refresh_EEPROM(void)
+{
+	switch_threshold = (Read_b_eep(EE_SWITCH_THRESHOLD_H) << 8) | (Read_b_eep(EE_SWITCH_THRESHOLD_L));
+	sonar_divider = (Read_b_eep(EE_SONAR_DIVIDER_H) << 8) | (Read_b_eep(EE_SONAR_DIVIDER_L));
+	thresholdFrontFront = (Read_b_eep(EE_FF_THRESHOLD_H) << 8) | (Read_b_eep(EE_FF_THRESHOLD_L));
+	thresholdFrontBack = (Read_b_eep(EE_FB_THRESHOLD_H) << 8) | (Read_b_eep(EE_FB_THRESHOLD_L));
+	thresholdBack = (Read_b_eep(EE_BACK_THRESHOLD_H) << 8) | (Read_b_eep(EE_BACK_THRESHOLD_L));
+}	
 
 void poll_sonar(void)
 {
@@ -228,12 +269,7 @@ void poll_sonar(void)
 		pulseDuration = ReadTimer0();
 
 								//divide the microseconds by 58 to convert to centimeters
-		distance[sonarIndex] = pulseDuration / 58;						
-		
-								//output the duration of pulse received from the Parallax in centimeters
-		TXString("Back Sonar Reading:");
-		TXDec_Int(distance[sonarIndex]);		
-		TXString("\x0D\x0A");
+		distance[sonarIndex] = pulseDuration / sonar_divider;						
 
 								//start 2nd sonar measurement
 		sonarIndex++;			
@@ -265,13 +301,7 @@ void poll_sonar(void)
 		pulseDuration = ReadTimer0();
 
 								//divide the microseconds by 58 to convert to centimeters
-		distance[sonarIndex] = pulseDuration / 58;						
-
-		
-								//output the duration of pulse received from the Parallax in centimeters
-		TXString("Front-Back Sonar Reading:");
-		TXDec_Int(distance[sonarIndex]);
-		TXString("\x0D\x0A");
+		distance[sonarIndex] = pulseDuration / sonar_divider;						
 
 								//start the 3rd sonar measurement
 		sonarIndex++;
@@ -303,19 +333,17 @@ void poll_sonar(void)
 		pulseDuration = ReadTimer0();
 
 								//divide the microseconds by 58 to convert to centimeters
-		distance[sonarIndex] = pulseDuration / 58;						
-		
-
-								//output the duration of pulse received from the Parallax in centimeters
-		TXString("Front-Front Sonar Reading:");
-		TXDec_Int(distance[sonarIndex]);
-		TXString("\x0D\x0A");
-
-
+		distance[sonarIndex] = pulseDuration / sonar_divider;						
 		
 		if(distance[0] > thresholdBack)
 		{
 			TXChar(SONAR_NO_OBJECT);		//send code for "No Object"
+			TXChar(' ');
+			TXDec_Int(distance[0]);
+			TXChar(' ');
+			TXDec_Int(distance[1]);
+			TXChar(' ');
+			TXDec_Int(distance[2]);
 			TXString("\x0D\x0A");			
 		}	 
 		else
