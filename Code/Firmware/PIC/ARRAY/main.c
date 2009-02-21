@@ -477,7 +477,11 @@ void get_angle()
 	{
 		angle_out += 360;
 	}
-					
+	
+	// ***** transmit necessary alert character, then a space, then the integer angle  *****
+	TXChar(INT_ANGLE);
+	TXChar(' ');
+	TXDec_Int(angle_out);				
 	
 	// clear value of angle_out for next iteration...	
 	angle_out = 0;		
