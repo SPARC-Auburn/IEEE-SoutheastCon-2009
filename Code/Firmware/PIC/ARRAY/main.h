@@ -2,7 +2,7 @@
 #define MAIN_H
 
 #define SLAVE
-#define ADC_DELAY	1000			// Delay between readings in microseconds.
+#define ADC_DELAY	50			// Delay between readings in microseconds.
 #define ARS_SAMPLES	8
 
 void	high_isr 		(void);

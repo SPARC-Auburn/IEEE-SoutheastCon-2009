@@ -51,8 +51,12 @@ union int_byte arsMeasure = 0;
 unsigned char adc_pointer = 0;
 unsigned char ars_pointer = 0;
 signed long angle = 0;
-signed long angle_temp = 0;
 signed long angle_out = 0;
+
+int arsVariation = 0;
+signed long arsVariationAccumulator = 0;
+signed long tempAccumulator = 0;
+int angleInteger = 0;
 
 unsigned char adc_channel[4] = {0b10000111,0b10001111,0b10010111,0b10011111};
 
@@ -74,6 +78,7 @@ int differenceLineFollow = 0;
 
 int antenna_adjustment = 35;                     // difference between left and right antenna readings initialized to 35, but should be set by calibration
 float ars_magic;
+
 
 //***************************************************************************************************************
 //							high_isr
@@ -104,10 +109,12 @@ void low_isr (void)
 			adc_pointer++;
 		} 
 		else 
-		{
-			if(temp > arsCalibration.lt + 5 || temp < arsCalibration.lt - 5)
+		{	
+			arsVariation = (int)(temp - arsCalibration.lt);
+					
+			if(arsVariation > 2 || arsVariation < -2 )
 			{
-				angle += (int)temp - (int)arsCalibration.lt;
+				arsVariationAccumulator += arsVariation;
 				adc_pointer = 0;
 			}	
 		}	
@@ -127,7 +134,7 @@ void main (void)
 	Init();
 	initQueue();
 		
-	ars_magic = 4*(float)(ADC_DELAY)*(0.000001)*(float)(13.33/4.883);	
+	ars_magic = (float)(4*(ADC_DELAY/1000000)*(13.33/4.883));	
 	
 	Delay10KTCYx(1);		// Build in a delay to prevent weird serial characters
 
@@ -203,27 +210,59 @@ void main (void)
 					break;
 				case LINE_FOLLOW_OP:
 					if(parameter_count = 1) {
-						ProcStatus.line_follow_enabled = current_parameters[0];
+						if(current_parameters[0] == 0x31)
+						{
+							ProcStatus.line_follow_enabled = 1;
+						}
+						else 
+						{
+							ProcStatus.line_follow_enabled = 0;
+						}	
+						
 						ProcStatus.ProcessInProgress = 0;
 						parameter_count = 0;
 					}
 					break;
 				case CORNER_DETECTION_OP:
 					if(parameter_count = 1) {
-						ProcStatus.corner_detection_enabled = current_parameters[0];
+						if(current_parameters[0] == 0x31)
+						{
+							ProcStatus.corner_detection_enabled = 1;
+						}
+						else 
+						{
+							ProcStatus.corner_detection_enabled = 0;
+						}	
+						
 						ProcStatus.ProcessInProgress = 0;
 						parameter_count = 0;
 					}
 					break;
 				case LINE_DETECTION_OP:
 					if(parameter_count = 1) {
-						ProcStatus.line_detection_enabled = current_parameters[0];
+						if(current_parameters[0] == 0x31)
+						{
+							ProcStatus.line_detection_enabled = 1;
+						}
+						else 
+						{
+							ProcStatus.line_detection_enabled = 0;
+						}	
+												
 						ProcStatus.ProcessInProgress = 0;
 						parameter_count = 0;
 					}
 					break;
-				case GET_ANGLE_OP:					
-						ProcStatus.get_angle_enabled = 1;
+				case GET_ANGLE_OP:
+						if(current_parameters[0] == 0x31)
+						{
+							ProcStatus.get_angle_enabled = 1;
+						}
+						else 
+						{
+							ProcStatus.get_angle_enabled = 0;
+						}
+											
 						ProcStatus.ProcessInProgress = 0;
 						parameter_count = 0;
 					
@@ -249,7 +288,6 @@ void main (void)
 		}
         
 		// If get angle is enabled
-		get_angle();
 		if(ProcStatus.get_angle_enabled)
 		{
 			get_angle();
@@ -375,17 +413,26 @@ void line_detection() {
 	
 void get_angle()
 {
-	angle_temp = angle;
-	angle_out = angle_temp*ars_magic;
+	tempAccumulator = arsVariationAccumulator;
+	angle = tempAccumulator*ars_magic;
 	
-	if(angle_out/360)
+	// ***** Check magnitude of angle ****
+	angleInteger = angle/360;
+	
+	//  *****  If the magnitude of angle is greater than 360 *********
+	if(1 <= angleInteger || -1 >= angleInteger)
 	{
-		TXDec_Int((int)(angle_out - (angle_out/360)*360));
-		TXString("\x0D\x0A");	
+		//  ***** if so, subtract to get a number less than 360 in magnitude *******
+		angle_out = angle - (360 * angleInteger);
 	}
-	else
+	
+	// ***** make sure output stays between 0 and 360  ******
+	if(angle_out < 0)
 	{
-		TXDec_Int((int)angle_out);
-		TXString("\x0D\x0A");	
-	}		
+		angle_out += 360;
+	}
+					
+	
+	// clear value of angle_out for next iteration...	
+	angle_out = 0;		
 }				
