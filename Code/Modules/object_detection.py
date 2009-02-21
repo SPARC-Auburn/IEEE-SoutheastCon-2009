@@ -13,9 +13,6 @@
 # Paths
 import sys
 sys.path.append("../Libraries")
-# Logging
-import logging
-log = logging.getLogger('Obj Detection')
 # Configs
 import configs
 import configobj
@@ -23,6 +20,9 @@ global config, enable
 config = configs.get_config('Obj Detection')
 enabled = config['enabled']
 mc_name = config['micro_controller']
+# Logging
+import logging
+log = logging.getLogger(config['logger_name'])
 # Events
 import events
 # Conditions
@@ -64,6 +64,7 @@ class ObjDetection:
 	def notify(self, return_code, msg):
 		# Handel the messge
 		if return_code == 'Micro Switch Triggered':
+			log.debug("Micro switch depressed.")
 			events.queue.put(return_code)
 		else:
 			self.object = return_code
@@ -76,6 +77,7 @@ class ObjDetection:
 		self.obj_detected.wait(5)
 		if object is None:
 			log.error("Timed out while waiting for object detection to return.")
+			self.obj_detected.set()
 			return
 		return object
 		
