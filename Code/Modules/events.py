@@ -19,8 +19,8 @@ class Notifier(Thread):
 		
 	def run(self):
 		while not self.stop:
-			if not queue.full() and not lock.isSet():
-				global_event_lock.set()
+			if not queue.empty() and not lock.isSet():
+				lock.set()
 			
 	def shutdown(self):
 		self.stop = True

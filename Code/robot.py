@@ -133,7 +133,7 @@ od_micro = mcn.get_object('Obj Detection')
 import servo_controller as sc
 sc.init()
 arm_servo = sc.get_object('Arm Servo')
-arm_servo.down()
+arm_down()
 sorter_servo = sc.get_object('Sorter Servo')
 sorter_center()
 gripper_servo = sc.get_object('Gripper Servo')
