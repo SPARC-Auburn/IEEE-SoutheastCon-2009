@@ -50,13 +50,14 @@ union int_byte arsMeasure = 0;
 
 unsigned char adc_pointer = 0;
 unsigned char ars_pointer = 0;
-long angle = 0;
-long angle_temp = 0;
+signed long angle = 0;
+signed long angle_temp = 0;
+signed long angle_out = 0;
 
 unsigned char adc_channel[4] = {0b10000111,0b10001111,0b10010111,0b10011111};
 
 
-struct proc_status ProcStatus = {0,0,0,0,0};
+struct proc_status ProcStatus = {0,0,0,0,0,0};
 unsigned char current_parameters[32];
 unsigned char current_proc = 0;
 unsigned char parameter_count = 0;
@@ -72,6 +73,7 @@ int differenceLineFollow = 0;
 
 
 int antenna_adjustment = 35;                     // difference between left and right antenna readings initialized to 35, but should be set by calibration
+float ars_magic;
 
 //***************************************************************************************************************
 //							high_isr
@@ -103,8 +105,11 @@ void low_isr (void)
 		} 
 		else 
 		{
-			angle += temp - arsCalibration.lt;
-			adc_pointer = 0;
+			if(temp > arsCalibration.lt + 5 || temp < arsCalibration.lt - 5)
+			{
+				angle += (int)temp - (int)arsCalibration.lt;
+				adc_pointer = 0;
+			}	
 		}	
 		SelChanConvADC(adc_channel[adc_pointer]);		
 		WriteTimer0(65536-ADC_DELAY);
@@ -122,6 +127,8 @@ void main (void)
 	Init();
 	initQueue();
 		
+	ars_magic = 4*(float)(ADC_DELAY)*(0.000001)*(float)(13.33/4.883);	
+	
 	Delay10KTCYx(1);		// Build in a delay to prevent weird serial characters
 
 	if(isWDTTO())
@@ -215,6 +222,12 @@ void main (void)
 						parameter_count = 0;
 					}
 					break;
+				case GET_ANGLE_OP:					
+						ProcStatus.get_angle_enabled = 1;
+						ProcStatus.ProcessInProgress = 0;
+						parameter_count = 0;
+					
+					break;
 			}
 		}
 		
@@ -235,6 +248,13 @@ void main (void)
 			line_detection();
 		}
         
+		// If get angle is enabled
+		get_angle();
+		if(ProcStatus.get_angle_enabled)
+		{
+			get_angle();
+			ProcStatus.get_angle_enabled = 0;	
+		}	
 
 	}		
 }	
@@ -351,4 +371,21 @@ void line_detection() {
 		interrupt(INT_LINE_DETECT_FRONT);
 	}	
 			
-}			
+}
+	
+void get_angle()
+{
+	angle_temp = angle;
+	angle_out = angle_temp*ars_magic;
+	
+	if(angle_out/360)
+	{
+		TXDec_Int((int)(angle_out - (angle_out/360)*360));
+		TXString("\x0D\x0A");	
+	}
+	else
+	{
+		TXDec_Int((int)angle_out);
+		TXString("\x0D\x0A");	
+	}		
+}				

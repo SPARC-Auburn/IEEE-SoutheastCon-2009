@@ -336,16 +336,20 @@ void poll_sonar(void)
 								//divide the microseconds by 58 to convert to centimeters
 		distance[sonarIndex] = pulseDuration / sonar_divider;						
 		
-		if(distance[0] > thresholdBack)
-		{
-			TXChar(SONAR_NO_OBJECT);		//send code for "No Object"
 			TXChar(' ');
 			TXDec_Int(distance[0]);
 			TXChar(' ');
 			TXDec_Int(distance[1]);
 			TXChar(' ');
 			TXDec_Int(distance[2]);
-			TXString("\x0D\x0A");			
+			TXString("\x0D\x0A");
+		
+		
+		if(distance[0] > thresholdBack)
+		{
+			TXChar(SONAR_NO_OBJECT);		//send code for "No Object"
+			TXString("\x0D\x0A");
+						
 		}	 
 		else
 		{

@@ -18,6 +18,7 @@ void	cal_ant			(void);
 void	line_follow		(void);
 void	corner_detection(void);
 void	line_detection	(void);
+void    get_angle       (void);
 
 union int_byte
 {
@@ -30,4 +31,5 @@ struct proc_status {
     unsigned line_follow_enabled            :1;
     unsigned corner_detection_enabled       :1;
     unsigned line_detection_enabled         :1;
+    unsigned get_angle_enabled				:1;
 };

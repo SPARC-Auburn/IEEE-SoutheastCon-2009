@@ -5,6 +5,8 @@
 #define		LINE_FOLLOW_OP			0x41
 #define		CORNER_DETECTION_OP		0x42
 #define		LINE_DETECTION_OP		0x43
+#define 	GET_ANGLE_OP			0x44
+
 
 #define		INT_CAL_ANT_DONE		0x40	// Antenna Calibration Complete
 
