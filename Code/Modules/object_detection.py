@@ -38,6 +38,8 @@ return_codes = {'\x70':'Micro Switch Triggered',
 				'\x73':'Glass',
 				'\x74':'Plastic',
 				'\x75':'Detection Error'}
+				
+command_codes = {'Check Object':'\x60'}
 
 # Static Functions #
 def init():
@@ -66,7 +68,7 @@ class ObjDetection:
 		# Handel the messge
 		if return_code == 'Micro Switch Triggered':
 			log.debug("Micro switch depressed.")
-			events.queue.put(return_code)
+			events.queue.put((return_code, msg))
 		else:
 			self.object = return_code
 			self.msg = msg
@@ -75,13 +77,13 @@ class ObjDetection:
 	def check_obj(self):
 		self.object = None
 		self.obj_detected.clear()
-		mc.send(['\x60'])
+		mc.send(command_codes['Check Object'])
 		self.obj_detected.wait(5)
 		if self.object is None:
 			log.error("Timed out while waiting for object detection to return.")
 			self.obj_detected.set()
 			return
-		log.debug("Object check returned: %s - %s", (self.object, self.msg))
+		log.debug("Object check returned: %s", self.object)
 		return self.object
 		
 		

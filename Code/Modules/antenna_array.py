@@ -10,70 +10,104 @@
 # Paths
 import sys
 sys.path.append("../Libraries")
-# Logging
-import logging
-log = logging.getLogger('Obj Detection')
 # Configs
 import configs
 import configobj
-global config, enable
-config = configs.get_config('Obj Detection')
+global config
+config = configs.get_config('Antenna Array')
 enabled = config['enabled']
 mc_name = config['micro_controller']
+# Logging
+import logging
+log = logging.getLogger(config['logger_name'])
 # Events
 import events
-# Conditions
+# Event
 from threading import Event
+# Sleep
+from time import sleep
 # micro_controller_network
 import micro_controller_network
+mc = micro_controller_network.get_object(mc_name)
 
 # Static Variables
-return_codes = {'\x70':'Micro Switch Triggered',
-				'\x71':'No Object',
-				'\x72':'Can',
-				'\x73':'Glass',
-				'\x74':'Plastic',
-				'\x75':'Detection Error'}
+return_codes = {'\x41':'Left',
+				'\x42':'Right',
+				'\x43':'Dead On',
+				'\x49':'No Line',
+				'\x44':'On Corner',
+				'\x46':'Left Back',
+				'\x47':'Right Back',
+				'\x48':'Right Front'}
+				
+command_codes = {'Line Follow':'\x41',
+				 'Corner Detection':'\x42',
+				 'Line Detection':'\x43'}
 
 # Static Functions #
 def init():
-	global config, initialized, obj_detection, mc
-	mc = micro_controller_network.get_object(mc_name)
-	obj_detection = ObjDetection()
-	mc.register(obj_detection)
+	global config, initialized, ant_array
+	ant_array = AntennaArray()
+	mc.register(ant_array)
 	initialized = True
 	
 def get_object(id = None):
-	global initialized, obj_detection
+	global initialized, ant_array
 	if not initialized:
 		log.critial("The object_detection.init() method has to be called before retrieving objects.")
 		exit(1)
-	return obj_detection
+	return ant_array
 		
 # Classes #
-class ObjDetection:
+class AntennaArray:
 	def __init__(self):
 		self.return_codes = return_codes
-		self.obj_detected = Event()
-		self.obj_detected.clear()
-		self.object = None
 		
 	def notify(self, return_code, msg):
 		# Handel the messge
-		if return_code == 'Micro Switch Triggered':
-			events.queue.put(return_code)
+		if return_code == 'Left':
+			log.debug("Antenna array indicates we are LEFT of the line.")
+			events.queue.put((return_code, msg))
+		elif return_code == 'Right':
+			log.debug("Antenna array indicates we are RIGHT of the line.")
+			events.queue.put((return_code, msg))
+		elif return_code == 'Dead On':
+			log.debug("Antenna array indicates we are DEAD ON the line.")
+			events.queue.put((return_code, msg))
+		elif return_code == 'No Line':
+			log.debug("Antenna array indicates NO LINE is detected.")
+			events.queue.put((return_code, msg))
+		elif return_code == 'On Corner':
+			log.debug("Antenna array indicates we are ON the CORNER.")
+			events.queue.put((return_code, msg))
+		elif return_code == 'Left Back':
+			log.debug("Antenna array indicates the line is near the LEFT BACK of the robot.")
+			events.queue.put((return_code, msg))
+		elif return_code == 'Right Back':
+			log.debug("Antenna array indicates the line is near the RIGHT BACK of the robot.")
+			events.queue.put((return_code, msg))
+		elif return_code == 'Right Front':
+			log.debug("Antenna array indicates the line is near the RIGHT FRONT of the robot.")
+			events.queue.put((return_code, msg))
+		
+	def cal_ant(self):
+		mc.send(command_codes['Calibrate Antenna'])
+		sleep(1)
+		
+	def line_follow(self, enable = True):
+		if enable:
+			mc.send(command_codes['Line Follow']+'1')
 		else:
-			self.object = return_code
-			self.obj_detected.set()
+			mc.send(command_codes['Line Follow']+'0')
+			
+	def corner_detection(self, enable = True):
+		if enable:
+			mc.send(command_codes['Corner Detection']+'1')
+		else:
+			mc.send(command_codes['Corner Detection']+'0')
 		
-	def check_obj(self):
-		object = None
-		self.obj_detected.clear()
-		mc.send(['\x60'])
-		self.obj_detected.wait(5)
-		if object is None:
-			log.error("Timed out while waiting for object detection to return.")
-			return
-		return object
-		
-		
+	def line_detection(self, enable = True):
+		if enable:
+			mc.send(command_codes['Line Detection']+'1')
+		else:
+			mc.send(command_codes['Line Detection']+'0')
