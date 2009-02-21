@@ -194,11 +194,21 @@ void main (void)
 				popRXQueue(&c);
 				current_parameters[parameter_count] = c;
 				parameter_count++;
+				#ifdef __DEBUG
+				TXString("DEBUG - Parameter added: ");
+				TXChar(c);
+				TXString("\r\n");
+				#endif
 			}
 			else {
 				ProcStatus.ProcessInProgress = 1;
 				popRXQueue(&c);
 				current_proc = c;
+				#ifdef __DEBUG
+				TXString("DEBUG - Current Process: ");
+				TXChar(current_proc);
+				TXString("\r\n");
+				#endif
 			}
 			switch(current_proc) {
 				case RESET_OP:
@@ -211,7 +221,7 @@ void main (void)
 					parameter_count = 0;
 					break;
 				case LINE_FOLLOW_OP:
-					if(parameter_count = 1) {
+					if(parameter_count == 1) {
 						if(current_parameters[0] == 0x31)
 						{
 							ProcStatus.line_follow_enabled = 1;
@@ -226,7 +236,7 @@ void main (void)
 					}
 					break;
 				case CORNER_DETECTION_OP:
-					if(parameter_count = 1) {
+					if(parameter_count == 1) {
 						if(current_parameters[0] == 0x31)
 						{
 							ProcStatus.corner_detection_enabled = 1;
@@ -241,9 +251,12 @@ void main (void)
 					}
 					break;
 				case LINE_DETECTION_OP:
-					if(parameter_count = 1) {
+					if(parameter_count == 1) {
 						if(current_parameters[0] == 0x31)
 						{
+							#ifdef __DEBUG
+							TXString("DEBUG - Line Detection Enabled.\r\n");
+							#endif
 							ProcStatus.line_detection_enabled = 1;
 						}
 						else 
@@ -256,7 +269,7 @@ void main (void)
 					}
 					break;
 				case GET_ANGLE_OP:
-					if(parameter_count = 1) {
+					if(parameter_count == 1) {
 						if(current_parameters[0] == 0x31)
 						{
 							ProcStatus.get_angle_enabled = 1;
@@ -460,8 +473,7 @@ void line_detection() {
 	{
 		interrupt(INT_LINE_DETECT_FRONT);
 		ProcStatus.line_detection_enabled = 0;
-	}	
-			
+	}		
 }
 	
 void get_angle()
