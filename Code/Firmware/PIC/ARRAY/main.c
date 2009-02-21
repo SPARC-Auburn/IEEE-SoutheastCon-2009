@@ -256,6 +256,7 @@ void main (void)
 					}
 					break;
 				case GET_ANGLE_OP:
+					if(parameter_count = 1) {
 						if(current_parameters[0] == 0x31)
 						{
 							ProcStatus.get_angle_enabled = 1;
@@ -267,8 +268,13 @@ void main (void)
 											
 						ProcStatus.ProcessInProgress = 0;
 						parameter_count = 0;
-					
+					}
 					break;
+				case ZERO_ANGLE_OP:
+					ProcStatus.zero_angle_enabled = 1;
+					ProcStatus.ProcessInProgress = 0;
+					parameter_count = 0;
+						
 			}
 		}
 		
@@ -293,6 +299,13 @@ void main (void)
 		if(ProcStatus.get_angle_enabled)
 		{
 			get_angle();
+		}	
+		
+		// If zero angle is enabled
+		if(ProcStatus.zero_angle_enabled)
+		{
+			zero_angle();
+			ProcStatus.zero_angle_enabled = 0;	
 		}	
 
 	}		
@@ -468,4 +481,8 @@ void get_angle()
 	
 	// clear value of angle_out for next iteration...	
 	angle_out = 0;		
-}				
+}
+void zero_angle()
+{
+	arsVariationAccumulator = 0;
+}					

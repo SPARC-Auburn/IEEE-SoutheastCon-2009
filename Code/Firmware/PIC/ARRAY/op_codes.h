@@ -7,6 +7,7 @@
 #define		LINE_DETECTION_OP		0x43
 
 #define 	GET_ANGLE_OP			0x60
+#define		ZERO_ANGLE_OP			0x62
 
 #define		INT_ANGLE				0X60
 
