@@ -13,9 +13,6 @@
 # Paths
 import sys
 sys.path.append("../Libraries")
-# Logging
-import logging
-log = logging.getLogger('Servo Ctrl')
 # Configs
 import configs
 import configobj
@@ -23,17 +20,20 @@ global config, enable
 config = configs.get_config('Servo Controller')
 enabled = config['enabled']
 mc_name = config['micro_controller']
+# Logging
+import logging
+log = logging.getLogger(config['logger_name'])
 # micro_controller_network
 import micro_controller_network
+mc = micro_controller_network.get_object(mc_name)
 
 # Static Functions #
 def init():
-	global config, initialized, servos, mc
+	global config, initialized, servos
 	servos = {}
 	for x in config:
 		if type(config[x]) is configobj.Section:
 			servos[x] = Servo(config = config[x])
-	mc = micro_controller_network.get_object(mc_name)
 	initialized = True
 	
 def get_object(id):
@@ -86,7 +86,7 @@ class Servo:
 		'''
 			Moves the servo to the given position in uSeconds.
 			'''
-		global enabled, mc
+		global enabled
 		if not enabled:
 			return
 		log.debug("Moving to position: %i" % position)

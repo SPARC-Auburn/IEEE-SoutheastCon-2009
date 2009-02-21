@@ -11,20 +11,17 @@
 	'''
 
 # Imports #
-# Logging
-import logging
-log = logging.getLogger('MCN')
-master_log = logging.getLogger('Master Node')
 # Configs
 import configs
 import configobj
 global config, enabled
 config = configs.get_config('Micro Controller Network')
 enabled = config['enabled']
+# Logging
+import logging
+log = logging.getLogger(config['logger_name'])
 # Threading
 from threading import Thread, Lock
-# Queue
-import Queue
 # PySerial
 if enabled:
 	try:
@@ -40,7 +37,7 @@ def init():
 	micro_controllers = {}
 	for x in config:
 		if type(config[x]) is configobj.Section:
-			micro_controllers[x] = MicroController(name = x, serial = config[x]['serial_port'], baud_rate = config[x]['baud_rate'])
+			micro_controllers[x] = MicroController(x, config[x])
 	initialized = True
 	
 def get_object(id):
@@ -51,34 +48,34 @@ def get_object(id):
 	try:
 		return micro_controllers[id]
 	except KeyError:
-		log.error("You provided an invalid id for any of the available Master Nodes.  Please double check the names in the config files.")
+		log.error("You provided an invalid id for any of the available Micro Controllers.  Please double check the names in the config files.")
 		
 # Classes #
 class MicroController:
 	'''
-		This is the class that represents and provides access to a master 
-		node of a micro controller network.
+		This is the class that represents and provides access to a micro controller 
+		of a micro controller network.
 		'''
-	def __init__(self, name = None, serial='', baud_rate = 115200):
+	def __init__(self, name, config = None):
 		'''
-			Constructor - opens serial port given and initializes the master node.
+			Constructor - opens serial port given and initializes the micro controller.
 			'''
-		global config
 		#Name
 		self.name = name
-		if name is None:
-			name = 'Unamed micro controller'
+		self.config = config
+		#Log
+		self.log = logging.getLogger(config['logger_name'])
 		#Serial
 		self.serial = Serial()
-		self.serial.port = serial
-		self.serial.baudrate = baud_rate
+		self.serial.port = self.config['serial_port']
+		self.serial.baudrate = self.config['baud_rate']
 		self.serial.timeout = 1
-		self.enabled = config[name]['enabled']
+		self.enabled = config['enabled']
 		if self.enabled:
 			try:
 				self.serial.open()
 			except Exception as e:
-				log.error("Unable to open serial port %s: %s" % (serial, e))
+				self.log.error("Unable to open serial port %s: %s" % (self.serial, e))
 		self.send_lock = Lock()
 		#Services
 		self.services = []
@@ -97,21 +94,32 @@ class MicroController:
 				if msg[0:1] == return_code:
 					service.notify(service.return_codes[return_code], msg)
 					return
-		log.error("Unregistered return code received: %s", msg)
+		self.log.error("Unregistered return code received: %s", msg)
 		return
 	
 	def send(self, msg):
-		''''
+		'''
 			Sends a msg to a micro controller at the given address.
 			Address must be a byte.
 			msg must be a list of bytes to send.
 			Bytes must be a 2 char string representing two hex digits.
 			'''
+		if not self.enabled:
+			return
+		if type(msg) is list:
+			self.send_list_of_bytes(msg)
+		else:
+			self.serial.write(msg)
+	
+	def send_list_of_bytes(self, msg):
+		'''
+			Sends a list of bytes to the send method, legacy.
+			'''
 		# Checks
 		if not self.enabled:
 			return
 		if type(msg) is not list:
-			log.error("Messages sent to the micro controller must be a list of bytes!")
+			self.log.error("Messages sent to the micro controller must be a list of bytes!")
 			return
 		
 		# Implementation
@@ -119,14 +127,14 @@ class MicroController:
 		for x in msg:
 			message += x
 		self.send_lock.acquire()
-		master_log.debug("Sending message: %s" % message.encode('hex'))
+		self.log.debug("Sending message: %s" % message.encode('hex'))
 		if self.serial.isOpen():
 			self.serial.write(message+'\r')
 		self.send_lock.release()
 		return
 		
 	def shutdown(self):
-		log.info("Micro Controller %s is shutting down.", self.name)
+		self.log.info("Micro Controller %s is shutting down.", self.name)
 		self.debugging.shutdown()
 		if self.debugging.is_alive():
 			self.debugging.join()
@@ -155,7 +163,7 @@ class debug(Thread):
 	def processInput(self, input):
 		input = input.strip()
 		if len(input) > 2 and input[0:2] == 'RST':
-			log.info("Micro Controller %s reset.", self.name)
+			self.mc.log.info("Micro Controller %s reset.", self.name)
 		elif input != '' and input != '\r' and input != '\n':
 			self.mc.handleMsg(input)
 		return

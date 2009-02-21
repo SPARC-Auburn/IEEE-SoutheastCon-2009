@@ -1,13 +1,10 @@
 #
-#  object_detection.py
+#  antenna_array.py
 #  
 #
-#  Created by William Woodall on 2/19/09.
+#  Created by William Woodall on 2/20/09.
 #  Copyright (c) 2009 Auburn University. All rights reserved.
 #
-'''
-	Module for controlling and managing object detection.
-	'''
 
 # Imports #
 # Paths

@@ -61,13 +61,13 @@ def gripper_close():
 	gripper_servo.move(1.0)
 	
 def sorter_left():
-	sorter_servo(-1.0)
+	sorter_servo.move(-1.0)
 
 def sorter_right():
-	sorter_servo(1.0)
+	sorter_servo.move(1.0)
 	
 def sorter_center():
-	sorter_servo(0)
+	sorter_servo.move(0)
 
 # Logging Related Functions
 def debug(msg):
@@ -133,8 +133,11 @@ od_micro = mcn.get_object('Obj Detection')
 import servo_controller as sc
 sc.init()
 arm_servo = sc.get_object('Arm Servo')
+arm_servo.down()
 sorter_servo = sc.get_object('Sorter Servo')
+sorter_center()
 gripper_servo = sc.get_object('Gripper Servo')
+gripper_close()
 # Object Detection
 import object_detection
 object_detection.init()

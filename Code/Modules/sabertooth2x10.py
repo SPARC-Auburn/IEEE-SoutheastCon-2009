@@ -21,14 +21,14 @@
 	'''
 
 # Imports #
-# Logging
-import logging
-log = logging.getLogger('Sabertooth')
 # Configs
 import configs
 global config, enabled
 config = configs.get_config('Sabertooth2x10')
 enabled = config['enabled']
+# Logging
+import logging
+log = logging.getLogger(config['logger_name'])
 # PySerial
 if enabled:
 	try:
