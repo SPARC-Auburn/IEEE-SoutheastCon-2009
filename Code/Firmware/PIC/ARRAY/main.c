@@ -79,6 +79,8 @@ int differenceLineFollow = 0;
 int antenna_adjustment = 35;                     // difference between left and right antenna readings initialized to 35, but should be set by calibration
 float ars_magic;
 
+char lineFollowCurrentState;
+char cornerDetectCurrentState;
 
 //***************************************************************************************************************
 //							high_isr
@@ -291,7 +293,6 @@ void main (void)
 		if(ProcStatus.get_angle_enabled)
 		{
 			get_angle();
-			ProcStatus.get_angle_enabled = 0;	
 		}	
 
 	}		
@@ -351,7 +352,12 @@ void line_follow() {
 	if(antResults[0] < (antCalibration[0].lt + EE_line_threshold) && 
 		antResults[1]  < (antCalibration[1].lt + EE_line_threshold))
 	{
-		interrupt(INT_LINE_ERROR);
+		if(INT_LINE_ERROR != lineFollowCurrentState)
+		{
+			interrupt(INT_LINE_ERROR);
+			lineFollowCurrentState = INT_LINE_ERROR;
+			ProcStatus.line_follow_enabled = 0;
+		}	
 	}	
 	else
 	{
@@ -362,15 +368,31 @@ void line_follow() {
 		//  ******  line follow threshold adjusts the amount
 		if(differenceLineFollow > EE_line_follow_threshold)
 		{
-			interrupt(INT_LINE_LEFT);	
+			if(INT_LINE_LEFT != lineFollowCurrentState)
+			{
+				interrupt(INT_LINE_LEFT);
+				lineFollowCurrentState = INT_LINE_LEFT;				
+				ProcStatus.line_follow_enabled = 0;
+			}
+				
 		}	
 		else if(differenceLineFollow < (EE_line_follow_threshold * -1))
 		{
-			interrupt(INT_LINE_RIGHT);
+			if(INT_LINE_RIGHT != lineFollowCurrentState)
+			{
+				interrupt(INT_LINE_RIGHT);
+				lineFollowCurrentState = INT_LINE_RIGHT;
+				ProcStatus.line_follow_enabled = 0;
+			}
 		}	
 		else
 		{
-			interrupt(INT_LINE_CENTER);	
+			if(INT_LINE_CENTER != lineFollowCurrentState)
+			{
+				interrupt(INT_LINE_CENTER);
+				lineFollowCurrentState = INT_LINE_CENTER;
+				ProcStatus.line_follow_enabled = 0;
+			}	
 		}	
 	}
 }
@@ -380,12 +402,20 @@ void corner_detection() {
 	// interrupts if nessisary.  The interrupt return messages are on the wiki and should kept up to date
 	// with any changes.
 	if(antMeasure[2].lt > (antCalibration[2].lt + EE_corner_threshold))
-	{
-		interrupt(INT_CORNER_DETECT);
+	{	
+		if(INT_LINE_CENTER != cornerDetectCurrentState)
+			{
+				interrupt(INT_CORNER_DETECT);
+				cornerDetectCurrentState = INT_CORNER_DETECT;
+				ProcStatus.corner_detection_enabled = 0;
+			}	
+		
+		
 	}
 	else
 	{
-		interrupt(INT_CORNER_NO_DETECT);			
+		//interrupt(INT_CORNER_NO_DETECT);
+		cornerDetectCurrentState = INT_CORNER_NO_DETECT;			
 	}
 }
 
@@ -397,16 +427,19 @@ void line_detection() {
 	if(antMeasure[0].lt > (antCalibration[0].lt + EE_line_threshold)) 
 	{
 		interrupt(INT_LINE_DETECT_LEFT);
+		ProcStatus.line_detection_enabled = 0;		
 	}
 	
 	if(antMeasure[1].lt > (antCalibration[1].lt + EE_line_threshold))
 	{
 		interrupt(INT_LINE_DETECT_RIGHT);
+		ProcStatus.line_detection_enabled = 0;
 	}
 	
 	if(antMeasure[2].lt > (antCalibration[2].lt + EE_corner_threshold))
 	{
 		interrupt(INT_LINE_DETECT_FRONT);
+		ProcStatus.line_detection_enabled = 0;
 	}	
 			
 }
