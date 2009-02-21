@@ -29,6 +29,7 @@ import events
 from threading import Event
 # micro_controller_network
 import micro_controller_network
+mc = micro_controller_network.get_object(mc_name)
 
 # Static Variables
 return_codes = {'\x70':'Micro Switch Triggered',
@@ -40,8 +41,7 @@ return_codes = {'\x70':'Micro Switch Triggered',
 
 # Static Functions #
 def init():
-	global config, initialized, obj_detection, mc
-	mc = micro_controller_network.get_object(mc_name)
+	global config, initialized, obj_detection
 	obj_detection = ObjDetection()
 	mc.register(obj_detection)
 	initialized = True
@@ -60,6 +60,7 @@ class ObjDetection:
 		self.obj_detected = Event()
 		self.obj_detected.clear()
 		self.object = None
+		self.msg = ''
 		
 	def notify(self, return_code, msg):
 		# Handel the messge
@@ -68,17 +69,19 @@ class ObjDetection:
 			events.queue.put(return_code)
 		else:
 			self.object = return_code
+			self.msg = msg
 			self.obj_detected.set()
 		
 	def check_obj(self):
-		object = None
+		self.object = None
 		self.obj_detected.clear()
 		mc.send(['\x60'])
 		self.obj_detected.wait(5)
-		if object is None:
+		if self.object is None:
 			log.error("Timed out while waiting for object detection to return.")
 			self.obj_detected.set()
 			return
-		return object
+		log.debug("Object check returned: %s - %s", (self.object, self.msg))
+		return self.object
 		
 		
