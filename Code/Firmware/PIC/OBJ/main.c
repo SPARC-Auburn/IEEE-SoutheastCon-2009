@@ -243,35 +243,35 @@ void poll_sonar(void)
 								//start the 1st sonar measurement
 		sonarIndex = 0;		
 
-		TRISAbits.TRISA0 = 0; 	//set pin 2 to output for Parallax triggering sequence
-
-		PORTAbits.RA0 = 0;		//bring pin 2 low
-		Delay10TCYx(7);			//delay for ~2 microseconds
-
-		PORTAbits.RA0 = 1;  	//bring pin 2 high
-		Delay10TCYx(16);		//delay for ~5 microseconds
-
-		PORTAbits.RA0 = 0;		//bring pin 2 low
-
-		TRISAbits.TRISA0 = 1; 	//set pin 2 to input for pulse readin
-		
-		while(PORTAbits.RA0 == 0)
-		{	
-								//wait for the Parallax to bring pin 2 high				
-		}
-		
-		WriteTimer0( 0 );		//reset Timer0
-
-		while(PORTAbits.RA0 == 1)
-		{
-								//wait for the Parallax to bring pin 2 low
-		}
-								//read the value in Timer0
-		pulseDuration = ReadTimer0();
-
-								//divide the microseconds by 58 to convert to centimeters
-		distance[sonarIndex] = pulseDuration / sonar_divider;						
-
+//		TRISAbits.TRISA0 = 0; 	//set pin 2 to output for Parallax triggering sequence
+//
+//		PORTAbits.RA0 = 0;		//bring pin 2 low
+//		Delay10TCYx(7);			//delay for ~2 microseconds
+//
+//		PORTAbits.RA0 = 1;  	//bring pin 2 high
+//		Delay10TCYx(16);		//delay for ~5 microseconds
+//
+//		PORTAbits.RA0 = 0;		//bring pin 2 low
+//
+//		TRISAbits.TRISA0 = 1; 	//set pin 2 to input for pulse readin
+//		
+//		while(PORTAbits.RA0 == 0)
+//		{	
+//								//wait for the Parallax to bring pin 2 high				
+//		}
+//		
+//		WriteTimer0( 0 );		//reset Timer0
+//
+//		while(PORTAbits.RA0 == 1)
+//		{
+//								//wait for the Parallax to bring pin 2 low
+//		}
+//								//read the value in Timer0
+//		pulseDuration = ReadTimer0();
+//
+//								//divide the microseconds by 58 to convert to centimeters
+//		distance[sonarIndex] = pulseDuration / sonar_divider;						
+//
 								//start 2nd sonar measurement
 		sonarIndex++;			
 		
@@ -336,23 +336,23 @@ void poll_sonar(void)
 								//divide the microseconds by 58 to convert to centimeters
 		distance[sonarIndex] = pulseDuration / sonar_divider;						
 		
-			TXChar(' ');
-			TXDec_Int(distance[0]);
-			TXChar(' ');
-			TXDec_Int(distance[1]);
-			TXChar(' ');
-			TXDec_Int(distance[2]);
-			TXString("\x0D\x0A");
+//			TXChar(' ');
+//			TXDec_Int(distance[0]);
+//			TXChar(' ');
+//			TXDec_Int(distance[1]);
+//			TXChar(' ');
+//			TXDec_Int(distance[2]);
+//			TXString("\x0D\x0A");
 		
 		
-		if(distance[0] > thresholdBack)
-		{
-			TXChar(SONAR_NO_OBJECT);		//send code for "No Object"
-			TXString("\x0D\x0A");
-						
-		}	 
-		else
-		{
+//		if(distance[0] > thresholdBack)
+//		{
+//			TXChar(SONAR_NO_OBJECT);		//send code for "No Object"
+//			TXString("\x0D\x0A");
+//						
+//		}	 
+//		else
+//		{
 			if(distance[1] < thresholdFrontBack && distance[2] < thresholdFrontFront)
 			{
 				TXChar(SONAR_PLASTIC);	//send code for "Plastic Bottle"
@@ -381,6 +381,6 @@ void poll_sonar(void)
 				}			
 			}
 								
-		}
+//		}
 	
 }	
