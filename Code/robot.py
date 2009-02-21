@@ -69,6 +69,20 @@ def sorter_right():
 def sorter_center():
 	sorter_servo.move(0)
 
+# Object Detection
+def check_obj():
+	obj_detection.check_obj()
+
+# Antenna Array
+def line_follow():
+	ant_array.line_follow()
+
+def corner_detection():
+	ant_array.corner_detection()
+
+def line_detection():
+	ant_array.line_detection()
+
 # Logging Related Functions
 def debug(msg):
 	brain_log.debug(msg)
@@ -138,10 +152,17 @@ sorter_servo = sc.get_object('Sorter Servo')
 sorter_center()
 gripper_servo = sc.get_object('Gripper Servo')
 gripper_close()
+spinner_servo = sc.get_object('Spinner Servo')
+spinner_servo.move(-1.0)
 # Object Detection
 import object_detection
 object_detection.init()
 obj_detection = object_detection.get_object()
+# Antenna Array
+import antenna_array
+antenna_array.init()
+ant_array = antenna_array.get_object()
+
 
 signal.signal(signal.SIGINT, shutdown_signal)
 
