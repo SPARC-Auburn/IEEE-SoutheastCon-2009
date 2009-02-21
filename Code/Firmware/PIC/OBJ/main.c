@@ -27,11 +27,11 @@ int i;
 unsigned int switchCount = 0;
 
 // Variables that are stored in the EEPROM
-unsigned int switch_threshold = 1;
-unsigned int sonar_divider = 1;
-unsigned int thresholdFrontFront = 0;
-unsigned int thresholdFrontBack = 0;
-unsigned int thresholdBack = 0;
+unsigned int switch_threshold = 20;
+unsigned int sonar_divider = 58;
+unsigned int thresholdFrontFront = 14;
+unsigned int thresholdFrontBack = 14;
+unsigned int thresholdBack = 10;
 
 
 
@@ -231,11 +231,11 @@ void main (void)
 
 void Refresh_EEPROM(void)
 {
-	switch_threshold = ((int)Read_b_eep(EE_SWITCH_THRESHOLD_H) << 8) | (Read_b_eep(EE_SWITCH_THRESHOLD_L));
-	sonar_divider = ((int)Read_b_eep(EE_SONAR_DIVIDER_H) << 8) | (Read_b_eep(EE_SONAR_DIVIDER_L));
-	thresholdFrontFront = ((int)Read_b_eep(EE_FF_THRESHOLD_H) << 8) | (Read_b_eep(EE_FF_THRESHOLD_L));
-	thresholdFrontBack = ((int)Read_b_eep(EE_FB_THRESHOLD_H) << 8) | (Read_b_eep(EE_FB_THRESHOLD_L));
-	thresholdBack = ((int)Read_b_eep(EE_BACK_THRESHOLD_H) << 8) | (Read_b_eep(EE_BACK_THRESHOLD_L));
+//	switch_threshold = ((int)Read_b_eep(EE_SWITCH_THRESHOLD_H) << 8) | (Read_b_eep(EE_SWITCH_THRESHOLD_L));
+//	sonar_divider = ((int)Read_b_eep(EE_SONAR_DIVIDER_H) << 8) | (Read_b_eep(EE_SONAR_DIVIDER_L));
+//	thresholdFrontFront = ((int)Read_b_eep(EE_FF_THRESHOLD_H) << 8) | (Read_b_eep(EE_FF_THRESHOLD_L));
+//	thresholdFrontBack = ((int)Read_b_eep(EE_FB_THRESHOLD_H) << 8) | (Read_b_eep(EE_FB_THRESHOLD_L));
+//	thresholdBack = ((int)Read_b_eep(EE_BACK_THRESHOLD_H) << 8) | (Read_b_eep(EE_BACK_THRESHOLD_L));
 }	
 
 void poll_sonar(void)

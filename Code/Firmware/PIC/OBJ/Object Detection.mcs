@@ -2,58 +2,6 @@
 MagicCookie={0b13fe8c-dfe0-40eb-8900-6712719559a7}
 Version=1.0
 [File000]
-Location=C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\main.o
-Folder=Intermediary
-DeviceName=PIC18F2685
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
-LanguageToolLocation=C:\MCC18\bin\mcc18.exe
-PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|init.c|serial.c|queue.c||<obj>||<lib>||<lkr>||
-SuiteArgsString=
-ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
-TraceCmdString=
-DebugOptions=-D__DEBUG
-[File001]
-Location=C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\init.o
-Folder=Intermediary
-DeviceName=PIC18F2685
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
-LanguageToolLocation=C:\MCC18\bin\mcc18.exe
-PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|init.c|serial.c|queue.c||<obj>||<lib>||<lkr>||
-SuiteArgsString=
-ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
-TraceCmdString=
-DebugOptions=-D__DEBUG
-[File002]
-Location=C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\serial.o
-Folder=Intermediary
-DeviceName=PIC18F2685
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
-LanguageToolLocation=C:\MCC18\bin\mcc18.exe
-PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|init.c|serial.c|queue.c||<obj>||<lib>||<lkr>||
-SuiteArgsString=
-ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
-TraceCmdString=
-DebugOptions=-D__DEBUG
-[File003]
-Location=C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\queue.o
-Folder=Intermediary
-DeviceName=PIC18F2685
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
-LanguageToolLocation=C:\MCC18\bin\mcc18.exe
-PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|init.c|serial.c|queue.c||<obj>||<lib>||<lkr>||
-SuiteArgsString=
-ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
-TraceCmdString=
-DebugOptions=-D__DEBUG
-[File004]
 Location=K:\SPaRC code repository\Firmware\PIC\OBJ\main.o
 Folder=Intermediary
 DeviceName=PIC18F2685
@@ -66,7 +14,7 @@ SuiteArgsString=
 ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
 TraceCmdString=
 DebugOptions=-D__DEBUG
-[File005]
+[File001]
 Location=K:\SPaRC code repository\Firmware\PIC\OBJ\init.o
 Folder=Intermediary
 DeviceName=PIC18F2685
@@ -79,7 +27,7 @@ SuiteArgsString=
 ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
 TraceCmdString=
 DebugOptions=-D__DEBUG
-[File006]
+[File002]
 Location=K:\SPaRC code repository\Firmware\PIC\OBJ\serial.o
 Folder=Intermediary
 DeviceName=PIC18F2685
@@ -92,7 +40,7 @@ SuiteArgsString=
 ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
 TraceCmdString=
 DebugOptions=-D__DEBUG
-[File007]
+[File003]
 Location=K:\SPaRC code repository\Firmware\PIC\OBJ\queue.o
 Folder=Intermediary
 DeviceName=PIC18F2685
@@ -105,85 +53,7 @@ SuiteArgsString=
 ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
 TraceCmdString=
 DebugOptions=-D__DEBUG
-[File008]
-Location=C:\SVN\Code\Firmware\PIC\OBJ\main.o
-Folder=Intermediary
-DeviceName=PIC18F2685
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
-LanguageToolLocation=C:\MCC18\bin\mcc18.exe
-PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|init.c|serial.c|queue.c||<obj>||<lib>||<lkr>||
-SuiteArgsString=
-ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
-TraceCmdString=
-DebugOptions=-D__DEBUG
-[File009]
-Location=C:\SVN\Code\Firmware\PIC\OBJ\init.o
-Folder=Intermediary
-DeviceName=PIC18F2685
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
-LanguageToolLocation=C:\MCC18\bin\mcc18.exe
-PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|init.c|serial.c|queue.c||<obj>||<lib>||<lkr>||
-SuiteArgsString=
-ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
-TraceCmdString=
-DebugOptions=-D__DEBUG
-[File010]
-Location=C:\SVN\Code\Firmware\PIC\OBJ\serial.o
-Folder=Intermediary
-DeviceName=PIC18F2685
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
-LanguageToolLocation=C:\MCC18\bin\mcc18.exe
-PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|init.c|serial.c|queue.c||<obj>||<lib>||<lkr>||
-SuiteArgsString=
-ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
-TraceCmdString=
-DebugOptions=-D__DEBUG
-[File011]
-Location=C:\SVN\Code\Firmware\PIC\OBJ\queue.o
-Folder=Intermediary
-DeviceName=PIC18F2685
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
-LanguageToolLocation=C:\MCC18\bin\mcc18.exe
-PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|init.c|serial.c|queue.c||<obj>||<lib>||<lkr>||
-SuiteArgsString=
-ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
-TraceCmdString=
-DebugOptions=-D__DEBUG
-[File012]
-Location=C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\Object Detection.cof
-Folder=Output
-DeviceName=PIC18F2685
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={96C98149-AA1B-4CF9-B967-FAE79CAB663C}
-LanguageToolLocation=C:\MCC18\bin\mplink.exe
-PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|init.c|serial.c|queue.c||<obj>||<lib>||<lkr>||
-SuiteArgsString=
-ToolArgsString=/o"$(BINDIR_)$(TARGETBASE).cof" /M"$(BINDIR_)$(TARGETBASE).map" /W
-TraceCmdString=
-DebugOptions=/z__MPLAB_DEBUG=1
-[File013]
-Location=C:\SVN\Code\Firmware\PIC\Slave_Object_Detect\Object Detection.hex
-Folder=Output
-DeviceName=PIC18F2685
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={96C98149-AA1B-4CF9-B967-FAE79CAB663C}
-LanguageToolLocation=C:\MCC18\bin\mplink.exe
-PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|init.c|serial.c|queue.c||<obj>||<lib>||<lkr>||
-SuiteArgsString=
-ToolArgsString=/o"$(BINDIR_)$(TARGETBASE).cof" /M"$(BINDIR_)$(TARGETBASE).map" /W
-TraceCmdString=
-DebugOptions=/z__MPLAB_DEBUG=1
-[File014]
+[File004]
 Location=K:\SPaRC code repository\Firmware\PIC\OBJ\Object Detection.cof
 Folder=Output
 DeviceName=PIC18F2685
@@ -196,34 +66,8 @@ SuiteArgsString=
 ToolArgsString=/o"$(BINDIR_)$(TARGETBASE).cof" /M"$(BINDIR_)$(TARGETBASE).map" /W
 TraceCmdString=
 DebugOptions=/z__MPLAB_DEBUG=1
-[File015]
+[File005]
 Location=K:\SPaRC code repository\Firmware\PIC\OBJ\Object Detection.hex
-Folder=Output
-DeviceName=PIC18F2685
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={96C98149-AA1B-4CF9-B967-FAE79CAB663C}
-LanguageToolLocation=C:\MCC18\bin\mplink.exe
-PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|init.c|serial.c|queue.c||<obj>||<lib>||<lkr>||
-SuiteArgsString=
-ToolArgsString=/o"$(BINDIR_)$(TARGETBASE).cof" /M"$(BINDIR_)$(TARGETBASE).map" /W
-TraceCmdString=
-DebugOptions=/z__MPLAB_DEBUG=1
-[File016]
-Location=C:\SVN\Code\Firmware\PIC\OBJ\Object Detection.cof
-Folder=Output
-DeviceName=PIC18F2685
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={96C98149-AA1B-4CF9-B967-FAE79CAB663C}
-LanguageToolLocation=C:\MCC18\bin\mplink.exe
-PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|init.c|serial.c|queue.c||<obj>||<lib>||<lkr>||
-SuiteArgsString=
-ToolArgsString=/o"$(BINDIR_)$(TARGETBASE).cof" /M"$(BINDIR_)$(TARGETBASE).map" /W
-TraceCmdString=
-DebugOptions=/z__MPLAB_DEBUG=1
-[File017]
-Location=C:\SVN\Code\Firmware\PIC\OBJ\Object Detection.hex
 Folder=Output
 DeviceName=PIC18F2685
 LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}

@@ -1,5 +1,5 @@
 MPLINK 4.22, Linker
-Linker Map File - Created Fri Feb 20 23:07:17 2009
+Linker Map File - Created Fri Feb 20 23:23:02 2009
 
                                  Section Info
                   Section       Type    Address   Location Size(Bytes)
@@ -44,30 +44,30 @@ Linker Map File - Created Fri Feb 20 23:07:17 2009
         .romdata_serial.o    romdata   0x000014    program   0x000000
                low_vector       code   0x000018    program   0x000006
                    .cinit    romdata   0x00001e    program   0x000026
-             .code_main.o       code   0x000044    program   0x000740
-           .code_serial.o       code   0x000784    program   0x00069a
-            .code_queue.o       code   0x000e1e    program   0x000244
-               _cinit_scn       code   0x001062    program   0x00009e
-             .code_init.o       code   0x001100    program   0x000080
-          .code_write_B.o       code   0x001180    program   0x00005c
-             .stringtable    romdata   0x0011dc    program   0x00005a
-           .code_read_B.o       code   0x001236    program   0x000048
-           .code_t0read.o       code   0x00127e    program   0x00003e
-          .code_t0write.o       code   0x0012bc    program   0x000038
-           .code_t0open.o       code   0x0012f4    program   0x000038
-             D10KTCYXCODE       code   0x00132c    program   0x00002e
-         .code_fxd1616u.o       code   0x00135a    program   0x00002c
-           .code_ismclr.o       code   0x001386    program   0x000024
-             _startup_scn       code   0x0013aa    program   0x00001c
-         .code_fxd0808u.o       code   0x0013c6    program   0x00001c
-          .code_iswdtto.o       code   0x0013e2    program   0x000018
-            .code_ispor.o       code   0x0013fa    program   0x000018
-              D10TCYXCODE       code   0x001412    program   0x000016
-                    .code       code   0x001428    program   0x00000e
-            .code_isbor.o       code   0x001436    program   0x00000c
-        .idata_serial.o_i    romdata   0x001442    program   0x000010
-         .idata_queue.o_i    romdata   0x001452    program   0x000007
-          .idata_main.o_i    romdata   0x001459    program   0x00001c
+           .code_serial.o       code   0x000044    program   0x00069a
+             .code_main.o       code   0x0006de    program   0x0005f6
+            .code_queue.o       code   0x000cd4    program   0x000244
+               _cinit_scn       code   0x000f18    program   0x00009e
+             .code_init.o       code   0x000fb6    program   0x000080
+          .code_write_B.o       code   0x001036    program   0x00005c
+             .stringtable    romdata   0x001092    program   0x00005a
+           .code_read_B.o       code   0x0010ec    program   0x000048
+           .code_t0read.o       code   0x001134    program   0x00003e
+          .code_t0write.o       code   0x001172    program   0x000038
+           .code_t0open.o       code   0x0011aa    program   0x000038
+             D10KTCYXCODE       code   0x0011e2    program   0x00002e
+         .code_fxd1616u.o       code   0x001210    program   0x00002c
+           .code_ismclr.o       code   0x00123c    program   0x000024
+             _startup_scn       code   0x001260    program   0x00001c
+         .code_fxd0808u.o       code   0x00127c    program   0x00001c
+          .code_iswdtto.o       code   0x001298    program   0x000018
+            .code_ispor.o       code   0x0012b0    program   0x000018
+              D10TCYXCODE       code   0x0012c8    program   0x000016
+                    .code       code   0x0012de    program   0x00000e
+            .code_isbor.o       code   0x0012ec    program   0x00000c
+        .idata_serial.o_i    romdata   0x0012f8    program   0x000010
+         .idata_queue.o_i    romdata   0x001308    program   0x000007
+          .idata_main.o_i    romdata   0x00130f    program   0x00001c
     .config_300001_main.o    romdata   0x300001    program   0x000001
     .config_300003_main.o    romdata   0x300003    program   0x000001
     .config_300005_main.o    romdata   0x300005    program   0x000001
@@ -135,143 +135,143 @@ Linker Map File - Created Fri Feb 20 23:07:17 2009
                                Start         End      
                            ---------   ---------      
                             0x000000    0x000013      
-                            0x000018    0x001474      
+                            0x000018    0x00132a      
                             0x300001    0x300001      
                             0x300003    0x300003      
                             0x300005    0x300005      
-            5236 out of 99352 program addresses used, program memory utilization is 5%
+            4906 out of 99352 program addresses used, program memory utilization is 4%
 
 
 
                               Symbols - Sorted by Name
                      Name    Address   Location    Storage File                     
                 ---------  ---------  ---------  --------- ---------                
-                   D10K_1   0x001338    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
-                    D10Kl   0x001344    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
-                    D10Kx   0x001336    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
-                    D10_1   0x001422    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
-                     D10x   0x00141a    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
-             Delay10KTCYx   0x00132c    program     extern C:\MCC18\src\traditional\delays\d10ktcyx.asm
-              Delay10TCYx   0x001412    program     extern C:\MCC18\src\traditional\delays\d10tcyx.asm
-                 FXD0808U   0x0013c6    program     extern C:\MCC18\src\traditional\math\fxd0808u.c
-                 FXD1616U   0x00135a    program     extern C:\MCC18\src\traditional\math\fxd1616u.c
-                     Init   0x001100    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\init.c
-          Init_Interrupts   0x00111a    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\init.c
-          Init_Oscillator   0x001114    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\init.c
-               Init_USART   0x001122    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\init.c
-               OpenTimer0   0x0012f4    program     extern C:\MCC18\src\pmc_common\Timers\t0open.c
-                   RXChar   0x000792    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
-                  RXReady   0x000784    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
-               ReadTimer0   0x00127e    program     extern C:\MCC18\src\pmc_common\Timers\t0read.c
-               Read_b_eep   0x001236    program     extern C:\MCC18\src\pmc_common\EEP\read_B.c
-           Refresh_EEPROM   0x000392    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
-                SerialISR   0x000e3a    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
+                   D10K_1   0x0011ee    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
+                    D10Kl   0x0011fa    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
+                    D10Kx   0x0011ec    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
+                    D10_1   0x0012d8    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
+                     D10x   0x0012d0    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
+             Delay10KTCYx   0x0011e2    program     extern C:\MCC18\src\traditional\delays\d10ktcyx.asm
+              Delay10TCYx   0x0012c8    program     extern C:\MCC18\src\traditional\delays\d10tcyx.asm
+                 FXD0808U   0x00127c    program     extern C:\MCC18\src\traditional\math\fxd0808u.c
+                 FXD1616U   0x001210    program     extern C:\MCC18\src\traditional\math\fxd1616u.c
+                     Init   0x000fb6    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\init.c
+          Init_Interrupts   0x000fd0    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\init.c
+          Init_Oscillator   0x000fca    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\init.c
+               Init_USART   0x000fd8    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\init.c
+               OpenTimer0   0x0011aa    program     extern C:\MCC18\src\pmc_common\Timers\t0open.c
+                   RXChar   0x000052    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
+                  RXReady   0x000044    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
+               ReadTimer0   0x001134    program     extern C:\MCC18\src\pmc_common\Timers\t0read.c
+               Read_b_eep   0x0010ec    program     extern C:\MCC18\src\pmc_common\EEP\read_B.c
+           Refresh_EEPROM   0x000a2c    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
+                SerialISR   0x000cf0    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
               StatusReset   0x00000e    program     extern C:\MCC18\src\pmc_common\reset\statrst.c
-                    TXBin   0x000808    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
-                TXBin_Int   0x000878    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
-                   TXChar   0x0007ae    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
-                    TXDec   0x000910    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
-                TXDec_Int   0x0009c4    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
-                    TXHex   0x000c90    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
-                TXHex_Int   0x000d04    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
-                 TXString   0x0007ca    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
-              WriteTimer0   0x0012bc    program     extern C:\MCC18\src\pmc_common\Timers\t0write.c
-              Write_b_eep   0x001180    program     extern C:\MCC18\src\pmc_common\EEP\write_B.c
-       _D10KTCYXCODE_0010   0x00133c    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
-       _D10KTCYXCODE_001C   0x001348    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
-        _D10TCYXCODE_000A   0x00141c    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
-        _D10TCYXCODE_000C   0x00141e    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
-        _D10TCYXCODE_000E   0x001420    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
-      ___case_48_lbl00022   0x00021a    program     static                          
-      ___case_49_lbl00024   0x000222    program     static                          
-      ___case_50_lbl00030   0x0002d8    program     static                          
-      ___case_96_lbl00031   0x000312    program     static                          
-      ___default_lbl00032   0x00031c    program     static                          
-         ___else_lbl00008   0x00019e    program     static                          
-         ___else_lbl00010   0x000184    program     static                          
-         ___else_lbl00012   0x00016a    program     static                          
-         ___else_lbl00014   0x000150    program     static                          
-         ___else_lbl00020   0x0001ea    program     static                          
-         ___else_lbl00036   0x00036c    program     static                          
-         ___else_lbl00038   0x000388    program     static                          
-           ___if_lbl00007   0x0001ae    program     static                          
-           ___if_lbl00009   0x0001ae    program     static                          
-           ___if_lbl00011   0x0001ae    program     static                          
-           ___if_lbl00013   0x0001ae    program     static                          
-           ___if_lbl00019   0x000202    program     static                          
-           ___if_lbl00023   0x000234    program     static                          
-           ___if_lbl00028   0x0002d6    program     static                          
-           ___if_lbl00029   0x000310    program     static                          
-           ___if_lbl00033   0x000330    program     static                          
-           ___if_lbl00034   0x000386    program     static                          
-           ___if_lbl00035   0x000386    program     static                          
-           ___if_lbl00037   0x00038e    program     static                          
+                    TXBin   0x0000c8    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
+                TXBin_Int   0x000138    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
+                   TXChar   0x00006e    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
+                    TXDec   0x0001d0    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
+                TXDec_Int   0x000284    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
+                    TXHex   0x000550    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
+                TXHex_Int   0x0005c4    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
+                 TXString   0x00008a    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
+              WriteTimer0   0x001172    program     extern C:\MCC18\src\pmc_common\Timers\t0write.c
+              Write_b_eep   0x001036    program     extern C:\MCC18\src\pmc_common\EEP\write_B.c
+       _D10KTCYXCODE_0010   0x0011f2    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
+       _D10KTCYXCODE_001C   0x0011fe    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
+        _D10TCYXCODE_000A   0x0012d2    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
+        _D10TCYXCODE_000C   0x0012d4    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
+        _D10TCYXCODE_000E   0x0012d6    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
+      ___case_48_lbl00022   0x0008b4    program     static                          
+      ___case_49_lbl00024   0x0008bc    program     static                          
+      ___case_50_lbl00030   0x000972    program     static                          
+      ___case_96_lbl00031   0x0009ac    program     static                          
+      ___default_lbl00032   0x0009b6    program     static                          
+         ___else_lbl00008   0x000838    program     static                          
+         ___else_lbl00010   0x00081e    program     static                          
+         ___else_lbl00012   0x000804    program     static                          
+         ___else_lbl00014   0x0007ea    program     static                          
+         ___else_lbl00020   0x000884    program     static                          
+         ___else_lbl00036   0x000a06    program     static                          
+         ___else_lbl00038   0x000a22    program     static                          
+           ___if_lbl00007   0x000848    program     static                          
+           ___if_lbl00009   0x000848    program     static                          
+           ___if_lbl00011   0x000848    program     static                          
+           ___if_lbl00013   0x000848    program     static                          
+           ___if_lbl00019   0x00089c    program     static                          
+           ___if_lbl00023   0x0008ce    program     static                          
+           ___if_lbl00028   0x000970    program     static                          
+           ___if_lbl00029   0x0009aa    program     static                          
+           ___if_lbl00033   0x0009ca    program     static                          
+           ___if_lbl00034   0x000a20    program     static                          
+           ___if_lbl00035   0x000a20    program     static                          
+           ___if_lbl00037   0x000a28    program     static                          
        ___return_lbl00000   0x000004    program     static                          
-       ___return_lbl00000   0x001384    program     static                          
-       ___return_lbl00000   0x0013e0    program     static                          
+       ___return_lbl00000   0x00123a    program     static                          
+       ___return_lbl00000   0x001296    program     static                          
        ___return_lbl00000   0x00000c    program     static                          
-       ___return_lbl00001   0x0013c4    program     static                          
+       ___return_lbl00001   0x00127a    program     static                          
        ___return_lbl00001   0x00001c    program     static                          
-       ___return_lbl00002   0x0010fe    program     static                          
-       ___return_lbl00006   0x000390    program     static                          
-   ___switchexit_lbl00021   0x000322    program     static                          
-        ___while_lbl00015   0x0001b2    program     static                          
-        ___while_lbl00016   0x000390    program     static                          
-        ___while_lbl00017   0x0001b2    program     static                          
-        ___while_lbl00018   0x000324    program     static                          
-        ___while_lbl00026   0x00026c    program     static                          
-        ___while_lbl00027   0x0002c0    program     static                          
+       ___return_lbl00002   0x000fb4    program     static                          
+       ___return_lbl00006   0x000a2a    program     static                          
+   ___switchexit_lbl00021   0x0009bc    program     static                          
+        ___while_lbl00015   0x00084c    program     static                          
+        ___while_lbl00016   0x000a2a    program     static                          
+        ___while_lbl00017   0x00084c    program     static                          
+        ___while_lbl00018   0x0009be    program     static                          
+        ___while_lbl00026   0x000906    program     static                          
+        ___while_lbl00027   0x00095a    program     static                          
                __config_0   0x300001    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
                __config_1   0x300003    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
                __config_2   0x300005    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
                    __init   0x000006    program     extern C:\MCC18\src\traditional\stdclib\__init.c
-               __string_0   0x001233    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
-               __string_0   0x001220    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
-               __string_1   0x001230    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
-               __string_1   0x00120f    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
-               __string_2   0x0011ff    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
-               __string_3   0x0011ef    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
-               __string_4   0x0011e5    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
-               __string_5   0x0011e2    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
-               __string_6   0x0011df    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
-               __string_7   0x0011dc    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
-              __tmplbl_10   0x000282    program     static                          
-               __tmplbl_2   0x000260    program     static                          
-               __tmplbl_3   0x00023e    program     static                          
-            __zero_memory   0x001428    program     extern C:\MCC18\src\traditional\proc\p18F2685.asm
-                _do_cinit   0x001062    program     extern C:\MCC18\src\traditional\startup\c018i.c
+               __string_0   0x0010e9    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
+               __string_0   0x0010d6    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
+               __string_1   0x0010e6    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
+               __string_1   0x0010c5    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
+               __string_2   0x0010b5    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
+               __string_3   0x0010a5    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
+               __string_4   0x00109b    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
+               __string_5   0x001098    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
+               __string_6   0x001095    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
+               __string_7   0x001092    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
+              __tmplbl_10   0x00091c    program     static                          
+               __tmplbl_2   0x0008fa    program     static                          
+               __tmplbl_3   0x0008d8    program     static                          
+            __zero_memory   0x0012de    program     extern C:\MCC18\src\traditional\proc\p18F2685.asm
+                _do_cinit   0x000f18    program     extern C:\MCC18\src\traditional\startup\c018i.c
                    _entry   0x000000    program     extern C:\MCC18\src\traditional\startup\c018i.c
-                 _startup   0x0013aa    program     extern C:\MCC18\src\traditional\startup\c018i.c
-               clear_loop   0x00142e    program     static C:\MCC18\src\traditional\proc\p18F2685.asm
-                copy_loop   0x0010d4    program     static                          
-            copy_one_byte   0x0010da    program     static                          
-                     done   0x0010fe    program     static                          
-             done_copying   0x0010e8    program     static                          
-                  endloop   0x001380    program     static                          
-                  endloop   0x0013dc    program     static                          
-                 high_isr   0x000044    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
+                 _startup   0x001260    program     extern C:\MCC18\src\traditional\startup\c018i.c
+               clear_loop   0x0012e4    program     static C:\MCC18\src\traditional\proc\p18F2685.asm
+                copy_loop   0x000f8a    program     static                          
+            copy_one_byte   0x000f90    program     static                          
+                     done   0x000fb4    program     static                          
+             done_copying   0x000f9e    program     static                          
+                  endloop   0x001236    program     static                          
+                  endloop   0x001292    program     static                          
+                 high_isr   0x0006de    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
                  high_vec   0x000008    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
-                initQueue   0x000e1e    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
-                    isBOR   0x001436    program     extern C:\MCC18\src\pmc_common\reset\isbor.c
-                   isMCLR   0x001386    program     extern C:\MCC18\src\pmc_common\reset\ismclr.c
-                    isPOR   0x0013fa    program     extern C:\MCC18\src\pmc_common\reset\ispor.c
-                isRXEmpty   0x000f08    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
-                 isRXFull   0x000f20    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
-                isTXEmpty   0x000efa    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
-                 isTXFull   0x000f16    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
-                  isWDTTO   0x0013e2    program     extern C:\MCC18\src\pmc_common\reset\iswdtto.c
-                     loop   0x001364    program     static                          
-                     loop   0x0013ce    program     static                          
-                     loop   0x0013ba    program     static                          
-                  low_isr   0x0000e6    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
+                initQueue   0x000cd4    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
+                    isBOR   0x0012ec    program     extern C:\MCC18\src\pmc_common\reset\isbor.c
+                   isMCLR   0x00123c    program     extern C:\MCC18\src\pmc_common\reset\ismclr.c
+                    isPOR   0x0012b0    program     extern C:\MCC18\src\pmc_common\reset\ispor.c
+                isRXEmpty   0x000dbe    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
+                 isRXFull   0x000dd6    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
+                isTXEmpty   0x000db0    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
+                 isTXFull   0x000dcc    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
+                  isWDTTO   0x001298    program     extern C:\MCC18\src\pmc_common\reset\iswdtto.c
+                     loop   0x00121a    program     static                          
+                     loop   0x001284    program     static                          
+                     loop   0x001270    program     static                          
+                  low_isr   0x000780    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
                   low_vec   0x000018    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
-                     main   0x00010c    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
-               poll_sonar   0x0004de    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
-               popRXQueue   0x00100a    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
-               popTXQueue   0x000fb2    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
-              pushRXQueue   0x000f70    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
-              pushTXQueue   0x000f2e    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
-                     test   0x00107c    program     static                          
+                     main   0x0007a6    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
+               poll_sonar   0x000a2e    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
+               popRXQueue   0x000ec0    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
+               popTXQueue   0x000e68    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
+              pushRXQueue   0x000e26    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
+              pushTXQueue   0x000de4    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
+                     test   0x000f32    program     static                          
                    ADCON0   0x000fc2       data     extern C:\MCC18\src\traditional\proc\p18F2685.asm
                ADCON0bits   0x000fc2       data     extern C:\MCC18\src\traditional\proc\p18F2685.asm
                    ADCON1   0x000fc1       data     extern C:\MCC18\src\traditional\proc\p18F2685.asm
@@ -1058,121 +1058,121 @@ Linker Map File - Created Fri Feb 20 23:07:17 2009
               StatusReset   0x00000e    program     extern C:\MCC18\src\pmc_common\reset\statrst.c
                   low_vec   0x000018    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
        ___return_lbl00001   0x00001c    program     static                          
-                 high_isr   0x000044    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
-                  low_isr   0x0000e6    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
-                     main   0x00010c    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
-         ___else_lbl00014   0x000150    program     static                          
-         ___else_lbl00012   0x00016a    program     static                          
-         ___else_lbl00010   0x000184    program     static                          
-         ___else_lbl00008   0x00019e    program     static                          
-           ___if_lbl00007   0x0001ae    program     static                          
-           ___if_lbl00009   0x0001ae    program     static                          
-           ___if_lbl00011   0x0001ae    program     static                          
-           ___if_lbl00013   0x0001ae    program     static                          
-        ___while_lbl00017   0x0001b2    program     static                          
-        ___while_lbl00015   0x0001b2    program     static                          
-         ___else_lbl00020   0x0001ea    program     static                          
-           ___if_lbl00019   0x000202    program     static                          
-      ___case_48_lbl00022   0x00021a    program     static                          
-      ___case_49_lbl00024   0x000222    program     static                          
-           ___if_lbl00023   0x000234    program     static                          
-               __tmplbl_3   0x00023e    program     static                          
-               __tmplbl_2   0x000260    program     static                          
-        ___while_lbl00026   0x00026c    program     static                          
-              __tmplbl_10   0x000282    program     static                          
-        ___while_lbl00027   0x0002c0    program     static                          
-           ___if_lbl00028   0x0002d6    program     static                          
-      ___case_50_lbl00030   0x0002d8    program     static                          
-           ___if_lbl00029   0x000310    program     static                          
-      ___case_96_lbl00031   0x000312    program     static                          
-      ___default_lbl00032   0x00031c    program     static                          
-   ___switchexit_lbl00021   0x000322    program     static                          
-        ___while_lbl00018   0x000324    program     static                          
-           ___if_lbl00033   0x000330    program     static                          
-         ___else_lbl00036   0x00036c    program     static                          
-           ___if_lbl00035   0x000386    program     static                          
-           ___if_lbl00034   0x000386    program     static                          
-         ___else_lbl00038   0x000388    program     static                          
-           ___if_lbl00037   0x00038e    program     static                          
-       ___return_lbl00006   0x000390    program     static                          
-        ___while_lbl00016   0x000390    program     static                          
-           Refresh_EEPROM   0x000392    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
-               poll_sonar   0x0004de    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
-                  RXReady   0x000784    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
-                   RXChar   0x000792    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
-                   TXChar   0x0007ae    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
-                 TXString   0x0007ca    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
-                    TXBin   0x000808    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
-                TXBin_Int   0x000878    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
-                    TXDec   0x000910    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
-                TXDec_Int   0x0009c4    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
-                    TXHex   0x000c90    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
-                TXHex_Int   0x000d04    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
-                initQueue   0x000e1e    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
-                SerialISR   0x000e3a    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
-                isTXEmpty   0x000efa    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
-                isRXEmpty   0x000f08    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
-                 isTXFull   0x000f16    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
-                 isRXFull   0x000f20    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
-              pushTXQueue   0x000f2e    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
-              pushRXQueue   0x000f70    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
-               popTXQueue   0x000fb2    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
-               popRXQueue   0x00100a    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
-                _do_cinit   0x001062    program     extern C:\MCC18\src\traditional\startup\c018i.c
-                     test   0x00107c    program     static                          
-                copy_loop   0x0010d4    program     static                          
-            copy_one_byte   0x0010da    program     static                          
-             done_copying   0x0010e8    program     static                          
-                     done   0x0010fe    program     static                          
-       ___return_lbl00002   0x0010fe    program     static                          
-                     Init   0x001100    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\init.c
-          Init_Oscillator   0x001114    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\init.c
-          Init_Interrupts   0x00111a    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\init.c
-               Init_USART   0x001122    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\init.c
-              Write_b_eep   0x001180    program     extern C:\MCC18\src\pmc_common\EEP\write_B.c
-               __string_7   0x0011dc    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
-               __string_6   0x0011df    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
-               __string_5   0x0011e2    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
-               __string_4   0x0011e5    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
-               __string_3   0x0011ef    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
-               __string_2   0x0011ff    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
-               __string_1   0x00120f    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
-               __string_0   0x001220    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
-               __string_1   0x001230    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
-               __string_0   0x001233    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
-               Read_b_eep   0x001236    program     extern C:\MCC18\src\pmc_common\EEP\read_B.c
-               ReadTimer0   0x00127e    program     extern C:\MCC18\src\pmc_common\Timers\t0read.c
-              WriteTimer0   0x0012bc    program     extern C:\MCC18\src\pmc_common\Timers\t0write.c
-               OpenTimer0   0x0012f4    program     extern C:\MCC18\src\pmc_common\Timers\t0open.c
-             Delay10KTCYx   0x00132c    program     extern C:\MCC18\src\traditional\delays\d10ktcyx.asm
-                    D10Kx   0x001336    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
-                   D10K_1   0x001338    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
-       _D10KTCYXCODE_0010   0x00133c    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
-                    D10Kl   0x001344    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
-       _D10KTCYXCODE_001C   0x001348    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
-                 FXD1616U   0x00135a    program     extern C:\MCC18\src\traditional\math\fxd1616u.c
-                     loop   0x001364    program     static                          
-                  endloop   0x001380    program     static                          
-       ___return_lbl00000   0x001384    program     static                          
-                   isMCLR   0x001386    program     extern C:\MCC18\src\pmc_common\reset\ismclr.c
-                 _startup   0x0013aa    program     extern C:\MCC18\src\traditional\startup\c018i.c
-                     loop   0x0013ba    program     static                          
-       ___return_lbl00001   0x0013c4    program     static                          
-                 FXD0808U   0x0013c6    program     extern C:\MCC18\src\traditional\math\fxd0808u.c
-                     loop   0x0013ce    program     static                          
-                  endloop   0x0013dc    program     static                          
-       ___return_lbl00000   0x0013e0    program     static                          
-                  isWDTTO   0x0013e2    program     extern C:\MCC18\src\pmc_common\reset\iswdtto.c
-                    isPOR   0x0013fa    program     extern C:\MCC18\src\pmc_common\reset\ispor.c
-              Delay10TCYx   0x001412    program     extern C:\MCC18\src\traditional\delays\d10tcyx.asm
-                     D10x   0x00141a    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
-        _D10TCYXCODE_000A   0x00141c    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
-        _D10TCYXCODE_000C   0x00141e    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
-        _D10TCYXCODE_000E   0x001420    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
-                    D10_1   0x001422    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
-            __zero_memory   0x001428    program     extern C:\MCC18\src\traditional\proc\p18F2685.asm
-               clear_loop   0x00142e    program     static C:\MCC18\src\traditional\proc\p18F2685.asm
-                    isBOR   0x001436    program     extern C:\MCC18\src\pmc_common\reset\isbor.c
+                  RXReady   0x000044    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
+                   RXChar   0x000052    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
+                   TXChar   0x00006e    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
+                 TXString   0x00008a    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
+                    TXBin   0x0000c8    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
+                TXBin_Int   0x000138    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
+                    TXDec   0x0001d0    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
+                TXDec_Int   0x000284    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
+                    TXHex   0x000550    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
+                TXHex_Int   0x0005c4    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
+                 high_isr   0x0006de    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
+                  low_isr   0x000780    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
+                     main   0x0007a6    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
+         ___else_lbl00014   0x0007ea    program     static                          
+         ___else_lbl00012   0x000804    program     static                          
+         ___else_lbl00010   0x00081e    program     static                          
+         ___else_lbl00008   0x000838    program     static                          
+           ___if_lbl00007   0x000848    program     static                          
+           ___if_lbl00009   0x000848    program     static                          
+           ___if_lbl00011   0x000848    program     static                          
+           ___if_lbl00013   0x000848    program     static                          
+        ___while_lbl00017   0x00084c    program     static                          
+        ___while_lbl00015   0x00084c    program     static                          
+         ___else_lbl00020   0x000884    program     static                          
+           ___if_lbl00019   0x00089c    program     static                          
+      ___case_48_lbl00022   0x0008b4    program     static                          
+      ___case_49_lbl00024   0x0008bc    program     static                          
+           ___if_lbl00023   0x0008ce    program     static                          
+               __tmplbl_3   0x0008d8    program     static                          
+               __tmplbl_2   0x0008fa    program     static                          
+        ___while_lbl00026   0x000906    program     static                          
+              __tmplbl_10   0x00091c    program     static                          
+        ___while_lbl00027   0x00095a    program     static                          
+           ___if_lbl00028   0x000970    program     static                          
+      ___case_50_lbl00030   0x000972    program     static                          
+           ___if_lbl00029   0x0009aa    program     static                          
+      ___case_96_lbl00031   0x0009ac    program     static                          
+      ___default_lbl00032   0x0009b6    program     static                          
+   ___switchexit_lbl00021   0x0009bc    program     static                          
+        ___while_lbl00018   0x0009be    program     static                          
+           ___if_lbl00033   0x0009ca    program     static                          
+         ___else_lbl00036   0x000a06    program     static                          
+           ___if_lbl00034   0x000a20    program     static                          
+           ___if_lbl00035   0x000a20    program     static                          
+         ___else_lbl00038   0x000a22    program     static                          
+           ___if_lbl00037   0x000a28    program     static                          
+       ___return_lbl00006   0x000a2a    program     static                          
+        ___while_lbl00016   0x000a2a    program     static                          
+           Refresh_EEPROM   0x000a2c    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
+               poll_sonar   0x000a2e    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
+                initQueue   0x000cd4    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
+                SerialISR   0x000cf0    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
+                isTXEmpty   0x000db0    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
+                isRXEmpty   0x000dbe    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
+                 isTXFull   0x000dcc    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
+                 isRXFull   0x000dd6    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
+              pushTXQueue   0x000de4    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
+              pushRXQueue   0x000e26    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
+               popTXQueue   0x000e68    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
+               popRXQueue   0x000ec0    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\queue.c
+                _do_cinit   0x000f18    program     extern C:\MCC18\src\traditional\startup\c018i.c
+                     test   0x000f32    program     static                          
+                copy_loop   0x000f8a    program     static                          
+            copy_one_byte   0x000f90    program     static                          
+             done_copying   0x000f9e    program     static                          
+                     done   0x000fb4    program     static                          
+       ___return_lbl00002   0x000fb4    program     static                          
+                     Init   0x000fb6    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\init.c
+          Init_Oscillator   0x000fca    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\init.c
+          Init_Interrupts   0x000fd0    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\init.c
+               Init_USART   0x000fd8    program     extern K:\SPaRC code repository\Firmware\PIC\OBJ\init.c
+              Write_b_eep   0x001036    program     extern C:\MCC18\src\pmc_common\EEP\write_B.c
+               __string_7   0x001092    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
+               __string_6   0x001095    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
+               __string_5   0x001098    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
+               __string_4   0x00109b    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
+               __string_3   0x0010a5    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
+               __string_2   0x0010b5    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
+               __string_1   0x0010c5    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
+               __string_0   0x0010d6    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
+               __string_1   0x0010e6    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
+               __string_0   0x0010e9    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\serial.c
+               Read_b_eep   0x0010ec    program     extern C:\MCC18\src\pmc_common\EEP\read_B.c
+               ReadTimer0   0x001134    program     extern C:\MCC18\src\pmc_common\Timers\t0read.c
+              WriteTimer0   0x001172    program     extern C:\MCC18\src\pmc_common\Timers\t0write.c
+               OpenTimer0   0x0011aa    program     extern C:\MCC18\src\pmc_common\Timers\t0open.c
+             Delay10KTCYx   0x0011e2    program     extern C:\MCC18\src\traditional\delays\d10ktcyx.asm
+                    D10Kx   0x0011ec    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
+                   D10K_1   0x0011ee    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
+       _D10KTCYXCODE_0010   0x0011f2    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
+                    D10Kl   0x0011fa    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
+       _D10KTCYXCODE_001C   0x0011fe    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
+                 FXD1616U   0x001210    program     extern C:\MCC18\src\traditional\math\fxd1616u.c
+                     loop   0x00121a    program     static                          
+                  endloop   0x001236    program     static                          
+       ___return_lbl00000   0x00123a    program     static                          
+                   isMCLR   0x00123c    program     extern C:\MCC18\src\pmc_common\reset\ismclr.c
+                 _startup   0x001260    program     extern C:\MCC18\src\traditional\startup\c018i.c
+                     loop   0x001270    program     static                          
+       ___return_lbl00001   0x00127a    program     static                          
+                 FXD0808U   0x00127c    program     extern C:\MCC18\src\traditional\math\fxd0808u.c
+                     loop   0x001284    program     static                          
+                  endloop   0x001292    program     static                          
+       ___return_lbl00000   0x001296    program     static                          
+                  isWDTTO   0x001298    program     extern C:\MCC18\src\pmc_common\reset\iswdtto.c
+                    isPOR   0x0012b0    program     extern C:\MCC18\src\pmc_common\reset\ispor.c
+              Delay10TCYx   0x0012c8    program     extern C:\MCC18\src\traditional\delays\d10tcyx.asm
+                     D10x   0x0012d0    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
+        _D10TCYXCODE_000A   0x0012d2    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
+        _D10TCYXCODE_000C   0x0012d4    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
+        _D10TCYXCODE_000E   0x0012d6    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
+                    D10_1   0x0012d8    program     static C:\MCC18\src\traditional\delays\d10tcyx.asm
+            __zero_memory   0x0012de    program     extern C:\MCC18\src\traditional\proc\p18F2685.asm
+               clear_loop   0x0012e4    program     static C:\MCC18\src\traditional\proc\p18F2685.asm
+                    isBOR   0x0012ec    program     extern C:\MCC18\src\pmc_common\reset\isbor.c
                __config_0   0x300001    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
                __config_1   0x300003    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
                __config_2   0x300005    program     static K:\SPaRC code repository\Firmware\PIC\OBJ\main.c
