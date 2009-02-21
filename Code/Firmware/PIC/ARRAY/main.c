@@ -50,9 +50,10 @@ union int_byte arsMeasure = 0;
 
 unsigned char adc_pointer = 0;
 unsigned char ars_pointer = 0;
-signed long angle = 0;
-signed long angle_out = 0;
 
+//**** ARS variables *******
+int angle = 0;
+int angle_out = 0;
 int arsVariation = 0;
 signed long arsVariationAccumulator = 0;
 signed long tempAccumulator = 0;
@@ -77,7 +78,7 @@ int differenceLineFollow = 0;
 
 
 int antenna_adjustment = 35;                     // difference between left and right antenna readings initialized to 35, but should be set by calibration
-float ars_magic;
+int ars_magic;
 
 char lineFollowCurrentState;
 char cornerDetectCurrentState;
@@ -113,8 +114,14 @@ void low_isr (void)
 		else 
 		{	
 			arsVariation = (int)(temp - arsCalibration.lt);
+			
+//			#ifdef __DEBUG
+//				TXString("ARS Variation");
+//				TXDec_Int(arsVariation);
+//				TXString("\r\n");
+//			#endif
 					
-			if(arsVariation > 2 || arsVariation < -2 )
+			if(arsVariation > 10 || arsVariation < -10 )
 			{
 				arsVariationAccumulator += arsVariation;
 				adc_pointer = 0;
@@ -136,7 +143,7 @@ void main (void)
 	Init();
 	initQueue();
 		
-	ars_magic = (float)(4*(ADC_DELAY/1000000)*(13.33/4.883));	
+	ars_magic = (int)(4.883/(4*(ADC_DELAY/1000000)*13.33));	
 	
 	Delay10KTCYx(1);		// Build in a delay to prevent weird serial characters
 
@@ -479,17 +486,34 @@ void line_detection() {
 void get_angle()
 {
 	tempAccumulator = arsVariationAccumulator;
-	angle = tempAccumulator*ars_magic;
+	angle = (int)(tempAccumulator/ars_magic);
+	
+//	#ifdef __DEBUG
+//		TXString("Variation Accumulator: ");
+//		TXDec_Int((int)arsVariationAccumulator);
+//		TXString("\x0A\x0D");
+//	#endif
+	
+	#ifdef __DEBUG
+		TXString("Angle: ");
+		TXDec_Int((int)angle);
+		TXString("\x0A\x0D");
+	#endif
+	
 	
 	// ***** Check magnitude of angle ****
 	angleInteger = angle/360;
 	
 	//  *****  If the magnitude of angle is greater than 360 *********
-	if(1 <= angleInteger || -1 >= angleInteger)
+	if(angleInteger >= 1 || angleInteger <= -1)
 	{
 		//  ***** if so, subtract to get a number less than 360 in magnitude *******
 		angle_out = angle - (360 * angleInteger);
 	}
+	else
+	{
+		angle_out = angle;
+	}	
 	
 	// ***** make sure output stays between 0 and 360  ******
 	if(angle_out < 0)
@@ -497,6 +521,7 @@ void get_angle()
 		angle_out += 360;
 	}
 	
+		
 	// ***** transmit necessary alert character, then a space, then the integer angle  *****
 	TXChar(INT_ANGLE);
 	TXChar(' ');
