@@ -24,7 +24,6 @@ unsigned int distance[] = {50,50,50};
 int sonarIndex = 0;
 int i;
 
-
 unsigned int switchCount = 0;
 
 // Variables that are stored in the EEPROM
@@ -42,8 +41,8 @@ unsigned char parameter_count = 0;
 unsigned char current_parameters[32];
 
 int EEP_count = -1;
-int EEP_address = 0;
-char EEP_offset = 0;
+union int_byte EEP_address;
+unsigned char EEP_offset = 0;
 
 
 #pragma config OSC = IRCIO67,WDT = OFF, MCLRE = ON
@@ -95,6 +94,7 @@ void main (void)
 //***************************************************************************************************************
 //                          setup
 //***************************************************************************************************************
+	EEP_address.lt = 0;
 	Refresh_EEPROM();
 	Init();	
 	initQueue();
@@ -139,7 +139,6 @@ void main (void)
 	while(1) {
 		// *** Handle everything currently in the queue. *** //
 		while(!isRXEmpty()) {
-		
 			if(ProcStatus.ProcessInProgress) {
 				popRXQueue(&c);
 				current_parameters[parameter_count] = c;
@@ -149,8 +148,6 @@ void main (void)
 				ProcStatus.ProcessInProgress = 1;
 				popRXQueue(&c);
 				current_proc = c;
-				TXChar(c);
-				TXString("\x0A\x0D");
 			}
 			switch(current_proc) {
 				case RESET_OP:
@@ -165,13 +162,17 @@ void main (void)
 					
 					if(EEP_count != -1 && parameter_count == EEP_count + 3)
 					{
-						EEP_address = (current_parameters[0] << 8) | current_parameters[1];
+						EEP_address.bt[1] = current_parameters[0];
+						EEP_address.bt[0] = current_parameters[1];
 						EEP_offset = 0;
-						while(EEP_offset + 3 < EEP_count)
+						while(EEP_offset < EEP_count)
 						{
-							Write_b_eep(EEP_address + EEP_offset, current_parameters[EEP_offset + 3]);	
+							Write_b_eep(EEP_address.lt, current_parameters[EEP_offset + 3]);
+							EEP_address.lt++;
+							EEP_offset++;	
 						}
 						EEP_count = -1;
+						EEP_address.lt = 0;
 						Refresh_EEPROM();
 						ProcStatus.ProcessInProgress = 0;
 						parameter_count = 0;	
@@ -180,9 +181,9 @@ void main (void)
 				case EEPROM_RD_OP:
 					if(parameter_count == 2)
 					{
-						EEP_address = (current_parameters[0] << 8) | current_parameters[1];	
+						
 						TXString("0 ");
-						TXChar(Read_b_eep(EEP_address));
+						TXChar(Read_b_eep(EEP_address.lt));
 						ProcStatus.ProcessInProgress = 0;
 						parameter_count = 0;
 					}	
@@ -230,11 +231,11 @@ void main (void)
 
 void Refresh_EEPROM(void)
 {
-	switch_threshold = (Read_b_eep(EE_SWITCH_THRESHOLD_H) << 8) | (Read_b_eep(EE_SWITCH_THRESHOLD_L));
-	sonar_divider = (Read_b_eep(EE_SONAR_DIVIDER_H) << 8) | (Read_b_eep(EE_SONAR_DIVIDER_L));
-	thresholdFrontFront = (Read_b_eep(EE_FF_THRESHOLD_H) << 8) | (Read_b_eep(EE_FF_THRESHOLD_L));
-	thresholdFrontBack = (Read_b_eep(EE_FB_THRESHOLD_H) << 8) | (Read_b_eep(EE_FB_THRESHOLD_L));
-	thresholdBack = (Read_b_eep(EE_BACK_THRESHOLD_H) << 8) | (Read_b_eep(EE_BACK_THRESHOLD_L));
+	switch_threshold = ((int)Read_b_eep(EE_SWITCH_THRESHOLD_H) << 8) | (Read_b_eep(EE_SWITCH_THRESHOLD_L));
+	sonar_divider = ((int)Read_b_eep(EE_SONAR_DIVIDER_H) << 8) | (Read_b_eep(EE_SONAR_DIVIDER_L));
+	thresholdFrontFront = ((int)Read_b_eep(EE_FF_THRESHOLD_H) << 8) | (Read_b_eep(EE_FF_THRESHOLD_L));
+	thresholdFrontBack = ((int)Read_b_eep(EE_FB_THRESHOLD_H) << 8) | (Read_b_eep(EE_FB_THRESHOLD_L));
+	thresholdBack = ((int)Read_b_eep(EE_BACK_THRESHOLD_H) << 8) | (Read_b_eep(EE_BACK_THRESHOLD_L));
 }	
 
 void poll_sonar(void)
