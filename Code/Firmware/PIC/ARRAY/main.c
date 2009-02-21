@@ -346,7 +346,7 @@ void cal_ars(void)
 }
 
 void interrupt(char c) {
-	pushTXQueue(c);
+	TXChar(c);
 	TXString("\x0D\x0A");
 }
 
@@ -363,7 +363,7 @@ void line_follow() {
 	
 		
 	if(antResults[0] < (antCalibration[0].lt + EE_line_threshold) && 
-		antResults[1]  < (antCalibration[1].lt + EE_line_threshold))
+	   antResults[1]  < (antCalibration[1].lt + EE_line_threshold))
 	{
 		if(INT_LINE_ERROR != lineFollowCurrentState)
 		{
@@ -414,7 +414,10 @@ void corner_detection() {
 	// This function simply checks the antenna values against the threshholds in the eeprom and 
 	// interrupts if nessisary.  The interrupt return messages are on the wiki and should kept up to date
 	// with any changes.
-	if(antMeasure[2].lt > (antCalibration[2].lt + EE_corner_threshold))
+	
+	antResults[2] = antMeasure[2].lt;
+	
+	if(antResults[2] > (antCalibration[2].lt + EE_corner_threshold))
 	{	
 		if(INT_LINE_CENTER != cornerDetectCurrentState)
 			{
@@ -437,19 +440,23 @@ void line_detection() {
 	// interrupts if nessisary.  The interrupt return messages are on the wiki and should kept up to date
 	// with any changes.
 	
-	if(antMeasure[0].lt > (antCalibration[0].lt + EE_line_threshold)) 
+	antResults[0] = antMeasure[0].lt;
+	antResults[1] = antMeasure[1].lt;
+	antResults[2] = antMeasure[2].lt;
+	
+	if(antResults[0] > (antCalibration[0].lt + EE_line_threshold)) 
 	{
 		interrupt(INT_LINE_DETECT_LEFT);
 		ProcStatus.line_detection_enabled = 0;		
 	}
 	
-	if(antMeasure[1].lt > (antCalibration[1].lt + EE_line_threshold))
+	if(antResults[1] > (antCalibration[1].lt + EE_line_threshold))
 	{
 		interrupt(INT_LINE_DETECT_RIGHT);
 		ProcStatus.line_detection_enabled = 0;
 	}
 	
-	if(antMeasure[2].lt > (antCalibration[2].lt + EE_corner_threshold))
+	if(antResults[2] > (antCalibration[2].lt + EE_corner_threshold))
 	{
 		interrupt(INT_LINE_DETECT_FRONT);
 		ProcStatus.line_detection_enabled = 0;
