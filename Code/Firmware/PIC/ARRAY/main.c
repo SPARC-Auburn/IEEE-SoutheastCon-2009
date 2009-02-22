@@ -62,7 +62,7 @@ int angleInteger = 0;
 unsigned char adc_channel[4] = {0b10000111,0b10001111,0b10010111,0b10011111};
 
 
-struct proc_status ProcStatus = {0,0,0,0,0,0};
+struct proc_status ProcStatus = {0,0,0,0,0,0,0,0};
 unsigned char current_parameters[32];
 unsigned char current_proc = 0;
 unsigned char parameter_count = 0;
@@ -82,6 +82,12 @@ float ars_magic;
 
 char lineFollowCurrentState;
 char cornerDetectCurrentState;
+
+char desiredAngle;
+int monitorAngleCounter;
+int originalAngle;
+int upperMonitorThreshold;
+int lowerMonitorThreshold;
 
 //***************************************************************************************************************
 //							high_isr
@@ -284,6 +290,7 @@ void main (void)
 						else 
 						{
 							ProcStatus.get_angle_enabled = 0;
+						
 						}
 											
 						ProcStatus.ProcessInProgress = 0;
@@ -294,7 +301,26 @@ void main (void)
 					ProcStatus.zero_angle_enabled = 1;
 					ProcStatus.ProcessInProgress = 0;
 					parameter_count = 0;
-						
+					break;
+				case MONITOR_ANGLE_OP:
+					if(parameter_count == 1) 
+					{
+						if(current_parameters[0] == 0x30)
+						{
+							ProcStatus.monitor_angle_enabled = 0;
+						}
+						else 
+						{
+							ProcStatus.monitor_angle_enabled = 1;
+							desiredAngle = current_parameters[0];
+							monitorAngleCounter = 0; 
+						}		
+											
+						ProcStatus.ProcessInProgress = 0;
+						parameter_count = 0;
+					}
+					break;
+											
 			}
 		}
 		
@@ -326,7 +352,12 @@ void main (void)
 		{
 			zero_angle();
 			ProcStatus.zero_angle_enabled = 0;	
-		}	
+		}
+		
+		if(ProcStatus.monitor_angle_enabled)
+		{
+			monitor_angle();
+		}		
 
 	}		
 }	
@@ -534,4 +565,74 @@ void get_angle()
 void zero_angle()
 {
 	arsVariationAccumulator = 0;
-}					
+}	
+void monitor_angle()
+{
+	tempAccumulator = arsVariationAccumulator;
+	angle = (int)((float)tempAccumulator/ars_magic);
+	
+	// ***** Check magnitude of angle ****
+	angleInteger = angle/360;
+	
+	//  *****  If the magnitude of angle is greater than 360 *********
+	if(angleInteger >= 1 || angleInteger <= -1)
+	{
+		//  ***** if so, subtract to get a number less than 360 in magnitude *******
+		angle_out = angle - (360 * angleInteger);
+	}
+	else
+	{
+		angle_out = angle;
+	}	
+	
+
+	// ***** if the counter is zero    *****
+	if(monitorAngleCounter == 0)
+	{
+		// then store the original angle
+		originalAngle = angle_out;
+		
+		// calculate the upper and lower monitor thresholds
+		upperMonitorThreshold = originalAngle + desiredAngle;
+				
+		lowerMonitorThreshold = originalAngle - desiredAngle;
+		
+		//  ****  increment the counter	*****			
+		monitorAngleCounter ++;
+			
+	}	
+	else if(angle_out > upperMonitorThreshold)
+		{
+			TXChar(INT_EXCEED_LEFT);
+			TXString("\r\n");
+		}	
+		else if(angle_out < lowerMonitorThreshold)
+			{
+				TXChar(INT_EXCEED_RIGHT);
+				TXString("\r\n");
+			}	
+	
+
+	// clear value of angle_out for next iteration...	
+	angle_out = 0;
+}
+
+//		// make sure upper and lower monitor thresholds are within the 0 to 360 range 
+//		if(upperMonitorThreshold < 0)
+//		{
+//			upperMonitorThreshold += 360;	
+//		}
+//		else if(upperMonitorThreshold > 360)
+//		{
+//			upperMonitorThreshold -= 360;	
+//		}
+//		
+//		if(lowerMonitorThreshold < 0)
+//		{
+//			lowerMonitorThreshold += 360;	
+//		}
+//		else if(lowerMonitorThreshold > 360)
+//		{
+//			lowerMonitorThreshold -= 360;	
+//		}		
+								

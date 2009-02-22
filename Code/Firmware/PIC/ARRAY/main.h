@@ -20,6 +20,9 @@ void	corner_detection(void);
 void	line_detection	(void);
 void    get_angle       (void);
 void	zero_angle		(void);
+void	monitor_angle	(void);
+
+
 
 union int_byte
 {
@@ -34,4 +37,5 @@ struct proc_status {
     unsigned line_detection_enabled         :1;
     unsigned get_angle_enabled				:1;
     unsigned zero_angle_enabled				:1;
+    unsigned monitor_angle_enabled			:1;
 };

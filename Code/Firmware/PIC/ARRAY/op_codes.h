@@ -8,6 +8,7 @@
 
 #define 	GET_ANGLE_OP			0x60
 #define		ZERO_ANGLE_OP			0x62
+#define		MONITOR_ANGLE_OP		0x61
 
 #define		INT_ANGLE				0X60
 
@@ -26,3 +27,6 @@
 #define		INT_LINE_DETECT_LEFT	0x46
 #define		INT_LINE_DETECT_RIGHT	0x47
 #define		INT_LINE_DETECT_FRONT	0x48
+
+#define		INT_EXCEED_LEFT			0x61
+#define		INT_EXCEED_RIGHT		0X62
