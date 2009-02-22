@@ -69,7 +69,7 @@ unsigned char parameter_count = 0;
 
 
 int EE_line_threshold = 30;							// 30
-int EE_line_follow_threshold = 20;					// 20
+int EE_line_follow_threshold = 40;					// 20
 unsigned char EE_corner_threshold = 40;				// 40
 unsigned int EE_interrupt_throttle = 5000;			// 5000
 
