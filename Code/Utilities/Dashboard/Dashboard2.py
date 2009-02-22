@@ -10,7 +10,7 @@ import Networking
 
 HOST = '127.0.0.1'			# Loopback
 PORT = 50007				# Random port
-updateScrollPosition = false
+updateScrollPosition = False
 
 def test(robot):
 	event = c.get_message()
