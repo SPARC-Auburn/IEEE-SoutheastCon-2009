@@ -1,3 +1,4 @@
+import InterfaceComponents
 
 Open, Closed = range(2)
 On, Off = range(2)
@@ -21,14 +22,14 @@ class RobotStatus():
 		self.Arm = Component()
 		self.Gripper = Component()
 		self.Sorter = Component()
-		self.Motor = Component()
+		self.Drive = Component()
 		self.LRF = Component()
 		self.HES = Component()
 		
 		self.resetArm()
 		self.resetGripper()
 		self.resetSorter()
-		self.resetMotor()
+		self.resetDrive()
 		self.resetLRF()
 		self.resetHES()
 		
@@ -43,11 +44,11 @@ class RobotStatus():
 	def resetSorter(self):
 		self.Sorter.Position = 0
 		
-	def resetMotor(self):
-		self.Motor.Left = -0.25
-		self.Motor.Right = 0.5
-		self.Motor.Facing = 90.0
-		
+	def resetDrive(self):
+		self.Drive.Left = 0.0
+		self.Drive.Right = 0.0
+		self.Drive.Facing = 90.0
+        
 	def resetLRF(self):
 		# Set to max distance
 		self.LRF.veiwingfield = 220
@@ -66,3 +67,30 @@ class RobotStatus():
 	def resetHES(self):
 		self.HES.Sensor = [0.6, 0.6, 0.6]
 		
+        
+        
+def updateAttr(robotStatus, compName, attrName, values):
+    if hasattr(robotStatus, compName):
+        compObj = getattr(robotStatus, compName)
+        print 'Success'
+        if hasattr(compObj, attrName):
+            attrObj = getattr(compObj, attrName)
+			
+			# Update the component state
+            if len(values) == 0:
+                print 'Notice: Cannot assign an empty list to an attribute.'
+            elif len(values) == 1:
+                setattr(compObj, attrName, values[0])
+            elif len(values) > 1:
+                setattr(compObj, attrName, values)
+			
+			# Now update the component graphic
+            if hasattr(InterfaceComponents, "update_Component_" + compName):
+                getattr(InterfaceComponents, "update_Component_" + compName)(robotStatus)
+                print 'Success'
+        else:
+            print 'Notice: Attribute:', attrName, ': does not exist on RobotStatus.'
+    else:
+        print 'Notice: Component:', compName, ' does not exist on RobotStatus.'
+
+	

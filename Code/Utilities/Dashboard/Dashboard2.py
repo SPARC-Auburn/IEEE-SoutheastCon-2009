@@ -6,25 +6,35 @@ import copy
 from Geometry import *
 from RobotStatus import *
 from InterfaceComponents import *
-import SocketClass
+import Networking
 
 HOST = '127.0.0.1'			# Loopback
 PORT = 50007				# Random port
+updateScrollPosition = false
 
 def test(robot):
-	msg = c.get_message()
-	if not msg == '':
-		text.insert(END, msg)
-		text.insert(END, "\n")
-	try:
-		print int(msg)
-		if int(msg) < 4:
-			
-			robot.Sorter.Position = int(msg)-1
-			print 'Position = ', robot.Sorter.Position
-			update_Sorter_Component(robot)
-	except:
-		msg = ''
+	event = c.get_message()
+	if event != '':
+		msg = event.strip('<>').split(',')
+		msg[-1] = msg[-1].strip('" ')
+		eventDataStr = msg[-1].split(':')
+		
+		# Print message to the event viewer
+		if not msg == []:
+			text.insert(END, msg[-1])
+			text.insert(END, "\n")
+			if updateScrollPosition:
+				text.yview(MOVETO, 1.0)
+        
+		# Update the component graphic
+		component, attribute = eventDataStr[0], eventDataStr[1]
+		del eventDataStr[0:2]
+		
+		eventDataReal = []
+		for s in eventDataStr:
+			eventDataReal.append(float(s))
+		
+		updateAttr(robot_status, component, attribute, eventDataReal)
 		
 
 def Event_Viewer(master):
@@ -55,7 +65,7 @@ def help_menu():
 
 
 robot_status = RobotStatus()
-c = SocketClass.Client(HOST, PORT)
+c = Networking.Client(HOST, PORT)
 
 #-- Create user interface application
 root = Tk()
@@ -85,16 +95,13 @@ m1.add(column1)
 m1.add(column2)
 
 
-init_LRF_Component(column1, robot_status)
-init_HES_Component(column1, robot_status)
-init_Sorter_Component(column1, robot_status)
+init_Component_LRF(column1, robot_status)
+init_Component_HES(column1, robot_status)
+init_Component_Sorter(column1, robot_status)
 
-init_Gripper_Component(column2, robot_status)
-init_Drive_Component(column2, robot_status)
-init_Arm_Component(column2, robot_status)
-
-
-
+init_Component_Gripper(column2, robot_status)
+init_Component_Drive(column2, robot_status)
+init_Component_Arm(column2, robot_status)
 
 while 1:
 	test(robot_status)

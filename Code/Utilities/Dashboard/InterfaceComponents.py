@@ -7,6 +7,10 @@ import copy
 import math
 
 
+Open, Closed = range(2)
+On, Off = range(2)
+Connected, Disconnected = range(2)
+
 # A list of functions for component initialization and update
 # init functions are for unchanging graphics and 
 # update functions are for changing some of the graphics according to input
@@ -15,15 +19,15 @@ import math
 Laser Range Finder Sensor Component
 
 '''
-def init_LRF_Component(master, robot):
+def init_Component_LRF(master, robot):
 	lrf = robot.LRF
 	lrf.half_w, lrf.half_h = 110, 110
 	lrf.canvas = Canvas(master, width=lrf.half_w*2, height=lrf.half_h*2)
 	master.add(lrf.canvas)
 	
-	update_LRF_Component(robot)
+	update_Component_LRF(robot)
 
-def update_LRF_Component(robot):
+def update_Component_LRF(robot):
 	lrf = robot.LRF
 	lrf.canvas.delete("all")
 	lrf.canvas.create_text(80, 10, text='Laser Range Finder', font=('verdana', 10, 'bold'))
@@ -48,15 +52,15 @@ def update_LRF_Component(robot):
 Hall Effect Sensor Component
 
 '''
-def init_HES_Component(master, robot):
+def init_Component_HES(master, robot):
 	hes = robot.HES
 	hes.canvas = Canvas(master, width=200, height=200)
 	hes.img_scale = PhotoImage(file = "ScaleZ_P1.gif")
 	master.add(hes.canvas)
 	
-	update_HES_Component(robot)
+	update_Component_HES(robot)
 	
-def update_HES_Component(robot):
+def update_Component_HES(robot):
 	hes = robot.HES
 	hes.canvas.delete("all")
 	hes.canvas.create_text(80, 10, text='Hall Effect Sensors', font=('verdana', 10, 'bold'))
@@ -79,16 +83,16 @@ def update_HES_Component(robot):
 # Sorter Component
 
 '''
-def init_Sorter_Component(master, robot):
+def init_Component_Sorter(master, robot):
 	sort = robot.Sorter
 	sort.canvas = Canvas(master, width=200, height=150)
 	sort.img_sorter = PhotoImage(file = "SorterOptions.gif")
 	sort.img_selection = PhotoImage(file = "SorterSelectionFinal.gif")
 	master.add(sort.canvas)
 	
-	update_Sorter_Component(robot)
+	update_Component_Sorter(robot)
 	
-def update_Sorter_Component(robot):
+def update_Component_Sorter(robot):
 	sort = robot.Sorter
 	sort.canvas.delete("all")
 	sort.canvas.create_text(80, 10, text='Sorter Component', font=('verdana', 10, 'bold'))
@@ -101,7 +105,7 @@ def update_Sorter_Component(robot):
 '''
 Gripper Component
 '''
-def init_Gripper_Component(master, robot):
+def init_Component_Gripper(master, robot):
 	grip = robot.Gripper
 	grip.x, grip.y = GeomObject(), GeomObject()
 	grip.x.orig, grip.y.orig = 90, 50
@@ -114,9 +118,9 @@ def init_Gripper_Component(master, robot):
 	grip.canvas = Canvas(master, width=200, height=180)
 	master.add(grip.canvas)
 	
-	update_Gripper_Component(robot)
+	update_Component_Gripper(robot)
 	
-def update_Gripper_Component(robot):
+def update_Component_Gripper(robot):
 	grip = robot.Gripper
 	grip.canvas.delete("all")
 	grip.canvas.create_text(80, 10, text='Gripper Component', font=('verdana', 10, 'bold'))
@@ -250,18 +254,19 @@ Drive Component
 	# # canvas.create_text(40, 10, text='Motor', font=('verdana', 10, 'bold'))
 	# master.add(canvas)
 	
-def init_Drive_Component(master, robot):
-	drive = robot.Motor
+def init_Component_Drive(master, robot):
+	drive = robot.Drive
 	drive.canvas = Canvas(master, width=200, height=200)
 	drive.img_arrowDown, drive.img_speedGuageDown = PhotoImage(file = 'ArrowDown.gif'), PhotoImage(file = 'SpeedGuageDown.gif')
 	drive.img_arrowUp, drive.img_speedGuageUp = PhotoImage(file = 'ArrowUp.gif'), PhotoImage(file = 'SpeedGuageUp.gif')
 	drive.img_speedScale = PhotoImage(file = 'ScaleN1_P1.gif')
 	
 	master.add(drive.canvas)
-	update_Drive_Component(robot)
+	update_Component_Drive(robot)
 	
-def update_Drive_Component(robot):
-	drive = robot.Motor
+def update_Component_Drive(robot):
+	drive = robot.Drive
+	drive.canvas.delete("all")
 	drive.canvas.create_text(80, 10, text='Drive Component', font=('verdana', 10, 'bold'))
 	
 	img_guage, img_arrow = drive.img_speedGuageUp, drive.img_arrowUp
@@ -285,14 +290,14 @@ def update_Drive_Component(robot):
 '''
 Arm Component
 '''
-def init_Arm_Component(master, robot):
+def init_Component_Arm(master, robot):
 	arm = robot.Arm
 	arm.canvas = Canvas(master, width=200, height=140)
 	master.add(arm.canvas)
 	
-	update_Arm_Component(robot)
+	update_Component_Arm(robot)
 	
-def update_Arm_Component(robot):
+def update_Component_Arm(robot):
 	arm = robot.Arm
 	arm.canvas.delete("all")
 	arm.canvas.create_text(70, 10, text='Arm Component', font=('verdana', 10, 'bold'))
