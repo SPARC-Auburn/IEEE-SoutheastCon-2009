@@ -67,17 +67,24 @@ unsigned char current_parameters[32];
 unsigned char current_proc = 0;
 unsigned char parameter_count = 0;
 
+//***************  VARIABLES FOR EEPROM BEGIN *****************
 
 int EE_line_threshold = 30;							// 30
 int EE_line_follow_threshold = 40;					// 20
 unsigned char EE_corner_threshold = 40;				// 40
-unsigned int EE_interrupt_throttle = 5000;			// 5000
+
+unsigned int EE_interrupt_throttle = 500;			// 5000
+
+
+
+//**************  VARIABLES FOR EEPROM END  ***************
 
 int antResults[3] = {0,0,0};
 int differenceLineFollow = 0;
 
 
 int antenna_adjustment = 35;                     // difference between left and right antenna readings initialized to 35, but should be set by calibration
+
 float ars_magic;
 
 char lineFollowCurrentState;
@@ -149,7 +156,7 @@ void main (void)
 	Init();
 	initQueue();
 		
-	ars_magic = (float)(4.883/(1.25*((float)ADC_DELAY/1000000)*13.33));	
+	ars_magic = (float)(4.883/(1.15*((float)ADC_DELAY/1000000)*13.33));	
 	
 	Delay10KTCYx(1);		// Build in a delay to prevent weird serial characters
 
@@ -605,11 +612,13 @@ void monitor_angle()
 		{
 			TXChar(INT_EXCEED_LEFT);
 			TXString("\r\n");
+			ProcStatus.monitor_angle_enabled = 0;
 		}	
 		else if(angle_out < lowerMonitorThreshold)
 			{
 				TXChar(INT_EXCEED_RIGHT);
 				TXString("\r\n");
+				ProcStatus.monitor_angle_enabled = 0;
 			}	
 	
 
