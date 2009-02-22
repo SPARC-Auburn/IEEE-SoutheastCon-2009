@@ -78,7 +78,7 @@ int differenceLineFollow = 0;
 
 
 int antenna_adjustment = 35;                     // difference between left and right antenna readings initialized to 35, but should be set by calibration
-int ars_magic;
+float ars_magic;
 
 char lineFollowCurrentState;
 char cornerDetectCurrentState;
@@ -121,7 +121,7 @@ void low_isr (void)
 //				TXString("\r\n");
 //			#endif
 					
-			if(arsVariation > 10 || arsVariation < -10 )
+			if(arsVariation > 4 || arsVariation < -4 )
 			{
 				arsVariationAccumulator += arsVariation;
 				adc_pointer = 0;
@@ -143,7 +143,7 @@ void main (void)
 	Init();
 	initQueue();
 		
-	ars_magic = (int)(4.883/(4*(ADC_DELAY/1000000)*13.33));	
+	ars_magic = (float)(4.883/(1.25*((float)ADC_DELAY/1000000)*13.33));	
 	
 	Delay10KTCYx(1);		// Build in a delay to prevent weird serial characters
 
@@ -486,15 +486,13 @@ void line_detection() {
 void get_angle()
 {
 	tempAccumulator = arsVariationAccumulator;
-	angle = (int)(tempAccumulator/ars_magic);
-	
-//	#ifdef __DEBUG
-//		TXString("Variation Accumulator: ");
-//		TXDec_Int((int)arsVariationAccumulator);
-//		TXString("\x0A\x0D");
-//	#endif
+	angle = (int)((float)tempAccumulator/ars_magic);
 	
 	#ifdef __DEBUG
+		TXString("Variation Accumulator: ");
+		TXDec_Int((int)arsVariationAccumulator);
+		TXString("\x0A\x0D");
+	
 		TXString("Angle: ");
 		TXDec_Int((int)angle);
 		TXString("\x0A\x0D");
@@ -528,7 +526,10 @@ void get_angle()
 	TXDec_Int(angle_out);				
 	
 	// clear value of angle_out for next iteration...	
-	angle_out = 0;		
+	angle_out = 0;
+	
+	// disable get_angle()
+	ProcStatus.get_angle_enabled = 0;		
 }
 void zero_angle()
 {
