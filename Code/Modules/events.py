@@ -12,6 +12,16 @@ lock = Event()
 
 queue = Queue(1024)
 
+def push(e, msg):
+	if not queue.full():
+		queue.put((e,msg))
+
+def pop():
+	if not queue.empty():
+		temp = queue.get()
+		lock.clear()
+		return temp
+
 class Notifier(Thread):
 	def __init__(self):
 		Thread.__init__(self)
@@ -27,8 +37,4 @@ class Notifier(Thread):
 		return
 		
 t = Notifier()
-try:
-	t.start()
-finally:
-	t.shutdown()
-	t.join()
+t.start()
