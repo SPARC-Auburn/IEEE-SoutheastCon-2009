@@ -125,7 +125,10 @@ def shutdown_signal(signal, frame):
 	shutdown()
 	
 def shutdown():
+	mc.shutdown()
+	lrf.shutdown()
 	servo_micro.shutdown()
+	events.shutdown()
 	log.info("Robot.py has shutdown cleanly.")
 	sys.exit(0)
 

@@ -32,6 +32,9 @@ def wait_for_event(timeout = 1):
 def get_last_event():
 	return pop()
 
+def shutdown():
+	t.shutdown()
+
 class Notifier(Thread):
 	def __init__(self):
 		Thread.__init__(self)
