@@ -90,12 +90,12 @@ class LaserRangeFinder:
 		command = 'G'+self.start+self.stop+self.step+'\r'
 		
 		# Send the command
-		self.write(command)
+		self.serial.write(command)
 		
 		# Retrieve data
 		# Burn the first two lines.
-		self.readline()
-		self.readline()
+		self.serial.readline()
+		self.serial.readline()
 		
 		line = self.readline()
 		# While there is no empty line return, ('\n'), continue processing data
@@ -108,7 +108,7 @@ class LaserRangeFinder:
 				dist += ord(line[i]) - 48
 				i += 1
 				result.append(dist)
-			line = self.readline()
+			line = self.serial.readline()
 			
 		# Return the resulting list of distances
 		return result
@@ -132,8 +132,8 @@ class LaserRangeFinder:
 
 	def clear(self):
 		"""This function clears all input/output buffers from the serial device."""
-		self.flushOutput()
-		self.flushInput()
+		self.serial.flushOutput()
+		self.serial.flushInput()
 		
 	def shutdown(self):
 		self.serial.close()
