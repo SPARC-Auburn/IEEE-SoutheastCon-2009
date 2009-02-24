@@ -152,6 +152,6 @@ class ServiceServo:
 		
 	def shutdown(self):
 		for servo in self.servos:
-			servo.move('zero')
+			self.servos[servo].move('zero')
 			servo.serial.close()
 		return
