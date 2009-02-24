@@ -12,8 +12,14 @@
 import sys
 sys.path.append("Libraries")
 sys.path.append("Modules")
+sys.path.append("Utilities/Dashboard")
+
 
 # Imports #
+# Constants
+from Constants import *
+# Dashboard communication
+from Networking import *
 # Signal
 import signal
 # Time
@@ -24,8 +30,8 @@ import logging
 import logging.config
 # Config
 import configs
-# Events
-import events
+
+#serverHandler = LoggingServerHandler('', PORT)
 
 # Functions #
 # These functions should be mostly 'pass through' functions.
@@ -38,44 +44,50 @@ import events
 
 # Motor Controller Related Functions
 def right(speed):
+	dash_log.info(toStringFormat('Drive', 'Right', [speed]))
 	mc.right(speed)
 		
 def left(speed):
+	dash_log.info(toStringFormat('Drive', 'Left', [speed]))
 	mc.left(speed)
 		
 def both(speed):
+	dash_log.info(toStringFormat('Drive', 'Left', [speed]))
+	dash_log.info(toStringFormat('Drive', 'Right', [speed]))
 	mc.both(speed)
 		
 def move(speed, direction):
+	dash_log.info(toStringFormat('Drive', 'Left', [speed]))
+	dash_log.info(toStringFormat('Drive', 'Right', [speed]))
 	mc.move(speed, direction)
-	
-# Laser Range Finder Related Functions
-def scan():
-	lrf.scan()
-
-def clear_lrf():
-	lrf.clear()
 	
 # Servo Related Functions
 def arm_up():
+	dash_log.info(toStringFormat('Arm', 'Angle', [185.0]))
 	arm_servo.move(-1.0)
 	
 def arm_down():
+	dash_log.info(toStringFormat('Arm', 'Angle', [0.0]))
 	arm_servo.move(1.0)
 	
 def gripper_open():
+	dash_log.info(toStringFormat('Gripper', 'Status', [Open]))
 	gripper_servo.move(-1.0)
 	
 def gripper_close():
+	dash_log.info(toStringFormat('Gripper', 'Status', [Closed]))
 	gripper_servo.move(1.0)
 	
 def sorter_left():
+	dash_log.info(toStringFormat('Sorter', 'Position', [0]))
 	sorter_servo.move(-1.0)
 
 def sorter_right():
+	dash_log.info(toStringFormat('Sorter', 'Position', [2]))
 	sorter_servo.move(1.0)
 	
 def sorter_center():
+	dash_log.info(toStringFormat('Sorter', 'Position', [1]))
 	sorter_servo.move(0)
 
 # Object Detection
@@ -91,25 +103,6 @@ def corner_detection():
 
 def line_detection():
 	ant_array.line_detection()
-
-# Events
-def wait_for_event():
-	events.wait_for_event()
-	
-def get_last_event():
-	events.get_last_event()
-
-def get_next_event():
-	wait_for_event()
-	return get_last_event()
-	
-def list_possible_events():
-	for micro in micros:
-		print micro.name+":"
-		for service in micro.services:
-			print "\t"+service.name+":"
-			for rc in service.return_codes:
-				print "\t\t"+service.return_codes[rc]
 
 # Logging Related Functions
 def debug(msg):
@@ -132,9 +125,7 @@ def shutdown_signal(signal, frame):
 	shutdown()
 	
 def shutdown():
-	mc.shutdown()
-	for micro in micros:
-		micro.shutdown()
+	servo_micro.shutdown()
 	log.info("Robot.py has shutdown cleanly.")
 	sys.exit(0)
 
@@ -150,6 +141,9 @@ except NameError:
 logging.config.fileConfig(loggingConfigFile)
 log = logging.getLogger('Robot')
 brain_log = logging.getLogger('Brain')
+dash_log = logging.getLogger('Dash_Log')
+serverHandler = LoggingServerHandler('', PORT)
+dash_log.addHandler(serverHandler)
 if print_non_default:
 	log.info("Using non default logging config file: %s" % loggingConfigFile)
 
@@ -168,21 +162,11 @@ config = configs.get_config()
 import sabertooth2x10 as saber
 saber.init()
 mc = saber.get_object()
-# Laser Range Finder
-import laser
-laser.init()
-lrf = laser.get_object()
-lrf.clear()
 # MCN
 import micro_controller_network as mcn
 mcn.init()
-micros = []
 servo_micro = mcn.get_object('Servo Control')
-micros.append(servo_micro)
 od_micro = mcn.get_object('Obj Detection')
-micros.append(od_micro)
-array_micro = mcn.get_object('Array Micro')
-micros.append(array_micro)
 # Servo Controller
 import servo_controller as sc
 sc.init()

@@ -41,7 +41,7 @@ class RobotStatus():
 		
 	def resetGripper(self):
 		self.Gripper.Status = Closed
-		self.Gripper.Sensor = [On, Off, Off, On]
+		self.Gripper.Sensor = [Off, Off, Off, Off]
 		
 	def resetSorter(self):
 		self.Sorter.Position = 0
