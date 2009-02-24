@@ -98,6 +98,10 @@ def wait_for_event():
 	
 def get_last_event():
 	events.get_last_event()
+
+def get_next_event()
+	wait_for_event()
+	return get_last_event()
 	
 def list_possible_events():
 	for micro in micros:

@@ -30,11 +30,7 @@ def wait_for_event(timeout = 1):
 		lock.wait(timeout)
 		
 def get_last_event():
-	lock.wait(0.01)
-	if lock.isSet():
-		return pop()
-	else:
-		return (None, None)
+	return pop()
 
 class Notifier(Thread):
 	def __init__(self):
