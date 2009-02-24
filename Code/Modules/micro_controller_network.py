@@ -135,6 +135,8 @@ class MicroController:
 		
 	def shutdown(self):
 		self.log.info("Micro Controller %s is shutting down.", self.name)
+		for service in self.services:
+			service.shutdown()
 		self.debugging.shutdown()
 		if self.debugging.is_alive():
 			self.debugging.join()

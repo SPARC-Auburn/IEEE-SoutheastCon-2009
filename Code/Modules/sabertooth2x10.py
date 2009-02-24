@@ -50,6 +50,7 @@ def get_object(id = 'motor controller'):
 	global motorcontrollers, initialized
 	if not initialized:
 		log.critical("The sabertooth2x10.init() method has to be called before retrieving objects.")
+		sys.exit(1)
 	try:
 		return motorcontrollers[id]
 	except KeyError:
@@ -131,7 +132,10 @@ class MotorController:
 		#Convert the speed to hex
 		speed = self.dec2hex(speed)
 		#Send the command
-		self.serial.write(speed)
+		if self.serial.isOpen():
+			self.serial.write(speed)
+		else:
+			log.error("Error sending motor command, motor controller's serial port is not available.")
 	
 	def both(self, speed=1.0):
 		'''
@@ -189,4 +193,9 @@ class MotorController:
 		self.left(leftSpeed)
 		self.right(rightSpeed)
 		return
+		
+		
+	def shutdown(self):
+		self.move(0,0)
+		self.serial.close()
 		

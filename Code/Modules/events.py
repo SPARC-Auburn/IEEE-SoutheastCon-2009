@@ -21,6 +21,20 @@ def pop():
 		temp = queue.get()
 		lock.clear()
 		return temp
+		
+def triggerEvent(return_code, msg):
+	push(return_code, msg)
+	
+def wait_for_event(timeout = 1):
+	while not lock.isSet():
+		lock.wait(timeout)
+		
+def get_last_event():
+	lock.wait(0.01)
+	if lock.isSet():
+		return pop()
+	else:
+		return (None, None)
 
 class Notifier(Thread):
 	def __init__(self):

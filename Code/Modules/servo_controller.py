@@ -33,7 +33,9 @@ def init():
 	servos = {}
 	for x in config:
 		if type(config[x]) is configobj.Section:
-			servos[x] = Servo(config = config[x])
+			servos[x] = Servo(name = x, config = config[x])
+	service = ServiceServo(servos)
+	mc.register(service)
 	initialized = True
 	
 def get_object(id):
@@ -53,7 +55,7 @@ class Servo:
 		This class represents and allows control of a servo controlled by 
 		a servo controller on a micro controller network.
 		'''
-	def __init__(self, pointer = None, zero = 1500, max = 2400, min = 600, config = None):
+	def __init__(self, name = '', pointer = None, zero = 1500, max = 2400, min = 600, config = None):
 		'''
 			Constructor - Creates a servo obejct given a configuration list.
 			'''
@@ -71,6 +73,7 @@ class Servo:
 			self.zero = int(config['zero'])
 			self.max = int(config['max'])
 			self.min = int(config['min'])
+		self.name = name
 		return
 		
 	def dec2hex(self, dec):
@@ -138,3 +141,17 @@ class Servo:
 			return
 		return
 		
+class ServiceServo:
+	def __init__(self, servos):
+		self.servos = servos
+		self.return_codes = {'\x50':'Servo Updated'}
+	
+	def notify(self, return_code, msg):
+		# DATA LOGGING NEEDS TO GO HERE
+		pass
+		
+	def shutdown(self):
+		for servo in self.servos:
+			servo.move('zero')
+			servo.serial.close()
+		return

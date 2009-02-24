@@ -1,25 +1,83 @@
-import serial
-import time
+#
+#  laser.py
+#  
+#
+#  Created by William Woodall on 2/24/09.
+#  Copyright (c) 2009 Auburn University. All rights reserved.
+#
 
-class Laser(serial.Serial):
-	"""Laser class, extends serial so you can use it like a serial port.
+
+'''
+Module for controlling the Hokuyo URG-04LX Laser Range Finder.
+'''
+
+# Imports #
+# Configs
+import configs
+config = configs.get_config('Laser Range Finder')
+enabled = config['enabled']
+# Logging
+import logging
+log = logging.getLogger(config['logger_name'])
+# PySerial
+if enabled:
+	try:
+		from serial import Serial
+	except Exception as e:
+		log.error("Serial cannot be imported, you may need to install it: %s" % e)
+		sys.exit(1)
+else:
+	log.warning("The Laser Range Finder is disabled and will quitely do nothing.")
 	
-	The Laser class extends the serial class so you can create it
-	and pass it the serial port to it at the same time.
-	i.e.: laser1 = laser.Laser("/dev/ttyACM0")
+# Static Functions #
+def init():
+	global initialized, lrfs
+	lrfs = {}
+	lrfs['Laser Range Finder'] = LaserRangeFinder(config = config)
+	initialized = True
 	
-	You can perform any function on it that you can perform on a serial object as well as, scan()."""
-	
-	def __init__(self, serialPort):
-        	"""Calls the Serial __init__ and then sets timeout and other default options"""
-		serial.Serial.__init__(self, serialPort)
-		self.timeout = .001
-		self.baudrate = 115200
-		# Prime the LRF (this is done because of first read errors using a low timeout time)
-		self.write('G00076800\r')
-		self.clear()
+def get_object(id = 'Laser Range Finder'):
+	global initialized, lrfs
+	if not initialized:
+		log.critical("The laser.init() method has to be called before retrieving objects.")
+		sys.exit(1)
+	try:
+		return lrfs[id]
+	except KeyError:
+		log.error("You provided an invalid id for any of the available Laser Range Finders.  Please double check the names in the config files.")
 		
-	def scan(self, start = "000", stop = "768", step = "00"):
+# Classes #
+class LaserRangeFinder:
+	'''
+	This class represents and allows access to a Hukuyo URG-04LX Laser Range Finder.
+	'''
+	def __init__(self, serial = '/dev/ttyACM0', baud_rate = '115200', start = 000, stop = 768, step = 00, config = None):
+		if config:
+			self.config = config
+			self.serial_port = config['serial_port']
+			self.baud_rate = config['baud_rate']
+			self.start = config['start']
+			self.stop = config['stop']
+			self.step = config['step']
+		else:
+			self.config = None
+			self.serial_port = serial
+			self.baud_rate = baud_rate
+			self.start = start
+			self.stop = stop
+			self.step = step
+		if enabled:
+			self.serial = Serial()
+			self.serial.port = self.serial_port
+			self.serial.baud_rate = self.baud_rate
+			self.serial.timeout = 1
+			try:
+				self.serial.open()
+			except Exception as e:
+				log.error("Unabled to open the serial port %s: %s" % (self.serial_port, e))
+		#End __init__
+		
+	def scan(self):
 		"""This function will scan from start to stop, returning a reading for every step number of scans.
 		
 		This function allows for specifying start, stop, and step values,
@@ -29,7 +87,7 @@ class Laser(serial.Serial):
 		i.e.: readings[i] is equal to reading of the ith+1 scan."""
 		result = []
 		# Generate the command
-		command = 'G'+start+stop+step+'\r'
+		command = 'G'+self.start+self.stop+self.step+'\r'
 		
 		# Send the command
 		self.write(command)
@@ -57,7 +115,7 @@ class Laser(serial.Serial):
 
 
 	def safe_scan(self, start = "000", stop = "768", step = "00"):
-		"""Checks input and then passes to scan()."""
+		"""Checks input and then passes to scan(). DEPRECIATED"""
 		# Check input
 		try:
 			istart = int(start)
@@ -77,3 +135,17 @@ class Laser(serial.Serial):
 		time.sleep(.01)
 		self.flushOutput()
 		self.flushInput()
+		
+	def shutdown(self):
+		self.serial.close()
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		

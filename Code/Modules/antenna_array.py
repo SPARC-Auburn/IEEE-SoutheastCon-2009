@@ -89,6 +89,9 @@ class AntennaArray:
 		elif return_code == 'Right Front':
 			log.debug("Antenna array indicates the line is near the RIGHT FRONT of the robot.")
 			events.queue.put((return_code, msg))
+			
+	def shutdown(self):
+		pass
 		
 	def cal_ant(self):
 		mc.send(command_codes['Calibrate Antenna'])

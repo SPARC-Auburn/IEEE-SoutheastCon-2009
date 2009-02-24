@@ -83,7 +83,10 @@ class ObjDetection:
 			log.error("Timed out while waiting for object detection to return.")
 			self.obj_detected.set()
 			return
-		log.debug("Object check returned: %s", self.object)
+		log.debug("Object check returned: %s" % self.object)
 		return self.object
+		
+	def shutdown(self):
+		pass
 		
 		

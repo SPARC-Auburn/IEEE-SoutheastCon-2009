@@ -47,6 +47,13 @@ def both(speed):
 def move(speed, direction):
 	mc.move(speed, direction)
 	
+# Laser Range Finder Related Functions
+def scan():
+	lrf.scan()
+
+def clear_lrf():
+	lrf.clear()
+	
 # Servo Related Functions
 def arm_up():
 	arm_servo.move(-1.0)
@@ -83,6 +90,21 @@ def corner_detection():
 def line_detection():
 	ant_array.line_detection()
 
+# Events
+def wait_for_event():
+	events.wait_for_event()
+	
+def get_last_event():
+	events.get_last_event()
+	
+def list_possible_events():
+	for micro in micros:
+		print micro.name+":"
+		for service in micro.services:
+			print "\t"+service.name+":"
+			for rc in service.return_codes:
+				print "\t\t"+service.return_codes[rc]
+
 # Logging Related Functions
 def debug(msg):
 	brain_log.debug(msg)
@@ -104,7 +126,9 @@ def shutdown_signal(signal, frame):
 	shutdown()
 	
 def shutdown():
-	servo_micro.shutdown()
+	mc.shutdown()
+	for micro in micros:
+		micro.shutdown()
 	log.info("Robot.py has shutdown cleanly.")
 	sys.exit(0)
 
@@ -138,11 +162,21 @@ config = configs.get_config()
 import sabertooth2x10 as saber
 saber.init()
 mc = saber.get_object()
+# Laser Range Finder
+import laser
+laser.init()
+lrf = laser.get_object()
+lrf.clear()
 # MCN
 import micro_controller_network as mcn
 mcn.init()
+micros = []
 servo_micro = mcn.get_object('Servo Control')
+micros.append(servo_micro)
 od_micro = mcn.get_object('Obj Detection')
+micros.append(od_micro)
+array_micro = mcn.get_object('Array Micro')
+micros.append(array_micro)
 # Servo Controller
 import servo_controller as sc
 sc.init()
