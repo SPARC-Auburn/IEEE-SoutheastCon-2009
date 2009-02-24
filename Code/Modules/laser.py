@@ -132,7 +132,6 @@ class LaserRangeFinder:
 
 	def clear(self):
 		"""This function clears all input/output buffers from the serial device."""
-		time.sleep(.01)
 		self.flushOutput()
 		self.flushInput()
 		
