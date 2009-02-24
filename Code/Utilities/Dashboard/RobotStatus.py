@@ -1,8 +1,10 @@
+from Constants import *
 import InterfaceComponents
 
-Open, Closed = range(2)
-On, Off = range(2)
-Connected, Disconnected = range(2)
+
+#Open, Closed = range(2)
+#On, Off = range(2)
+#Connected, Disconnected = range(2)
 
 class Component():
 	def __init__(self):
@@ -66,13 +68,15 @@ class RobotStatus():
 		
 	def resetHES(self):
 		self.HES.Sensor = [0.6, 0.6, 0.6]
+#<<<<<<< .mine
+		
+#=======
 		
         
         
 def updateAttr(robotStatus, compName, attrName, values):
     if hasattr(robotStatus, compName):
         compObj = getattr(robotStatus, compName)
-        print 'Success'
         if hasattr(compObj, attrName):
             attrObj = getattr(compObj, attrName)
 			
@@ -87,10 +91,9 @@ def updateAttr(robotStatus, compName, attrName, values):
 			# Now update the component graphic
             if hasattr(InterfaceComponents, "update_Component_" + compName):
                 getattr(InterfaceComponents, "update_Component_" + compName)(robotStatus)
-                print 'Success'
         else:
             print 'Notice: Attribute:', attrName, ': does not exist on RobotStatus.'
     else:
         print 'Notice: Component:', compName, ' does not exist on RobotStatus.'
 
-	
+#	>>>>>>> .r351

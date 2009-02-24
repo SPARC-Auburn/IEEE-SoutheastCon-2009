@@ -1,16 +1,17 @@
 from Tkinter import *
-from PIL import Image
-import Image, ImageTk
+#from PIL import Image
+#import Image, ImageTk
 import copy
 
 from Geometry import *
 from RobotStatus import *
 from InterfaceComponents import *
+from Constants import *
 import Networking
 
-HOST = '127.0.0.1'			# Loopback
-PORT = 50007				# Random port
-updateScrollPosition = False
+#HOST = '127.0.0.1'			# Loopback
+#PORT = 50007				# Random port
+#updateScrollPosition = False
 
 def test(robot):
 	event = c.get_message()
@@ -86,14 +87,11 @@ component_frame.pack(fill=X, side=TOP)
 
 m1 = PanedWindow(component_frame,relief="groove",background="grey70")
 m1.pack(fill=BOTH, expand=1)
-# left = Label(m1, text="left pane")
-
 
 column1 = PanedWindow(m1, orient=VERTICAL,relief="groove",background="grey70")
 column2 = PanedWindow(m1, orient=VERTICAL,relief="groove",background="grey70")
 m1.add(column1)
 m1.add(column2)
-
 
 init_Component_LRF(column1, robot_status)
 init_Component_HES(column1, robot_status)
@@ -103,6 +101,10 @@ init_Component_Gripper(column2, robot_status)
 init_Component_Drive(column2, robot_status)
 init_Component_Arm(column2, robot_status)
 
+#<<<<<<< .mine
+
+#=======
+#>>>>>>> .r351
 while 1:
 	test(robot_status)
 	root.update()
