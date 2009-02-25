@@ -196,8 +196,13 @@ lrf.clear()
 # MCN
 import micro_controller_network as mcn
 mcn.init()
+micros = []
 servo_micro = mcn.get_object('Servo Control')
+micros.append(servo_micro)
 od_micro = mcn.get_object('Obj Detection')
+micros.append(od_micro)
+array_micro = mcn.get_object('Array Micro')
+micros.append(array_micro)
 # Servo Controller
 import servo_controller as sc
 sc.init()
