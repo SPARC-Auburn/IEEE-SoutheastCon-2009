@@ -166,7 +166,7 @@ class LoggingServerHandler(logging.Handler):
         connection lost. Close the socket so that we can retry on the
         next event.
         """
-        print 'handleError Function'
+        #print 'handleError Function'
         if self.closeOnError and self.sock:
             self.sock.close()
             self.sock = None        #try to reconnect next time
@@ -196,7 +196,7 @@ class LoggingServerHandler(logging.Handler):
         """
         Closes the socket.
         """
-        print 'Close Function'
+        #print 'Close Function'
         if self.sock:
             self.sock.close()
             self.sock = None
