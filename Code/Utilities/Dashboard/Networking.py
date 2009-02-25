@@ -2,7 +2,7 @@
 import logging, socket, types, os, string, cPickle, struct, time, re
 from stat import ST_DEV, ST_INO
 import logging, logging.handlers
-import socket, events, sys
+import socket, sys
 sys.path.append("../../Modules")
 import events
 
