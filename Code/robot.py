@@ -30,6 +30,8 @@ import logging
 import logging.config
 # Config
 import configs
+# Events
+import events
 
 #serverHandler = LoggingServerHandler('', PORT)
 
@@ -44,22 +46,23 @@ import configs
 
 # Motor Controller Related Functions
 def right(speed):
-	dash_log.info(toStringFormat('Drive', 'Right', [speed]))
 	mc.right(speed)
 		
 def left(speed):
-	dash_log.info(toStringFormat('Drive', 'Left', [speed]))
 	mc.left(speed)
 		
 def both(speed):
-	dash_log.info(toStringFormat('Drive', 'Left', [speed]))
-	dash_log.info(toStringFormat('Drive', 'Right', [speed]))
 	mc.both(speed)
 		
 def move(speed, direction):
-	dash_log.info(toStringFormat('Drive', 'Left', [speed]))
-	dash_log.info(toStringFormat('Drive', 'Right', [speed]))
 	mc.move(speed, direction)
+	
+# Laser Range Finder Related Functions
+def scan():
+	lrf.scan()
+	
+def clear_lrf():
+	lrf.clear()
 	
 # Servo Related Functions
 def arm_up():
@@ -103,6 +106,25 @@ def corner_detection():
 
 def line_detection():
 	ant_array.line_detection()
+	
+# Events
+def wait_for_event():
+        events.wait_for_event()
+       
+def get_last_event():
+        events.get_last_event()
+
+def get_next_event():
+        wait_for_event()
+        return get_last_event()
+       
+def list_possible_events():
+        for micro in micros:
+                print micro.name+":"
+                for service in micro.services:
+                        print "\t"+service.name+":"
+                        for rc in service.return_codes:
+                                print "\t\t"+service.return_codes[rc]
 
 # Logging Related Functions
 def debug(msg):
@@ -127,11 +149,11 @@ def shutdown_signal(signal, frame):
 def shutdown():
 	mc.shutdown()
 	lrf.shutdown()
-	servo_micro.shutdown()
+	for micro in micros:
+		micro.shutdown()
 	events.shutdown()
 	log.info("Robot.py has shutdown cleanly.")
 	sys.exit(0)
-
 
 # Initilization #
 # Start logging
@@ -166,6 +188,11 @@ config = configs.get_config()
 import sabertooth2x10 as saber
 saber.init()
 mc = saber.get_object()
+# Laser Range Finder
+import laser
+laser.init()
+lrf = laser.get_object()
+lrf.clear()
 # MCN
 import micro_controller_network as mcn
 mcn.init()
