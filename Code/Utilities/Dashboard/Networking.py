@@ -2,7 +2,10 @@
 import logging, socket, types, os, string, cPickle, struct, time, re
 from stat import ST_DEV, ST_INO
 import logging, logging.handlers
-import socket
+import socket, events, sys
+sys.path.append("../../Modules")
+import events
+
 
 HOST = '127.0.0.1'			# Loopback
 PORT = 50007				# Random port
@@ -107,12 +110,14 @@ class LoggingServerHandler(logging.Handler):
         self.sock.listen(5)
         
     def makeConnection(self):
-        print 'Attempting to make connection'
+        #print 'Attempting to make connection'
         try:
             conn, addr = self.sock.accept()
             self.client.append([conn, addr])
+            events.triggerEvent("Dashboard Connected ", addr)
         except:
-            print 'No connection to be made'
+            pass
+            #print 'No connection to be made'
 
     def send(self):
         """
@@ -134,8 +139,9 @@ class LoggingServerHandler(logging.Handler):
                 except socket.error:
                     print 'Communication Error'
                     self.client.remove(thisClient)
-        else:
-            print 'No working connections'
+        #else:
+
+            #print 'No working connections'
 
     def makePickle(self, record):
         """
