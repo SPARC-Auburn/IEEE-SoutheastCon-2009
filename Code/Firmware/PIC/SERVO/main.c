@@ -222,6 +222,7 @@ void main (void)
 			{
 				temp.bt[0] = c;
 				servo[pointer].lt = temp.lt;
+				TXString("\x50 ");
 				TXDec(pointer+1);
 				TXChar(' ');
 				TXDec_Int(servo[pointer].lt);

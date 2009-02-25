@@ -40,7 +40,7 @@ void Init_USART(void)
 	
 	// Actual Baud = Fosc/(4*(SPBRG + 1)) = 32000000/(4*(68 + 1)) = 115942 baud
 	// Error = (115942-115200)/115200 * 100% = 0.6%
-	unsigned int baud=416;
+	unsigned int baud=68;
 	
 	TXSTA = 0;		// Reset registers
 	RCSTA = 0;
