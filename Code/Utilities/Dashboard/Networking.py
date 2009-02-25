@@ -132,12 +132,12 @@ class LoggingServerHandler(logging.Handler):
         #time yet, or because we have reached the retry time and retried,
         #but are still unable to connect.
         if self.sock:
-            print len(self.client), ' current connections.'
+            #print len(self.client), ' current connections.'
             for thisClient in self.client:
                 try:
                     thisClient[ conn ].send(str(self.record))
                 except socket.error:
-                    print 'Communication Error'
+                    #print 'Communication Error'
                     self.client.remove(thisClient)
         #else:
 
@@ -185,7 +185,7 @@ class LoggingServerHandler(logging.Handler):
         self.record = record
         try:
             s = self.makePickle(record)
-            print 'Broadcasting: ', record
+            #print 'Broadcasting: ', record
             self.send()
         except (KeyboardInterrupt, SystemExit):
             raise
