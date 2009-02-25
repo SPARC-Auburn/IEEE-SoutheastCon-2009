@@ -85,6 +85,8 @@ class LaserRangeFinder:
 		This function will return an array with a length equal to the number scans,
 		with each element in the array containing the corresponding reading.
 		i.e.: readings[i] is equal to reading of the ith+1 scan."""
+		if not enabled:
+			return
 		result = []
 		# Generate the command
 		command = 'G'+self.start+self.stop+self.step+'\r'
@@ -132,10 +134,13 @@ class LaserRangeFinder:
 
 	def clear(self):
 		"""This function clears all input/output buffers from the serial device."""
+		if not enabled:
+			return
 		self.serial.flushOutput()
 		self.serial.flushInput()
 		
 	def shutdown(self):
+		if self.serial.isOpen()
 		self.serial.close()
 		
 		
