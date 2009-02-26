@@ -17,7 +17,7 @@ def write_to_ee(address,values):
 	msg = '\x31'
 	msg += dec2hex(address)
 	number = len(values) * 2
-	msg += str(number)
+	msg += dec2hex(number)
 	for x in range(number/2):
 		msg += dec2hex(values[x])
 	if serial.isOpen():
