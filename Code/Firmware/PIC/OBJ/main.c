@@ -182,12 +182,21 @@ void main (void)
 				case EEPROM_RD_OP:
 					if(parameter_count == 2)
 					{
-						
+						EEP_address.bt[1] = current_parameters[0];
+						EEP_address.bt[0] = current_parameters[1];
+						EEP_offset = Read_b_eep(EEP_address.lt);
 						TXString("0 ");
-						TXChar(Read_b_eep(EEP_address.lt));
+						TXHex(EEP_offset);
+						TXString("\x0A\x0D");
+						EEP_address.lt = 0;
 						ProcStatus.ProcessInProgress = 0;
 						parameter_count = 0;
-					}	
+					} 
+					else if(parameter_count > 2)
+					{
+						ProcStatus.ProcessInProgress = 0;
+						parameter_count = 0;					
+					}
 					break;
 				case POLL_SONAR_OP:
 					ProcStatus.sonar_poll_enabled = 1;
