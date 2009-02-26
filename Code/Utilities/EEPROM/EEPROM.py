@@ -12,7 +12,7 @@ serial.timeout = 1
 serial.open()
 
 def write_to_ee(address,values):
-    if type(values) != list:
+	if type(values) != list:
 		print 'Error, values must be a list of ints'
 	msg = '\x31'
 	msg += dec2hex(address)
