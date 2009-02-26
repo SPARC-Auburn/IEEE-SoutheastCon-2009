@@ -28,7 +28,7 @@ def write_to_ee(address,values):
 		
 def read_from_ee(address):
 	value = read_hex_from_ee(address)
-	value = hex2dec([4:6])
+	value = hex2dec(value[4:6])
 	return value
     
 def read_hex_from_ee(address):
