@@ -29,8 +29,8 @@ unsigned int switchCount = 0;
 // Variables that are stored in the EEPROM
 unsigned int switch_threshold = 20;
 unsigned int sonar_divider = 58;
-unsigned int thresholdFrontFront = 14;
-unsigned int thresholdFrontBack = 14;
+unsigned int thresholdFrontFront = 812;
+unsigned int thresholdFrontBack = 812;
 unsigned int thresholdBack = 10;
 
 
@@ -160,7 +160,7 @@ void main (void)
 						EEP_count = current_parameters[2];	
 					}	
 					
-					if(EEP_count != -1 && parameter_count == EEP_count + 3)
+					if(EEP_count != -1 && (parameter_count == EEP_count + 3))
 					{
 						EEP_address.bt[1] = current_parameters[0];
 						EEP_address.bt[0] = current_parameters[1];
@@ -168,6 +168,7 @@ void main (void)
 						while(EEP_offset < EEP_count)
 						{
 							Write_b_eep(EEP_address.lt, current_parameters[EEP_offset + 3]);
+							Busy_eep();
 							EEP_address.lt++;
 							EEP_offset++;	
 						}
@@ -231,11 +232,11 @@ void main (void)
 
 void Refresh_EEPROM(void)
 {
-//	switch_threshold = ((int)Read_b_eep(EE_SWITCH_THRESHOLD_H) << 8) | (Read_b_eep(EE_SWITCH_THRESHOLD_L));
-//	sonar_divider = ((int)Read_b_eep(EE_SONAR_DIVIDER_H) << 8) | (Read_b_eep(EE_SONAR_DIVIDER_L));
-//	thresholdFrontFront = ((int)Read_b_eep(EE_FF_THRESHOLD_H) << 8) | (Read_b_eep(EE_FF_THRESHOLD_L));
-//	thresholdFrontBack = ((int)Read_b_eep(EE_FB_THRESHOLD_H) << 8) | (Read_b_eep(EE_FB_THRESHOLD_L));
-//	thresholdBack = ((int)Read_b_eep(EE_BACK_THRESHOLD_H) << 8) | (Read_b_eep(EE_BACK_THRESHOLD_L));
+	switch_threshold = ((int)Read_b_eep(EE_SWITCH_THRESHOLD_H) << 8) | (Read_b_eep(EE_SWITCH_THRESHOLD_L));
+	sonar_divider = ((int)Read_b_eep(EE_SONAR_DIVIDER_H) << 8) | (Read_b_eep(EE_SONAR_DIVIDER_L));
+	thresholdFrontFront = ((int)Read_b_eep(EE_FF_THRESHOLD_H) << 8) | (Read_b_eep(EE_FF_THRESHOLD_L));
+	thresholdFrontBack = ((int)Read_b_eep(EE_FB_THRESHOLD_H) << 8) | (Read_b_eep(EE_FB_THRESHOLD_L));
+	thresholdBack = ((int)Read_b_eep(EE_BACK_THRESHOLD_H) << 8) | (Read_b_eep(EE_BACK_THRESHOLD_L));
 }	
 
 void poll_sonar(void)
@@ -243,35 +244,6 @@ void poll_sonar(void)
 								//start the 1st sonar measurement
 		sonarIndex = 0;		
 
-//		TRISAbits.TRISA0 = 0; 	//set pin 2 to output for Parallax triggering sequence
-//
-//		PORTAbits.RA0 = 0;		//bring pin 2 low
-//		Delay10TCYx(7);			//delay for ~2 microseconds
-//
-//		PORTAbits.RA0 = 1;  	//bring pin 2 high
-//		Delay10TCYx(16);		//delay for ~5 microseconds
-//
-//		PORTAbits.RA0 = 0;		//bring pin 2 low
-//
-//		TRISAbits.TRISA0 = 1; 	//set pin 2 to input for pulse readin
-//		
-//		while(PORTAbits.RA0 == 0)
-//		{	
-//								//wait for the Parallax to bring pin 2 high				
-//		}
-//		
-//		WriteTimer0( 0 );		//reset Timer0
-//
-//		while(PORTAbits.RA0 == 1)
-//		{
-//								//wait for the Parallax to bring pin 2 low
-//		}
-//								//read the value in Timer0
-//		pulseDuration = ReadTimer0();
-//
-//								//divide the microseconds by 58 to convert to centimeters
-//		distance[sonarIndex] = pulseDuration / sonar_divider;						
-//
 								//start 2nd sonar measurement
 		sonarIndex++;			
 		
@@ -302,7 +274,7 @@ void poll_sonar(void)
 		pulseDuration = ReadTimer0();
 
 								//divide the microseconds by 58 to convert to centimeters
-		distance[sonarIndex] = pulseDuration / sonar_divider;						
+		distance[sonarIndex] = pulseDuration;						
 
 								//start the 3rd sonar measurement
 		sonarIndex++;
@@ -334,53 +306,52 @@ void poll_sonar(void)
 		pulseDuration = ReadTimer0();
 
 								//divide the microseconds by 58 to convert to centimeters
-		distance[sonarIndex] = pulseDuration / sonar_divider;						
+		distance[sonarIndex] = pulseDuration;						
 		
-//			TXChar(' ');
-//			TXDec_Int(distance[0]);
-//			TXChar(' ');
-//			TXDec_Int(distance[1]);
-//			TXChar(' ');
-//			TXDec_Int(distance[2]);
-//			TXString("\x0D\x0A");
-		
-		
-//		if(distance[0] > thresholdBack)
-//		{
-//			TXChar(SONAR_NO_OBJECT);		//send code for "No Object"
-//			TXString("\x0D\x0A");
-//						
-//		}	 
-//		else
-//		{
-			if(distance[1] < thresholdFrontBack && distance[2] < thresholdFrontFront)
+
+		if(distance[1] < thresholdFrontBack && distance[2] < thresholdFrontFront)
+		{
+			TXChar(SONAR_PLASTIC);	//send code for "Plastic Bottle"
+			TXChar(' ');
+			TXDec_Int(distance[1]);
+			TXChar(' ');
+			TXDec_Int(distance[2]);
+			TXString("\x0D\x0A");			
+
+		}
+		else
+		{
+			if(distance[1] < thresholdFrontBack && distance[2] > thresholdFrontFront)
 			{
-				TXChar(SONAR_PLASTIC);	//send code for "Plastic Bottle"
-				TXString("\x0D\x0A");			
-	
+				TXChar(SONAR_GLASS);	//send code for "Glass Bottle"
+				TXChar(' ');
+				TXDec_Int(distance[1]);
+				TXChar(' ');
+				TXDec_Int(distance[2]);
+				TXString("\x0D\x0A");	
 			}
 			else
 			{
-				if(distance[1] < thresholdFrontBack && distance[2] > thresholdFrontFront)
+				if(distance[1] > thresholdFrontBack && distance[2] > thresholdFrontFront)
 				{
-					TXChar(SONAR_GLASS);	//send code for "Glass Bottle"
+					TXChar(SONAR_ALUMINUM);	//send code for "Aluminum Can"
+					TXChar(' ');
+					TXDec_Int(distance[1]);
+					TXChar(' ');
+					TXDec_Int(distance[2]);
 					TXString("\x0D\x0A");	
 				}
 				else
 				{
-					if(distance[1] > thresholdFrontBack && distance[2] > thresholdFrontFront)
-					{
-						TXChar(SONAR_ALUMINUM);	//send code for "Aluminum Can"
-						TXString("\x0D\x0A");	
-					}
-					else
-					{
-						TXChar(SONAR_ERROR);	//send code for "Error - FrontFront Sonar is triggered, but FrontBack is not"
-						TXString("\x0D\x0A");	
-					}	
-				}			
-			}
+					TXChar(SONAR_ERROR);	//send code for "Error - FrontFront Sonar is triggered, but FrontBack is not"
+					TXChar(' ');
+					TXDec_Int(distance[1]);
+					TXChar(' ');
+					TXDec_Int(distance[2]);
+					TXString("\x0D\x0A");	
+				}	
+			}			
+		}
 								
-//		}
 	
 }	

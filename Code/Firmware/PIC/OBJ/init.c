@@ -18,6 +18,7 @@ int Init (void)
 void Init_Oscillator(void)
 {
 	OSCCON = 0b01110000; //configure PIC to primary oscillator block at 8MHz
+	OSCTUNEbits.PLLEN = 1;	// Enable the PLL for 32MHz
 }
 
 void Init_Interrupts(void)
@@ -29,7 +30,15 @@ void Init_Interrupts(void)
 
 void Init_USART(void)
 {
-	int baud = 16;
+	// SPBRG = (Fosc/Baud)/4 - 1
+	// Fosc = 32000000
+	// Baud = 115200
+	// SPBRG = (32000000/115200)/4 - 1
+	// SPBRG = 277.778/4 - 1 = 69.4444 - 1 = 68.4444
+	
+	// Actual Baud = Fosc/(4*(SPBRG + 1)) = 32000000/(4*(68 + 1)) = 115942 baud
+	// Error = (115942-115200)/115200 * 100% = 0.6%
+	unsigned int baud=68;
 	
 	TXSTA = 0;		// Reset registers
 	RCSTA = 0;
