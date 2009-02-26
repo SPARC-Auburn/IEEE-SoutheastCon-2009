@@ -92,6 +92,12 @@ def sorter_right():
 def sorter_center():
 	dash_log.info(toStringFormat('Sorter', 'Position', [1]))
 	sorter_servo.move(0)
+	
+def spinner_start():
+	spinner_servo.move(-1.0)
+
+def spinner_stop():
+	spinner_servo.move(0.0)
 
 # Object Detection
 def check_obj():
