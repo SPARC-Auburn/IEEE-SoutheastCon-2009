@@ -34,7 +34,7 @@ def read_from_ee(address):
 def read_hex_from_ee(address):
 	serial.flushOutput()
 	serial.flushInput()
-    msg = '\x32'
+	msg = '\x32'
 	msg += dec2hex(address)
 	if serial.isOpen():
 		serial.write(msg)
