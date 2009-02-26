@@ -2,77 +2,52 @@ import serial
 import sys
 
 serial = serial.Serial()
-serial.port = sys.argv[1]
-serial.baudrate = sys.argv[2]
+if len(sys.argv) > 1:
+	serial.port = sys.argv[1]
+	serial.baudrate = sys.argv[2]
+else:
+	serial.port = '/dev/ttyUSB0'
+	serial.baudrate = 115200
 serial.timeout = 1
 serial.open()
 
-def write_to_ee(address,msg):
-    message = ''
-    message = []
-    
-    message.append('\x31')     # Send the opcode for EEPROM Write
-    addr = dec2hex(int(address))
-    if len(addr) < 2:               # If the address isn't being sent in 2 bytes
-        addr =  '\x00' + addr       # Pack another byte on the front
-        message.append(addr[0:1])       # Send two bytes for the EEPROM Address 
-        message.append(addr[1:2])
-    else:
-        message.append(addr)
-
-    count = 0
-    for x in msg:
-        if int(x) > 255:
-            count += 2
-        else:
-            count += 1
-
-    message.append(dec2hex(count))
-
-    for x in msg:
-        if int(x) > 255:            # If the next number is an int, break it up
-            temp = dec2hex(int(x))
-            message.append(temp[0:1])
-            message.append(temp[1:2])
-        else:
-            message.append(dec2hex(int(x)))     # Otherwise print the next character
-    print message
-    send(message)                               # Send the message
-    return
-    
+def write_to_ee(address,values):
+    if type(values) != list:
+		print 'Error, values must be a list of ints'
+	msg = '\x31'
+	msg += dec2hex(address)
+	number = len(values) * 2
+	msg += number
+	for x in range(number):
+		msg += dec2hex(values[x])
+	if serial.isOpen():
+		serial.write(msg)
+	else:
+		print 'Error, the serial port is not open.'
+	return
+		
 def read_from_ee(address):
-    message = ''
-    message = []
-
-    message.append(dec2hex(32))     # Send the opcode for EEPROM Read
-    addr = dec2hex(int(address))
-    if len(addr) < 2:               # If the address isn't being sent in 2 bytes
-        addr =  '\x00' + addr       # Pack another byte on the front
-        message.append(addr[0:1])       # Send two bytes for the EEPROM Address
-        message.append(addr[1:2])
-    else:
-        message.append(addr)
+	value = read_hex_from_ee(address)
+	value = hex2dec([4:6])
+	return value
     
-    if serial.isOpen():
-        msg = serial.read()
-    msg.strip()
-    if msg[0:1] == '\x30':
-        return msg[1:2].decode('hex')
-    else:
-        return '0'
+def read_hex_from_ee(address):
+	serial.flushOutput()
+	serial.flushInput()
+    msg = '\x32'
+	msg += dec2hex(address)
+	if serial.isOpen():
+		serial.write(msg)
+	else:
+		print 'Error, the serial port is not open.'
+		return
+	value = serial.readline()
+	value = value.strip()
+	return value
 
-
-def send(msg):
-    message = ''
-    for x in msg:
-        message += x
-
-    print "Sending message: %s " % message.encode('hex')
-    
-    if serial.isOpen():
-        serial.write(message + '\r')
-
-    return
+def hex2dec(hex):
+	dec = 16 * int(hex[0:1])
+	dec += int(hex[1:2])
 
 def dec2hex(dec):
     '''
@@ -81,4 +56,8 @@ def dec2hex(dec):
     hex = '%X' % dec
     if len(hex)%2 is 1: #Prevents Odd-length error with decode.
         hex = '0'+hex
+	while len(hex) < 4:
+		hex = '0' + hex
     return hex.decode("hex")
+	
+
