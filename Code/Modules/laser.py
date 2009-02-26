@@ -140,6 +140,8 @@ class LaserRangeFinder:
 		self.serial.flushInput()
 		
 	def shutdown(self):
+		if not enabled:
+			return
 		if self.serial.isOpen():
 			self.serial.close()
 		
