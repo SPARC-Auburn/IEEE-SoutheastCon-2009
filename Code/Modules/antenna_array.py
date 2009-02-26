@@ -67,28 +67,28 @@ class AntennaArray:
 		# Handel the messge
 		if return_code == 'Left':
 			log.debug("Antenna array indicates we are LEFT of the line.")
-			events.queue.put((return_code, msg))
+			events.triggerEvent((return_code, msg))
 		elif return_code == 'Right':
 			log.debug("Antenna array indicates we are RIGHT of the line.")
-			events.queue.put((return_code, msg))
+			events.triggerEvent((return_code, msg))
 		elif return_code == 'Dead On':
 			log.debug("Antenna array indicates we are DEAD ON the line.")
-			events.queue.put((return_code, msg))
+			events.triggerEvent((return_code, msg))
 		elif return_code == 'No Line':
 			log.debug("Antenna array indicates NO LINE is detected.")
-			events.queue.put((return_code, msg))
+			events.triggerEvent((return_code, msg))
 		elif return_code == 'On Corner':
 			log.debug("Antenna array indicates we are ON the CORNER.")
-			events.queue.put((return_code, msg))
+			events.triggerEvent((return_code, msg))
 		elif return_code == 'Left Back':
 			log.debug("Antenna array indicates the line is near the LEFT BACK of the robot.")
-			events.queue.put((return_code, msg))
+			events.triggerEvent((return_code, msg))
 		elif return_code == 'Right Back':
 			log.debug("Antenna array indicates the line is near the RIGHT BACK of the robot.")
-			events.queue.put((return_code, msg))
+			events.triggerEvent((return_code, msg))
 		elif return_code == 'Right Front':
 			log.debug("Antenna array indicates the line is near the RIGHT FRONT of the robot.")
-			events.queue.put((return_code, msg))
+			events.triggerEvent((return_code, msg))
 			
 	def shutdown(self):
 		pass
