@@ -164,11 +164,12 @@ def shutdown():
 # Initilization #
 # Start logging
 try:
-	loggingConfigFile
-	print_non_default = True
-except NameError:
-	loggingConfigFile = 'Configurations/logging.cfg'
-	print_non_default = False
+	loggingConfigFile = open('Configurations/logging.cfg')
+except IOError:
+	try:
+		loggingConfigFile = open('Configurations/logging.cfg.default')
+	except IOError:
+		print ">>>>ERROR: No logging config file could be opened.<<<<"
 logging.config.fileConfig(loggingConfigFile)
 log = logging.getLogger('Robot')
 brain_log = logging.getLogger('Brain')
@@ -176,15 +177,16 @@ dash_log = logging.getLogger('Dash_Log')
 dash_log.propagate = False
 serverHandler = LoggingServerHandler('', PORT)
 dash_log.addHandler(serverHandler)
-if print_non_default:
-	log.info("Using non default logging config file: %s" % loggingConfigFile)
+log.debug("Using logging config file %s" % loggingConfigFile)
 
 # Start Configurations
 try:
-	configFile
-	log.info("Using non default config file: %s" % configFile)
-except NameError:
-	configFile = 'Configurations/robot.cfg'
+	configFile = open('Configurations/robot.cfg')
+except IOError:
+	try:
+		configFile = open('Configurations/robot.cfg.default')
+	except:
+		log.error("No config file could be opened.")
 configs.init(configFile)
 config = configs.get_config()
 
