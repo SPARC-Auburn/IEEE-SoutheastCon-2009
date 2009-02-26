@@ -54,11 +54,9 @@ def dec2hex(dec):
 	Converts a given decimal number to hex.
 	'''
 	hex = '%X' % dec
-	if len(hex)%2 is 1: #Prevents Odd-length error with decode.
-		hex = '0'+hex
 	while len(hex) < 4:
 		hex = '0' + hex
-		hex = hex.decode("hex")
+	hex = hex.decode("hex")
 	if len(hex) == 1:
 		hex = '\x00' + hex
 	return hex
