@@ -136,8 +136,9 @@ class LaserRangeFinder:
 		"""This function clears all input/output buffers from the serial device."""
 		if not enabled:
 			return
-		self.serial.flushOutput()
-		self.serial.flushInput()
+		if self.serial.isOpen():
+			self.serial.flushOutput()
+			self.serial.flushInput()
 		
 	def shutdown(self):
 		if not enabled:
