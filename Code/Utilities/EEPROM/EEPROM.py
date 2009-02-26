@@ -29,6 +29,8 @@ def write_to_ee(address,values):
 
 def read_from_ee(address):
 	value = read_hex_from_ee(address)
+	if value is None:
+		return
 	value = hex2dec(value[4:6])
 	return value
 
@@ -43,6 +45,9 @@ def read_hex_from_ee(address):
 		print 'Error, the serial port is not open.'
 		return
 	value = serial.readline()
+	if value == '':
+		print 'Error, did not receive response from the Micro Controller.'
+		return None
 	value = value.strip()
 	return value
 
