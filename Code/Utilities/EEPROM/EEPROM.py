@@ -21,6 +21,7 @@ def write_to_ee(address,values):
 	for x in range(number/2):
 		msg += dec2hex(values[x])
 	if serial.isOpen():
+		print "Writing:", msg.encode('hex')
 		serial.write(msg)
 	else:
 		print 'Error, the serial port is not open.'
