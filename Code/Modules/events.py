@@ -23,7 +23,8 @@ def pop():
 		return temp
 		
 def triggerEvent(return_code, msg):
-	push(return_code, msg)
+	if not t.stop:
+		push(return_code, msg)
 	
 def wait_for_event(timeout = 1):
 	while not lock.isSet():
@@ -34,6 +35,7 @@ def get_last_event():
 
 def shutdown():
 	t.shutdown()
+	t.join()
 
 class Notifier(Thread):
 	def __init__(self):
@@ -47,6 +49,8 @@ class Notifier(Thread):
 			
 	def shutdown(self):
 		self.stop = True
+		while not queue.empty():
+			queue.get()
 		return
 		
 t = Notifier()
