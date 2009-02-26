@@ -8,9 +8,9 @@ if len(sys.argv) > 1:
 else:
 	serial.port = '/dev/ttyUSB0'
 	serial.baudrate = 115200
-serial.timeout = 1
-serial.open()
-
+	serial.timeout = 1
+	serial.open()
+	
 def write_to_ee(address,values):
 	if type(values) != list:
 		print 'Error, values must be a list of ints'
@@ -26,12 +26,12 @@ def write_to_ee(address,values):
 	else:
 		print 'Error, the serial port is not open.'
 	return
-		
+
 def read_from_ee(address):
 	value = read_hex_from_ee(address)
 	value = hex2dec(value[4:6])
 	return value
-    
+
 def read_hex_from_ee(address):
 	serial.flushOutput()
 	serial.flushInput()
@@ -47,21 +47,20 @@ def read_hex_from_ee(address):
 	return value
 
 def hex2dec(hex):
-	dec = 16 * int(hex[0:1])
-	dec += int(hex[1:2])
+	return int(hex, 16)
 
 def dec2hex(dec):
-    '''
-        Converts a given decimal number to hex.
-        '''
-    hex = '%X' % dec
-    if len(hex)%2 is 1: #Prevents Odd-length error with decode.
-        hex = '0'+hex
+	'''
+	Converts a given decimal number to hex.
+	'''
+	hex = '%X' % dec
+	if len(hex)%2 is 1: #Prevents Odd-length error with decode.
+		hex = '0'+hex
 	while len(hex) < 4:
 		hex = '0' + hex
-	hex = hex.decode("hex")
+		hex = hex.decode("hex")
 	if len(hex) == 1:
 		hex = '\x00' + hex
-    return hex
-	
+	return hex
+
 
