@@ -118,7 +118,7 @@ def wait_for_event():
         events.wait_for_event()
        
 def get_last_event():
-        events.get_last_event()
+        return events.get_last_event()
 
 def get_next_event():
         wait_for_event()
