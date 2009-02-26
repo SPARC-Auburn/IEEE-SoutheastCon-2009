@@ -58,6 +58,9 @@ def dec2hex(dec):
         hex = '0'+hex
 	while len(hex) < 4:
 		hex = '0' + hex
-    return hex.decode("hex")
+	hex = hex.decode("hex")
+	if len(hex) == 1:
+		hex = '\x00' + hex
+    return hex
 	
 
