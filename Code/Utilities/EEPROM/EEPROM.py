@@ -4,12 +4,14 @@ import sys
 serial = serial.Serial()
 if len(sys.argv) > 1:
 	serial.port = sys.argv[1]
-	serial.baudrate = sys.argv[2]
 else:
 	serial.port = '/dev/ttyUSB0'
+if len(sys.argv) > 2:
+	serial.baudrate = sys.argv[2]
+else:
 	serial.baudrate = 115200
-	serial.timeout = 1
-	serial.open()
+serial.timeout = 1
+serial.open()
 	
 def write_to_ee(address,values):
 	if type(values) != list:
