@@ -27,7 +27,6 @@
 #pragma config OSC = IRCIO67
 #pragma config WDT = ON, WDTPS=32768
 #pragma config MCLRE = ON
-#pragma config BOREN = BOHW,BORV = 3
 
 
 #pragma code high_vector=0x08

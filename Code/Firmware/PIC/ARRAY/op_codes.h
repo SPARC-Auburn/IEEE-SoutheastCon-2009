@@ -1,6 +1,6 @@
 #define 	RESET_OP				0x30
-#define 	EEPROM_WR_OP			0x31
-#define		EEPROM_RD_OP			0x32
+#define 	EEPROM_WR_OP			0x01
+#define		EEPROM_RD_OP			0x02
 #define		CAL_ANT_OP				0x40
 #define		LINE_FOLLOW_OP			0x41
 #define		CORNER_DETECTION_OP		0x42

@@ -161,7 +161,7 @@ void main (void)
 	Init();
 	initQueue();
 		
-	ars_magic = (float)(4.883/(1.15*((float)ADC_DELAY/1000000)*13.33));	
+	ars_magic = (float)(4.883/(1.75*((float)ADC_DELAY/1000000)*12.75));	
 	
 	Delay10KTCYx(1);		// Build in a delay to prevent weird serial characters
 
@@ -219,6 +219,7 @@ void main (void)
 				popRXQueue(&c);
 				current_parameters[parameter_count] = c;
 				parameter_count++;
+				
 				#ifdef __DEBUG
 				TXString("DEBUG - Parameter added: ");
 				TXChar(c);
@@ -334,20 +335,20 @@ void main (void)
 					}
 					break;
 				case GET_ANGLE_OP:
-					if(parameter_count == 1) {
-						if(current_parameters[0] == 0x31)
-						{
+//					if(parameter_count == 1) {
+//						if(current_parameters[0] == 0x31)
+//						{
 							ProcStatus.get_angle_enabled = 1;
-						}
-						else 
-						{
-							ProcStatus.get_angle_enabled = 0;
-						
-						}
-											
+//						}
+//						else 
+//						{
+//							ProcStatus.get_angle_enabled = 0;
+//						
+//						}
+//											
 						ProcStatus.ProcessInProgress = 0;
 						parameter_count = 0;
-					}
+//					}
 					break;
 				case ZERO_ANGLE_OP:
 					ProcStatus.zero_angle_enabled = 1;
@@ -371,6 +372,9 @@ void main (void)
 						ProcStatus.ProcessInProgress = 0;
 						parameter_count = 0;
 					}
+					break;
+				default:
+					ProcStatus.ProcessInProgress = 0;
 					break;
 											
 			}
