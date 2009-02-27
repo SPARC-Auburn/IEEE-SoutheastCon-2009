@@ -5,12 +5,9 @@
 #  Created by William Woodall on 2/24/09.
 #  Copyright (c) 2009 Auburn University. All rights reserved.
 #
-
-
 '''
 Module for controlling the Hokuyo URG-04LX Laser Range Finder.
 '''
-
 # Imports #
 # Configs
 import configs
@@ -19,6 +16,8 @@ enabled = config['enabled']
 # Logging
 import logging
 log = logging.getLogger(config['logger_name'])
+# Events
+import events
 # PySerial
 if enabled:
 	try:
@@ -78,13 +77,9 @@ class LaserRangeFinder:
 		#End __init__
 		
 	def scan(self):
-		"""This function will scan from start to stop, returning a reading for every step number of scans.
-		
-		This function allows for specifying start, stop, and step values,
-		but also provides default values, so all parameters are optional.
-		This function will return an array with a length equal to the number scans,
-		with each element in the array containing the corresponding reading.
-		i.e.: readings[i] is equal to reading of the ith+1 scan."""
+		"""
+		This function will scan from start to stop, returning a reading for every step number of scans.
+		"""
 		if not enabled:
 			return
 		result = []
@@ -99,7 +94,7 @@ class LaserRangeFinder:
 		self.serial.readline()
 		self.serial.readline()
 		
-		line = self.readline()
+		line = self.serial.readline()
 		# While there is no empty line return, ('\n'), continue processing data
 		while (line != '\n'):
 			# While we haven't reached the end of the line

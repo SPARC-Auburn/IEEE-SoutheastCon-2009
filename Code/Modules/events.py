@@ -43,6 +43,10 @@ def triggerEvent(return_code, msg):
 def wait_for_event(timeout = 1):
 	while not event.isSet():
 		event.wait(timeout)
+
+def clear_events():
+	while not queue.empty():
+		pop()
 		
 def get_last_event():
 	return pop()

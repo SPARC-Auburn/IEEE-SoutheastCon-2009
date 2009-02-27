@@ -59,7 +59,7 @@ def move(speed, direction):
 	
 # Laser Range Finder Related Functions
 def scan():
-	lrf.scan()
+	return lrf.scan()
 	
 def clear_lrf():
 	lrf.clear()
@@ -124,6 +124,10 @@ def get_next_event():
         wait_for_event()
         return get_last_event()
        
+def clear_events():
+	events.clear_events()
+	return
+	   
 def list_possible_events():
         for micro in micros:
                 print micro.name+":"
@@ -157,7 +161,6 @@ def shutdown():
 	lrf.shutdown()
 	for micro in micros:
 		micro.shutdown()
-	events.shutdown()
 	log.info("Robot.py has shutdown cleanly.")
 	sys.exit(0)
 
@@ -230,6 +233,7 @@ obj_detection = object_detection.get_object()
 import antenna_array
 antenna_array.init()
 ant_array = antenna_array.get_object()
+# Angular Rate
 
 
 signal.signal(signal.SIGINT, shutdown_signal)
