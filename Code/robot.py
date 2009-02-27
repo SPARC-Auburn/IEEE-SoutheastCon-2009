@@ -180,7 +180,7 @@ dash_log = logging.getLogger('Dash_Log')
 dash_log.propagate = False
 serverHandler = LoggingServerHandler('', PORT)
 dash_log.addHandler(serverHandler)
-log.debug("Using logging config file %s" % loggingConfigFile)
+log.debug("Using logging config file %s" % loggingConfigFile.name)
 
 # Start Configurations
 try:
@@ -192,6 +192,7 @@ except IOError:
 		log.error("No config file could be opened.")
 configs.init(configFile)
 config = configs.get_config()
+log.debug("Using config file %s" % configFile.name)
 
 # Initialize modules #
 
