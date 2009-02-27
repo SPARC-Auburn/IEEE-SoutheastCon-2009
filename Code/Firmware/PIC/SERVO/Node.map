@@ -1,5 +1,5 @@
 MPLINK 4.22, Linker
-Linker Map File - Created Fri Feb 20 23:29:04 2009
+Linker Map File - Created Wed Feb 25 22:08:43 2009
 
                                  Section Info
                   Section       Type    Address   Location Size(Bytes)
@@ -21,55 +21,55 @@ Linker Map File - Created Fri Feb 20 23:29:04 2009
                low_vector       code   0x000018    program   0x000006
                    .cinit    romdata   0x00001e    program   0x000026
            .code_serial.o       code   0x000044    program   0x0005f6
-             .code_main.o       code   0x00063a    program   0x000538
-            .code_queue.o       code   0x000b72    program   0x000244
-             .code_init.o       code   0x000db6    program   0x0000ea
-               _cinit_scn       code   0x000ea0    program   0x00009e
-             .stringtable    romdata   0x000f3e    program   0x000061
-        .romdata_t3open.o    romdata   0x000f9f    program   0x000000
-       .idata_statrst.o_i    romdata   0x000f9f    program   0x000000
-       .romdata_statrst.o    romdata   0x000f9f    program   0x000000
-       .idata_t0write.o_i    romdata   0x000f9f    program   0x000000
-       .romdata_t0write.o    romdata   0x000f9f    program   0x000000
-       .idata_t1write.o_i    romdata   0x000f9f    program   0x000000
-       .romdata_t1write.o    romdata   0x000f9f    program   0x000000
-       .idata_t3write.o_i    romdata   0x000f9f    program   0x000000
-       .romdata_t3write.o    romdata   0x000f9f    program   0x000000
-        .romdata___init.o    romdata   0x000f9f    program   0x000000
-          .romdata_main.o    romdata   0x000f9f    program   0x000000
-         .romdata_isbor.o    romdata   0x000f9f    program   0x000000
-          .idata_main.o_i    romdata   0x000f9f    program   0x000001
-        .romdata_ismclr.o    romdata   0x000f9f    program   0x000000
-         .romdata_ispor.o    romdata   0x000f9f    program   0x000000
-       .romdata_iswdtto.o    romdata   0x000f9f    program   0x000000
-         .romdata_c018i.o    romdata   0x000f9f    program   0x000000
-         .romdata_queue.o    romdata   0x000f9f    program   0x000000
-      .romdata_fxd0808u.o    romdata   0x000f9f    program   0x000000
-        .romdata_serial.o    romdata   0x000f9f    program   0x000000
-      .romdata_fxd1616u.o    romdata   0x000f9f    program   0x000000
-        .idata_t0open.o_i    romdata   0x000f9f    program   0x000000
-        .romdata_t0open.o    romdata   0x000f9f    program   0x000000
-          .romdata_init.o    romdata   0x000f9f    program   0x000000
-        .idata_t1open.o_i    romdata   0x000f9f    program   0x000000
-        .romdata_t1open.o    romdata   0x000f9f    program   0x000000
-        .idata_t3open.o_i    romdata   0x000f9f    program   0x000000
-           .code_t3open.o       code   0x000fa0    program   0x000046
-           .code_t1open.o       code   0x000fe6    program   0x000042
-          .code_t3write.o       code   0x001028    program   0x000038
-          .code_t1write.o       code   0x001060    program   0x000038
-          .code_t0write.o       code   0x001098    program   0x000038
-           .code_t0open.o       code   0x0010d0    program   0x000038
-             D10KTCYXCODE       code   0x001108    program   0x00002e
-         .code_fxd1616u.o       code   0x001136    program   0x00002c
-           .code_ismclr.o       code   0x001162    program   0x000024
-             _startup_scn       code   0x001186    program   0x00001c
-         .code_fxd0808u.o       code   0x0011a2    program   0x00001c
-          .code_iswdtto.o       code   0x0011be    program   0x000018
-            .code_ispor.o       code   0x0011d6    program   0x000018
-                    .code       code   0x0011ee    program   0x00000e
-            .code_isbor.o       code   0x0011fc    program   0x00000c
-        .idata_serial.o_i    romdata   0x001208    program   0x000010
-         .idata_queue.o_i    romdata   0x001218    program   0x000007
+             .code_main.o       code   0x00063a    program   0x00053a
+            .code_queue.o       code   0x000b74    program   0x000244
+             .code_init.o       code   0x000db8    program   0x0000ea
+               _cinit_scn       code   0x000ea2    program   0x00009e
+             .stringtable    romdata   0x000f40    program   0x000061
+        .romdata_t3open.o    romdata   0x000fa1    program   0x000000
+       .idata_statrst.o_i    romdata   0x000fa1    program   0x000000
+       .romdata_statrst.o    romdata   0x000fa1    program   0x000000
+       .idata_t0write.o_i    romdata   0x000fa1    program   0x000000
+       .romdata_t0write.o    romdata   0x000fa1    program   0x000000
+       .idata_t1write.o_i    romdata   0x000fa1    program   0x000000
+       .romdata_t1write.o    romdata   0x000fa1    program   0x000000
+       .idata_t3write.o_i    romdata   0x000fa1    program   0x000000
+       .romdata_t3write.o    romdata   0x000fa1    program   0x000000
+        .romdata___init.o    romdata   0x000fa1    program   0x000000
+          .romdata_main.o    romdata   0x000fa1    program   0x000000
+         .romdata_isbor.o    romdata   0x000fa1    program   0x000000
+          .idata_main.o_i    romdata   0x000fa1    program   0x000001
+        .romdata_ismclr.o    romdata   0x000fa1    program   0x000000
+         .romdata_ispor.o    romdata   0x000fa1    program   0x000000
+       .romdata_iswdtto.o    romdata   0x000fa1    program   0x000000
+         .romdata_c018i.o    romdata   0x000fa1    program   0x000000
+         .romdata_queue.o    romdata   0x000fa1    program   0x000000
+      .romdata_fxd0808u.o    romdata   0x000fa1    program   0x000000
+        .romdata_serial.o    romdata   0x000fa1    program   0x000000
+      .romdata_fxd1616u.o    romdata   0x000fa1    program   0x000000
+        .idata_t0open.o_i    romdata   0x000fa1    program   0x000000
+        .romdata_t0open.o    romdata   0x000fa1    program   0x000000
+          .romdata_init.o    romdata   0x000fa1    program   0x000000
+        .idata_t1open.o_i    romdata   0x000fa1    program   0x000000
+        .romdata_t1open.o    romdata   0x000fa1    program   0x000000
+        .idata_t3open.o_i    romdata   0x000fa1    program   0x000000
+           .code_t3open.o       code   0x000fa2    program   0x000046
+           .code_t1open.o       code   0x000fe8    program   0x000042
+          .code_t3write.o       code   0x00102a    program   0x000038
+          .code_t1write.o       code   0x001062    program   0x000038
+          .code_t0write.o       code   0x00109a    program   0x000038
+           .code_t0open.o       code   0x0010d2    program   0x000038
+             D10KTCYXCODE       code   0x00110a    program   0x00002e
+         .code_fxd1616u.o       code   0x001138    program   0x00002c
+           .code_ismclr.o       code   0x001164    program   0x000024
+             _startup_scn       code   0x001188    program   0x00001c
+         .code_fxd0808u.o       code   0x0011a4    program   0x00001c
+          .code_iswdtto.o       code   0x0011c0    program   0x000018
+            .code_ispor.o       code   0x0011d8    program   0x000018
+                    .code       code   0x0011f0    program   0x00000e
+            .code_isbor.o       code   0x0011fe    program   0x00000c
+        .idata_serial.o_i    romdata   0x00120a    program   0x000010
+         .idata_queue.o_i    romdata   0x00121a    program   0x000007
     .config_300001_main.o    romdata   0x300001    program   0x000001
     .config_300002_main.o    romdata   0x300002    program   0x000001
     .config_300003_main.o    romdata   0x300003    program   0x000001
@@ -141,33 +141,33 @@ Linker Map File - Created Fri Feb 20 23:29:04 2009
                                Start         End      
                            ---------   ---------      
                             0x000000    0x000013      
-                            0x000018    0x00121e      
+                            0x000018    0x001220      
                             0x300001    0x300003      
                             0x300005    0x300005      
-            4639 out of 99352 program addresses used, program memory utilization is 4%
+            4641 out of 99352 program addresses used, program memory utilization is 4%
 
 
 
                               Symbols - Sorted by Name
                      Name    Address   Location    Storage File                     
                 ---------  ---------  ---------  --------- ---------                
-                   D10K_1   0x001114    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
-                    D10Kl   0x001120    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
-                    D10Kx   0x001112    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
-             Delay10KTCYx   0x001108    program     extern C:\MCC18\src\traditional\delays\d10ktcyx.asm
-                 FXD0808U   0x0011a2    program     extern C:\MCC18\src\traditional\math\fxd0808u.c
-                 FXD1616U   0x001136    program     extern C:\MCC18\src\traditional\math\fxd1616u.c
-                     Init   0x000db6    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\init.c
-          Init_Interrupts   0x000dd8    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\init.c
-          Init_Oscillator   0x000dd0    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\init.c
-              Init_Timers   0x000e3e    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\init.c
-               Init_USART   0x000de0    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\init.c
-               OpenTimer0   0x0010d0    program     extern C:\MCC18\src\pmc_common\Timers\t0open.c
-               OpenTimer1   0x000fe6    program     extern C:\MCC18\src\pmc_common\Timers\t1open.c
-               OpenTimer3   0x000fa0    program     extern C:\MCC18\src\pmc_common\Timers\t3open.c
+                   D10K_1   0x001116    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
+                    D10Kl   0x001122    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
+                    D10Kx   0x001114    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
+             Delay10KTCYx   0x00110a    program     extern C:\MCC18\src\traditional\delays\d10ktcyx.asm
+                 FXD0808U   0x0011a4    program     extern C:\MCC18\src\traditional\math\fxd0808u.c
+                 FXD1616U   0x001138    program     extern C:\MCC18\src\traditional\math\fxd1616u.c
+                     Init   0x000db8    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\init.c
+          Init_Interrupts   0x000dda    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\init.c
+          Init_Oscillator   0x000dd2    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\init.c
+              Init_Timers   0x000e40    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\init.c
+               Init_USART   0x000de2    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\init.c
+               OpenTimer0   0x0010d2    program     extern C:\MCC18\src\pmc_common\Timers\t0open.c
+               OpenTimer1   0x000fe8    program     extern C:\MCC18\src\pmc_common\Timers\t1open.c
+               OpenTimer3   0x000fa2    program     extern C:\MCC18\src\pmc_common\Timers\t3open.c
                    RXChar   0x000052    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\serial.c
                   RXReady   0x000044    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\serial.c
-                SerialISR   0x000b8e    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
+                SerialISR   0x000b90    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
               StatusReset   0x00000e    program     extern C:\MCC18\src\pmc_common\reset\statrst.c
                     TXBin   0x0000c8    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\serial.c
                 TXBin_Int   0x000138    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\serial.c
@@ -177,11 +177,11 @@ Linker Map File - Created Fri Feb 20 23:29:04 2009
                     TXHex   0x0004ac    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\serial.c
                 TXHex_Int   0x000520    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\serial.c
                  TXString   0x00008a    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\serial.c
-              WriteTimer0   0x001098    program     extern C:\MCC18\src\pmc_common\Timers\t0write.c
-              WriteTimer1   0x001060    program     extern C:\MCC18\src\pmc_common\Timers\t1write.c
-              WriteTimer3   0x001028    program     extern C:\MCC18\src\pmc_common\Timers\t3write.c
-       _D10KTCYXCODE_0010   0x001118    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
-       _D10KTCYXCODE_001C   0x001124    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
+              WriteTimer0   0x00109a    program     extern C:\MCC18\src\pmc_common\Timers\t0write.c
+              WriteTimer1   0x001062    program     extern C:\MCC18\src\pmc_common\Timers\t1write.c
+              WriteTimer3   0x00102a    program     extern C:\MCC18\src\pmc_common\Timers\t3write.c
+       _D10KTCYXCODE_0010   0x00111a    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
+       _D10KTCYXCODE_001C   0x001126    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
          ___else_lbl00025   0x000a66    program     static                          
          ___else_lbl00027   0x000a4c    program     static                          
          ___else_lbl00029   0x000a32    program     static                          
@@ -193,71 +193,71 @@ Linker Map File - Created Fri Feb 20 23:29:04 2009
            ___if_lbl00026   0x000a76    program     static                          
            ___if_lbl00028   0x000a76    program     static                          
            ___if_lbl00030   0x000a76    program     static                          
-           ___if_lbl00036   0x000b5c    program     static                          
-           ___if_lbl00037   0x000b5c    program     static                          
-           ___if_lbl00039   0x000b5c    program     static                          
-           ___if_lbl00041   0x000b5c    program     static                          
-           ___if_lbl00043   0x000b5c    program     static                          
+           ___if_lbl00036   0x000b5e    program     static                          
+           ___if_lbl00037   0x000b5e    program     static                          
+           ___if_lbl00039   0x000b5e    program     static                          
+           ___if_lbl00041   0x000b5e    program     static                          
+           ___if_lbl00043   0x000b5e    program     static                          
        ___return_lbl00000   0x00000c    program     static                          
        ___return_lbl00000   0x000004    program     static                          
-       ___return_lbl00000   0x001160    program     static                          
-       ___return_lbl00000   0x0011bc    program     static                          
-       ___return_lbl00001   0x0011a0    program     static                          
+       ___return_lbl00000   0x001162    program     static                          
+       ___return_lbl00000   0x0011be    program     static                          
+       ___return_lbl00001   0x0011a2    program     static                          
        ___return_lbl00001   0x00001c    program     static                          
-       ___return_lbl00002   0x000f3c    program     static                          
-       ___return_lbl00023   0x000b5e    program     static                          
+       ___return_lbl00002   0x000f3e    program     static                          
+       ___return_lbl00023   0x000b60    program     static                          
         ___while_lbl00032   0x000a7a    program     static                          
-        ___while_lbl00033   0x000b5e    program     static                          
+        ___while_lbl00033   0x000b60    program     static                          
                __config_0   0x300001    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
                __config_1   0x300002    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
                __config_2   0x300003    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
                __config_3   0x300005    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
                    __init   0x000006    program     extern C:\MCC18\src\traditional\stdclib\__init.c
-               __string_0   0x000f87    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
-               __string_0   0x000f9c    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\serial.c
-               __string_1   0x000f74    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
-               __string_1   0x000f99    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\serial.c
-               __string_2   0x000f62    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
-               __string_3   0x000f50    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
-               __string_4   0x000f44    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
-               __string_5   0x000f41    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
-               __string_6   0x000f3e    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
+               __string_0   0x000f89    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
+               __string_0   0x000f9e    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\serial.c
+               __string_1   0x000f76    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
+               __string_1   0x000f9b    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\serial.c
+               __string_2   0x000f64    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
+               __string_3   0x000f52    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
+               __string_4   0x000f46    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
+               __string_5   0x000f43    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
+               __string_6   0x000f40    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
                __tmplbl_2   0x000aa6    program     static                          
                __tmplbl_3   0x000aa0    program     static                          
                __tmplbl_4   0x000a9a    program     static                          
-            __zero_memory   0x0011ee    program     extern C:\MCC18\src\traditional\proc\p18F2685.asm
-                _do_cinit   0x000ea0    program     extern C:\MCC18\src\traditional\startup\c018i.c
+            __zero_memory   0x0011f0    program     extern C:\MCC18\src\traditional\proc\p18F2685.asm
+                _do_cinit   0x000ea2    program     extern C:\MCC18\src\traditional\startup\c018i.c
                    _entry   0x000000    program     extern C:\MCC18\src\traditional\startup\c018i.c
-                 _startup   0x001186    program     extern C:\MCC18\src\traditional\startup\c018i.c
-               clear_loop   0x0011f4    program     static C:\MCC18\src\traditional\proc\p18F2685.asm
-                copy_loop   0x000f12    program     static                          
-            copy_one_byte   0x000f18    program     static                          
-                     done   0x000f3c    program     static                          
-             done_copying   0x000f26    program     static                          
-                  endloop   0x0011b8    program     static                          
-                  endloop   0x00115c    program     static                          
+                 _startup   0x001188    program     extern C:\MCC18\src\traditional\startup\c018i.c
+               clear_loop   0x0011f6    program     static C:\MCC18\src\traditional\proc\p18F2685.asm
+                copy_loop   0x000f14    program     static                          
+            copy_one_byte   0x000f1a    program     static                          
+                     done   0x000f3e    program     static                          
+             done_copying   0x000f28    program     static                          
+                  endloop   0x0011ba    program     static                          
+                  endloop   0x00115e    program     static                          
                  high_isr   0x00063a    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
                  high_vec   0x000008    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
-                initQueue   0x000b72    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
-                    isBOR   0x0011fc    program     extern C:\MCC18\src\pmc_common\reset\isbor.c
-                   isMCLR   0x001162    program     extern C:\MCC18\src\pmc_common\reset\ismclr.c
-                    isPOR   0x0011d6    program     extern C:\MCC18\src\pmc_common\reset\ispor.c
-                isRXEmpty   0x000c5c    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
-                 isRXFull   0x000c74    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
-                isTXEmpty   0x000c4e    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
-                 isTXFull   0x000c6a    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
-                  isWDTTO   0x0011be    program     extern C:\MCC18\src\pmc_common\reset\iswdtto.c
-                     loop   0x001196    program     static                          
-                     loop   0x001140    program     static                          
-                     loop   0x0011aa    program     static                          
+                initQueue   0x000b74    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
+                    isBOR   0x0011fe    program     extern C:\MCC18\src\pmc_common\reset\isbor.c
+                   isMCLR   0x001164    program     extern C:\MCC18\src\pmc_common\reset\ismclr.c
+                    isPOR   0x0011d8    program     extern C:\MCC18\src\pmc_common\reset\ispor.c
+                isRXEmpty   0x000c5e    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
+                 isRXFull   0x000c76    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
+                isTXEmpty   0x000c50    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
+                 isTXFull   0x000c6c    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
+                  isWDTTO   0x0011c0    program     extern C:\MCC18\src\pmc_common\reset\iswdtto.c
+                     loop   0x001198    program     static                          
+                     loop   0x001142    program     static                          
+                     loop   0x0011ac    program     static                          
                   low_isr   0x0006dc    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
                   low_vec   0x000018    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
                      main   0x0009b0    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
-               popRXQueue   0x000d5e    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
-               popTXQueue   0x000d06    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
-              pushRXQueue   0x000cc4    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
-              pushTXQueue   0x000c82    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
-                     test   0x000eba    program     static                          
+               popRXQueue   0x000d60    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
+               popTXQueue   0x000d08    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
+              pushRXQueue   0x000cc6    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
+              pushTXQueue   0x000c84    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
+                     test   0x000ebc    program     static                          
                    ADCON0   0x000fc2       data     extern C:\MCC18\src\traditional\proc\p18F2685.asm
                ADCON0bits   0x000fc2       data     extern C:\MCC18\src\traditional\proc\p18F2685.asm
                    ADCON1   0x000fc1       data     extern C:\MCC18\src\traditional\proc\p18F2685.asm
@@ -1057,73 +1057,73 @@ Linker Map File - Created Fri Feb 20 23:29:04 2009
          ___else_lbl00042   0x000ab6    program     static                          
          ___else_lbl00040   0x000ac8    program     static                          
          ___else_lbl00038   0x000b56    program     static                          
-           ___if_lbl00043   0x000b5c    program     static                          
-           ___if_lbl00041   0x000b5c    program     static                          
-           ___if_lbl00039   0x000b5c    program     static                          
-           ___if_lbl00037   0x000b5c    program     static                          
-           ___if_lbl00036   0x000b5c    program     static                          
-        ___while_lbl00033   0x000b5e    program     static                          
-       ___return_lbl00023   0x000b5e    program     static                          
-                initQueue   0x000b72    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
-                SerialISR   0x000b8e    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
-                isTXEmpty   0x000c4e    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
-                isRXEmpty   0x000c5c    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
-                 isTXFull   0x000c6a    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
-                 isRXFull   0x000c74    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
-              pushTXQueue   0x000c82    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
-              pushRXQueue   0x000cc4    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
-               popTXQueue   0x000d06    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
-               popRXQueue   0x000d5e    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
-                     Init   0x000db6    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\init.c
-          Init_Oscillator   0x000dd0    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\init.c
-          Init_Interrupts   0x000dd8    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\init.c
-               Init_USART   0x000de0    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\init.c
-              Init_Timers   0x000e3e    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\init.c
-                _do_cinit   0x000ea0    program     extern C:\MCC18\src\traditional\startup\c018i.c
-                     test   0x000eba    program     static                          
-                copy_loop   0x000f12    program     static                          
-            copy_one_byte   0x000f18    program     static                          
-             done_copying   0x000f26    program     static                          
-                     done   0x000f3c    program     static                          
-       ___return_lbl00002   0x000f3c    program     static                          
-               __string_6   0x000f3e    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
-               __string_5   0x000f41    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
-               __string_4   0x000f44    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
-               __string_3   0x000f50    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
-               __string_2   0x000f62    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
-               __string_1   0x000f74    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
-               __string_0   0x000f87    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
-               __string_1   0x000f99    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\serial.c
-               __string_0   0x000f9c    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\serial.c
-               OpenTimer3   0x000fa0    program     extern C:\MCC18\src\pmc_common\Timers\t3open.c
-               OpenTimer1   0x000fe6    program     extern C:\MCC18\src\pmc_common\Timers\t1open.c
-              WriteTimer3   0x001028    program     extern C:\MCC18\src\pmc_common\Timers\t3write.c
-              WriteTimer1   0x001060    program     extern C:\MCC18\src\pmc_common\Timers\t1write.c
-              WriteTimer0   0x001098    program     extern C:\MCC18\src\pmc_common\Timers\t0write.c
-               OpenTimer0   0x0010d0    program     extern C:\MCC18\src\pmc_common\Timers\t0open.c
-             Delay10KTCYx   0x001108    program     extern C:\MCC18\src\traditional\delays\d10ktcyx.asm
-                    D10Kx   0x001112    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
-                   D10K_1   0x001114    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
-       _D10KTCYXCODE_0010   0x001118    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
-                    D10Kl   0x001120    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
-       _D10KTCYXCODE_001C   0x001124    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
-                 FXD1616U   0x001136    program     extern C:\MCC18\src\traditional\math\fxd1616u.c
-                     loop   0x001140    program     static                          
-                  endloop   0x00115c    program     static                          
-       ___return_lbl00000   0x001160    program     static                          
-                   isMCLR   0x001162    program     extern C:\MCC18\src\pmc_common\reset\ismclr.c
-                 _startup   0x001186    program     extern C:\MCC18\src\traditional\startup\c018i.c
-                     loop   0x001196    program     static                          
-       ___return_lbl00001   0x0011a0    program     static                          
-                 FXD0808U   0x0011a2    program     extern C:\MCC18\src\traditional\math\fxd0808u.c
-                     loop   0x0011aa    program     static                          
-                  endloop   0x0011b8    program     static                          
-       ___return_lbl00000   0x0011bc    program     static                          
-                  isWDTTO   0x0011be    program     extern C:\MCC18\src\pmc_common\reset\iswdtto.c
-                    isPOR   0x0011d6    program     extern C:\MCC18\src\pmc_common\reset\ispor.c
-            __zero_memory   0x0011ee    program     extern C:\MCC18\src\traditional\proc\p18F2685.asm
-               clear_loop   0x0011f4    program     static C:\MCC18\src\traditional\proc\p18F2685.asm
-                    isBOR   0x0011fc    program     extern C:\MCC18\src\pmc_common\reset\isbor.c
+           ___if_lbl00043   0x000b5e    program     static                          
+           ___if_lbl00041   0x000b5e    program     static                          
+           ___if_lbl00039   0x000b5e    program     static                          
+           ___if_lbl00037   0x000b5e    program     static                          
+           ___if_lbl00036   0x000b5e    program     static                          
+        ___while_lbl00033   0x000b60    program     static                          
+       ___return_lbl00023   0x000b60    program     static                          
+                initQueue   0x000b74    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
+                SerialISR   0x000b90    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
+                isTXEmpty   0x000c50    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
+                isRXEmpty   0x000c5e    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
+                 isTXFull   0x000c6c    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
+                 isRXFull   0x000c76    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
+              pushTXQueue   0x000c84    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
+              pushRXQueue   0x000cc6    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
+               popTXQueue   0x000d08    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
+               popRXQueue   0x000d60    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\queue.c
+                     Init   0x000db8    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\init.c
+          Init_Oscillator   0x000dd2    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\init.c
+          Init_Interrupts   0x000dda    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\init.c
+               Init_USART   0x000de2    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\init.c
+              Init_Timers   0x000e40    program     extern C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\init.c
+                _do_cinit   0x000ea2    program     extern C:\MCC18\src\traditional\startup\c018i.c
+                     test   0x000ebc    program     static                          
+                copy_loop   0x000f14    program     static                          
+            copy_one_byte   0x000f1a    program     static                          
+             done_copying   0x000f28    program     static                          
+                     done   0x000f3e    program     static                          
+       ___return_lbl00002   0x000f3e    program     static                          
+               __string_6   0x000f40    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
+               __string_5   0x000f43    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
+               __string_4   0x000f46    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
+               __string_3   0x000f52    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
+               __string_2   0x000f64    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
+               __string_1   0x000f76    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
+               __string_0   0x000f89    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
+               __string_1   0x000f9b    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\serial.c
+               __string_0   0x000f9e    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\serial.c
+               OpenTimer3   0x000fa2    program     extern C:\MCC18\src\pmc_common\Timers\t3open.c
+               OpenTimer1   0x000fe8    program     extern C:\MCC18\src\pmc_common\Timers\t1open.c
+              WriteTimer3   0x00102a    program     extern C:\MCC18\src\pmc_common\Timers\t3write.c
+              WriteTimer1   0x001062    program     extern C:\MCC18\src\pmc_common\Timers\t1write.c
+              WriteTimer0   0x00109a    program     extern C:\MCC18\src\pmc_common\Timers\t0write.c
+               OpenTimer0   0x0010d2    program     extern C:\MCC18\src\pmc_common\Timers\t0open.c
+             Delay10KTCYx   0x00110a    program     extern C:\MCC18\src\traditional\delays\d10ktcyx.asm
+                    D10Kx   0x001114    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
+                   D10K_1   0x001116    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
+       _D10KTCYXCODE_0010   0x00111a    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
+                    D10Kl   0x001122    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
+       _D10KTCYXCODE_001C   0x001126    program     static C:\MCC18\src\traditional\delays\d10ktcyx.asm
+                 FXD1616U   0x001138    program     extern C:\MCC18\src\traditional\math\fxd1616u.c
+                     loop   0x001142    program     static                          
+                  endloop   0x00115e    program     static                          
+       ___return_lbl00000   0x001162    program     static                          
+                   isMCLR   0x001164    program     extern C:\MCC18\src\pmc_common\reset\ismclr.c
+                 _startup   0x001188    program     extern C:\MCC18\src\traditional\startup\c018i.c
+                     loop   0x001198    program     static                          
+       ___return_lbl00001   0x0011a2    program     static                          
+                 FXD0808U   0x0011a4    program     extern C:\MCC18\src\traditional\math\fxd0808u.c
+                     loop   0x0011ac    program     static                          
+                  endloop   0x0011ba    program     static                          
+       ___return_lbl00000   0x0011be    program     static                          
+                  isWDTTO   0x0011c0    program     extern C:\MCC18\src\pmc_common\reset\iswdtto.c
+                    isPOR   0x0011d8    program     extern C:\MCC18\src\pmc_common\reset\ispor.c
+            __zero_memory   0x0011f0    program     extern C:\MCC18\src\traditional\proc\p18F2685.asm
+               clear_loop   0x0011f6    program     static C:\MCC18\src\traditional\proc\p18F2685.asm
+                    isBOR   0x0011fe    program     extern C:\MCC18\src\pmc_common\reset\isbor.c
                __config_0   0x300001    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
                __config_1   0x300002    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c
                __config_2   0x300003    program     static C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\SERVO\main.c

@@ -2,7 +2,7 @@
 MagicCookie={0b13fe8c-dfe0-40eb-8900-6712719559a7}
 Version=1.0
 [File000]
-Location=K:\SPaRC code repository\Firmware\PIC\OBJ\main.o
+Location=C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\OBJ\main.o
 Folder=Intermediary
 DeviceName=PIC18F2685
 LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
@@ -15,7 +15,7 @@ ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
 TraceCmdString=
 DebugOptions=-D__DEBUG
 [File001]
-Location=K:\SPaRC code repository\Firmware\PIC\OBJ\init.o
+Location=C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\OBJ\init.o
 Folder=Intermediary
 DeviceName=PIC18F2685
 LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
@@ -28,7 +28,7 @@ ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
 TraceCmdString=
 DebugOptions=-D__DEBUG
 [File002]
-Location=K:\SPaRC code repository\Firmware\PIC\OBJ\serial.o
+Location=C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\OBJ\serial.o
 Folder=Intermediary
 DeviceName=PIC18F2685
 LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
@@ -41,7 +41,7 @@ ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
 TraceCmdString=
 DebugOptions=-D__DEBUG
 [File003]
-Location=K:\SPaRC code repository\Firmware\PIC\OBJ\queue.o
+Location=C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\OBJ\queue.o
 Folder=Intermediary
 DeviceName=PIC18F2685
 LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
@@ -54,7 +54,7 @@ ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
 TraceCmdString=
 DebugOptions=-D__DEBUG
 [File004]
-Location=K:\SPaRC code repository\Firmware\PIC\OBJ\Object Detection.cof
+Location=C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\OBJ\Object Detection.cof
 Folder=Output
 DeviceName=PIC18F2685
 LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
@@ -67,7 +67,7 @@ ToolArgsString=/o"$(BINDIR_)$(TARGETBASE).cof" /M"$(BINDIR_)$(TARGETBASE).map" /
 TraceCmdString=
 DebugOptions=/z__MPLAB_DEBUG=1
 [File005]
-Location=K:\SPaRC code repository\Firmware\PIC\OBJ\Object Detection.hex
+Location=C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\OBJ\Object Detection.hex
 Folder=Output
 DeviceName=PIC18F2685
 LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}

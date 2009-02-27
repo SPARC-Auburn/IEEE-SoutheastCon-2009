@@ -229,11 +229,11 @@ void main (void)
 				TXString("\x0A\x0D");	
 
 				count = 0;			
-			}
-			else if( c == 0x00)
+			} else if (c == 0x30)
 			{
 				Reset();
-			}						
+			}
+					
 		}		
 	}
 }

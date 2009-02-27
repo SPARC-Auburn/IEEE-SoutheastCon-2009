@@ -5,10 +5,13 @@
 #define ADC_DELAY	500			// Delay between readings in microseconds.
 #define ARS_SAMPLES	8
 
+
 void	high_isr 		(void);
 void	high_vec 		(void);
 void 	low_vec  		(void);
 void 	low_isr  		(void);
+
+void 	Refresh_EEPROM	(void);
 
 void	read_antennas	(void);
 void	read_ars		(void);

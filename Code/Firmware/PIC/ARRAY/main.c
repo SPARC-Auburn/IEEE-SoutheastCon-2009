@@ -15,6 +15,7 @@
 #include "hardware.h"
 #include "queue.h"
 #include "op_codes.h"
+#include "eealloc.h"
 
 // Use Internal Oscillator, Watchdog Timer, MCLR, and Brown Out Detect
 #pragma config OSC = IRCIO67
@@ -40,6 +41,12 @@ void low_vec (void)
 #pragma code
 
 // Union arrays for antennas
+
+
+int EEP_count = -1;
+union int_byte EEP_address;
+unsigned char EEP_offset = 0;
+
 union int_byte antCalibration[3] = {0,0,0};
 union int_byte antMeasure[3] = {0,0,0};
 
@@ -69,13 +76,9 @@ unsigned char parameter_count = 0;
 
 //***************  VARIABLES FOR EEPROM BEGIN *****************
 
-int EE_line_threshold = 30;							// 30
-int EE_line_follow_threshold = 40;					// 20
-unsigned char EE_corner_threshold = 40;				// 40
-
-unsigned int EE_interrupt_throttle = 500;			// 5000
-
-
+int line_threshold = 30;							// 30
+int line_follow_threshold = 40;						// 20
+int corner_threshold = 40;							// 40
 
 //**************  VARIABLES FOR EEPROM END  ***************
 
@@ -153,6 +156,8 @@ unsigned char c;
 
 void main (void)
 {
+	EEP_address.lt = 0;
+	Refresh_EEPROM();
 	Init();
 	initQueue();
 		
@@ -235,10 +240,50 @@ void main (void)
 					Reset();
 					ProcStatus.ProcessInProgress = 0;
 					break;
+
 				case EEPROM_WR_OP:
-					// Do EEPROM_WR stuff here
-					ProcStatus.ProcessInProgress = 0;
-					parameter_count = 0;
+					if(parameter_count == 3)
+					{
+						EEP_count = current_parameters[2];	
+					}	
+					
+					if(EEP_count != -1 && (parameter_count == EEP_count + 3))
+					{
+						EEP_address.bt[1] = current_parameters[0];
+						EEP_address.bt[0] = current_parameters[1];
+						EEP_offset = 0;
+						while(EEP_offset < EEP_count)
+						{
+							Write_b_eep(EEP_address.lt, current_parameters[EEP_offset + 3]);
+							Busy_eep();
+							EEP_address.lt++;
+							EEP_offset++;	
+						}
+						EEP_count = -1;
+						EEP_address.lt = 0;
+						Refresh_EEPROM();
+						ProcStatus.ProcessInProgress = 0;
+						parameter_count = 0;	
+					}	
+					break;
+				case EEPROM_RD_OP:
+					if(parameter_count == 2)
+					{
+						EEP_address.bt[1] = current_parameters[0];
+						EEP_address.bt[0] = current_parameters[1];
+						EEP_offset = Read_b_eep(EEP_address.lt);
+						TXString("0 ");
+						TXHex(EEP_offset);
+						TXString("\x0A\x0D");
+						EEP_address.lt = 0;
+						ProcStatus.ProcessInProgress = 0;
+						parameter_count = 0;
+					} 
+					else if(parameter_count > 2)
+					{
+						ProcStatus.ProcessInProgress = 0;
+						parameter_count = 0;					
+					}
 					break;
 				case LINE_FOLLOW_OP:
 					if(parameter_count == 1) {
@@ -370,6 +415,15 @@ void main (void)
 }	
 
 
+void Refresh_EEPROM(void)
+{
+	
+	line_threshold = ((int)Read_b_eep(EE_LINE_THRESHOLD_H) << 8) | (Read_b_eep(EE_LINE_THRESHOLD_L));
+	line_follow_threshold = ((int)Read_b_eep(EE_LINE_FOLLOW_THRESHOLD_H) << 8) | (Read_b_eep(EE_LINE_FOLLOW_THRESHOLD_L));
+	corner_threshold = ((int)Read_b_eep(EE_CORNER_THRESHOLD_H) << 8) | (Read_b_eep(EE_CORNER_THRESHOLD_L));
+	
+}
+
 void cal_ant(void)
 {
 	adc_pointer = 0;
@@ -420,8 +474,8 @@ void line_follow() {
 	antResults[1] = antMeasure[1].lt;
 	
 		
-	if(antResults[0] < (antCalibration[0].lt + EE_line_threshold) && 
-	   antResults[1]  < (antCalibration[1].lt + EE_line_threshold))
+	if(antResults[0] < (antCalibration[0].lt + line_threshold) && 
+	   antResults[1]  < (antCalibration[1].lt + line_threshold))
 	{
 		if(INT_LINE_ERROR != lineFollowCurrentState)
 		{
@@ -437,7 +491,7 @@ void line_follow() {
 		
 		
 		//  ******  line follow threshold adjusts the amount
-		if(differenceLineFollow > EE_line_follow_threshold)
+		if(differenceLineFollow > line_follow_threshold)
 		{
 			if(INT_LINE_LEFT != lineFollowCurrentState)
 			{
@@ -447,7 +501,7 @@ void line_follow() {
 			}
 				
 		}	
-		else if(differenceLineFollow < (EE_line_follow_threshold * -1))
+		else if(differenceLineFollow < (line_follow_threshold * -1))
 		{
 			if(INT_LINE_RIGHT != lineFollowCurrentState)
 			{
@@ -475,7 +529,7 @@ void corner_detection() {
 	
 	antResults[2] = antMeasure[2].lt;
 	
-	if(antResults[2] > (antCalibration[2].lt + EE_corner_threshold))
+	if(antResults[2] > (antCalibration[2].lt + corner_threshold))
 	{	
 		if(INT_LINE_CENTER != cornerDetectCurrentState)
 			{
@@ -502,19 +556,19 @@ void line_detection() {
 	antResults[1] = antMeasure[1].lt;
 	antResults[2] = antMeasure[2].lt;
 	
-	if(antResults[0] > (antCalibration[0].lt + EE_line_threshold)) 
+	if(antResults[0] > (antCalibration[0].lt + line_threshold)) 
 	{
 		interrupt(INT_LINE_DETECT_LEFT);
 		ProcStatus.line_detection_enabled = 0;		
 	}
 	
-	if(antResults[1] > (antCalibration[1].lt + EE_line_threshold))
+	if(antResults[1] > (antCalibration[1].lt + line_threshold))
 	{
 		interrupt(INT_LINE_DETECT_RIGHT);
 		ProcStatus.line_detection_enabled = 0;
 	}
 	
-	if(antResults[2] > (antCalibration[2].lt + EE_corner_threshold))
+	if(antResults[2] > (antCalibration[2].lt + corner_threshold))
 	{
 		interrupt(INT_LINE_DETECT_FRONT);
 		ProcStatus.line_detection_enabled = 0;

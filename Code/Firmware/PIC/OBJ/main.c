@@ -27,11 +27,11 @@ int i;
 unsigned int switchCount = 0;
 
 // Variables that are stored in the EEPROM
-unsigned int switch_threshold = 20;
-unsigned int sonar_divider = 58;
-unsigned int thresholdFrontFront = 812;
-unsigned int thresholdFrontBack = 812;
-unsigned int thresholdBack = 10;
+unsigned int switch_threshold;
+unsigned int sonar_divider;
+unsigned int thresholdFrontFront;
+unsigned int thresholdFrontBack;
+unsigned int thresholdBack;
 
 
 

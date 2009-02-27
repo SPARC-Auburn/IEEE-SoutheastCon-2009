@@ -7,5 +7,6 @@
 #include <reset.h>
 #include <math.h>
 #include <adc.h>
+#include <eep.h>
 
 #endif
