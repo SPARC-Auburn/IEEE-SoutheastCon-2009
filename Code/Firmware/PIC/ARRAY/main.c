@@ -90,8 +90,8 @@ int antenna_adjustment = 35;                     // difference between left and 
 
 float ars_magic;
 
-char lineFollowCurrentState;
-char cornerDetectCurrentState;
+char lineFollowCurrentState = 0x00;
+char cornerDetectCurrentState = 0x00;
 
 char desiredAngle;
 int monitorAngleCounter;
@@ -442,7 +442,18 @@ void cal_ant(void)
 	}
 	
 	//  ******  Get difference between left and right antenna base readings (essential for line following)  *********
-	antenna_adjustment = antCalibration[0].lt - antCalibration[1].lt;	
+	antenna_adjustment = antCalibration[0].lt - antCalibration[1].lt;
+	
+//	TXString("calibration_one: ");
+//	TXDec_Int(antCalibration[0].lt);
+//	TXString("\x0D\x0A");
+//	TXString("calibration_two: ");
+//	TXDec_Int(antCalibration[1].lt);
+//	TXString("\x0D\x0A");
+//	TXString("adjustment: ");
+//	TXDec_Int(antenna_adjustment);
+//	TXString("\x0D\x0A");	
+
 }
 
 void cal_ars(void)
@@ -477,9 +488,18 @@ void line_follow() {
 	antResults[0] = antMeasure[0].lt;
 	antResults[1] = antMeasure[1].lt;
 	
+//	TXString("reading_one: ");
+//	TXDec_Int(antResults[0]);
+//	TXString("\x0D\x0A");
+//	TXString("reading_two: ");
+//	TXDec_Int(antResults[1]);
+//	TXString("\x0D\x0A");
+//	TXString("threshold: ");
+//	TXDec_Int(line_threshold);
+//	TXString("\x0D\x0A");
+	
 		
-	if(antResults[0] < (antCalibration[0].lt + line_threshold) && 
-	   antResults[1]  < (antCalibration[1].lt + line_threshold))
+	if(antResults[0] < (antCalibration[0].lt + line_threshold) && antResults[1]  < (antCalibration[1].lt + line_threshold))
 	{
 		if(INT_LINE_ERROR != lineFollowCurrentState)
 		{
@@ -491,11 +511,11 @@ void line_follow() {
 	else
 	{
 		//   ******  First adjust right antenna reading, and then get differnece between the left and right antenna readings
-		differenceLineFollow = antResults[0] - (antResults[1] + antenna_adjustment);
+//		differenceLineFollow = antResults[0] - (antResults[1] + antenna_adjustment);
 		
 		
 		//  ******  line follow threshold adjusts the amount
-		if(differenceLineFollow > line_follow_threshold)
+		if(antResults[0] > (antCalibration[0].lt + line_threshold))
 		{
 			if(INT_LINE_LEFT != lineFollowCurrentState)
 			{
@@ -505,7 +525,8 @@ void line_follow() {
 			}
 				
 		}	
-		else if(differenceLineFollow < (line_follow_threshold * -1))
+		
+		if(antResults[1]  > (antCalibration[1].lt + line_threshold))
 		{
 			if(INT_LINE_RIGHT != lineFollowCurrentState)
 			{
@@ -514,15 +535,15 @@ void line_follow() {
 				ProcStatus.line_follow_enabled = 0;
 			}
 		}	
-		else
-		{
-			if(INT_LINE_CENTER != lineFollowCurrentState)
-			{
-				interrupt(INT_LINE_CENTER);
-				lineFollowCurrentState = INT_LINE_CENTER;
-				ProcStatus.line_follow_enabled = 0;
-			}	
-		}	
+//		else 
+//		{
+//			if(INT_LINE_CENTER != lineFollowCurrentState)
+//			{
+//				interrupt(INT_LINE_CENTER);
+//				lineFollowCurrentState = INT_LINE_CENTER;
+//				ProcStatus.line_follow_enabled = 0;
+//			}	
+//		}	
 	}
 }
 
