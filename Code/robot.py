@@ -61,6 +61,9 @@ def move(speed, direction):
 def scan():
 	return lrf.scan()
 	
+def monitor_lrf():
+	lrf.monitor_obstacles()
+	
 def clear_lrf():
 	lrf.clear()
 	

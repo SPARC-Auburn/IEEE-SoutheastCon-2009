@@ -11,13 +11,27 @@ Module for controlling the Hokuyo URG-04LX Laser Range Finder.
 # Imports #
 # Configs
 import configs
-config = configs.get_config('Laser Range Finder')
-enabled = config['enabled']
+try:
+	config = configs.get_config('Laser Range Finder')
+	enabled = config['enabled']
+except NameError:
+	enabled = True
 # Logging
 import logging
-log = logging.getLogger(config['logger_name'])
+try:
+	log = logging.getLogger(config['logger_name'])
+except NameError:
+	pass
 # Events
 import events
+# Threading
+from threading import Event, Thread
+# Psyco
+try:
+	import psyco
+	psyco.full()
+except ImportError:
+	pass
 # PySerial
 if enabled:
 	try:
@@ -27,7 +41,8 @@ if enabled:
 		sys.exit(1)
 else:
 	log.warning("The Laser Range Finder is disabled and will quitely do nothing.")
-	
+
+
 # Static Functions #
 def init():
 	global initialized, lrfs
@@ -74,14 +89,24 @@ class LaserRangeFinder:
 				self.serial.open()
 			except Exception as e:
 				log.error("Unabled to open the serial port %s: %s" % (self.serial_port, e))
+			#Threading
+			self.check_for_obj = Event()
+			self.monitor = LaserMonitor(self)
+			monitor.start()
 		#End __init__
 		
-	def scan(self):
+	def scan(self, start = None, stop = None, step = None):
 		"""
 		This function will scan from start to stop, returning a reading for every step number of scans.
 		"""
 		if not enabled:
 			return
+		if start is None:
+			start = self.start
+		if stop is None:
+			stop = self.stop
+		if step is None:
+			step = self.step
 		result = []
 		# Generate the command
 		command = 'G'+self.start+self.stop+self.step+'\r'
@@ -110,23 +135,16 @@ class LaserRangeFinder:
 		# Return the resulting list of distances
 		return result
 
-
-	def safe_scan(self, start = "000", stop = "768", step = "00"):
-		"""Checks input and then passes to scan(). DEPRECIATED"""
-		# Check input
-		try:
-			istart = int(start)
-			istop = int(stop)
-			istep = int(step)
-		except ValueError:
-			print "Error converting input, make sure that all parameters are positive integers."
-			return []
-
-		# Validate input
-		if istart <= 0 and istart < istop and istop <= 768:
-			return self.scan(start, stop, step)
-		return []
-
+	def monitor_settings(self, start = 294, stop = 474, range = 600, spike = 50, width = 5):
+		self.monitor.start = start
+		self.monitor.stop = stop
+		self.monitor.range = range
+		self.monitor.spike = spike
+		self.monitor.width = width
+		
+	def monitor_obstacles(self):
+		self.check_for_obj.set()
+	
 	def clear(self):
 		"""This function clears all input/output buffers from the serial device."""
 		if not enabled:
@@ -140,14 +158,64 @@ class LaserRangeFinder:
 			return
 		if self.serial.isOpen():
 			self.serial.close()
+		self.monitor.shutdown()
+		self.monitor.join()
 		
 		
 		
+class LaserMonitor(Thread):
+	def __init__(self, lrf):
+		Thread.__init__(self)
+		self.name = 'Laser Monitor'
+		self.lrf = lrf
+		self.serial = lrf.serial
+		self.check_for_obj = lrf.check_for_obj
+		self.stop = False
 		
+		self.start = 294
+		self.stop = 474
+		self.range = 600
+		self.spike = 50
+		self.width = 5
 		
+	def run(self):
+		while not stop:
+			check_for_obj.wait(1)
+			if check_for_obj.isSet():
+				# scan
+				data = scan(start, stop, '00')
+				# Cut off things over the range
+				for x in range(len(data)):
+					if data[x] > self.range:
+						data[x] = 0
+				# Check for spikes
+				spikes = []
+				for x in range(1, len(data)):
+					if abs(data[x] - data[x-1]) > spike:
+						spikes.append(x)
+				# Check for objects
+				objects = []
+				obj_start = None
+				for x in range(len(spikes)-1):
+					if spikes[x+1] - spikes[x] >= width:
+						if obj_start is None:
+							obj_start = spikes[x]
+						else:
+							objects.append((obj_start, spikes[x]))
+							obj_start = None
+				if obj_start != None:
+					objects.append((obj_start, spikes[len(spikes)-1]))
+					obj_start = None
+				
+				result = []
+				for x,y in objects:
+					mid = (x+y)/2
+					result.append((data[mid], mid+start))
+				if result != []:
+					events.triggerEvent('LRF Object Detected', '0'+result)
+					log.debug("Object(s) Detected by LRF: %s" % str(result))
+					check_for_obj.clear()
+		return
 		
-		
-		
-		
-		
-		
+	def shutdown(self):
+		self.stop = True
