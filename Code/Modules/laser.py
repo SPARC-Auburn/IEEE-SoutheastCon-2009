@@ -184,9 +184,9 @@ class LaserRangeFinder:
 		magnatude = math.sqrt(math.pow(vroy, 2) + math.pow(vrox, 2))
 		return magnatude, theta
 
-	def set_monitor_settings(self, start = 294, stop = 474, range = 600, spike = 50, width = 5):
-		self.mstart = start
-		self.mstop = stop
+	def set_monitor_settings(self, angle = 30, range = 600, spike = 50, width = 5):
+		self.mstart = 384-(angle*3)
+		self.mstop = 384+(angle*3)
 		self.mrange = range
 		self.mspike = spike
 		self.mwidth = width
