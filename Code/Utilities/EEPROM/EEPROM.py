@@ -16,7 +16,7 @@ serial.open()
 def write_to_ee(address,values):
 	if type(values) != list:
 		print 'Error, values must be a list of ints'
-	msg = '\x31'
+	msg = '\x01'
 	msg += dec2hex(address)
 	number = len(values) * 2
 	msg += dec2hex(number)[1:2]
@@ -39,7 +39,7 @@ def read_from_ee(address):
 def read_hex_from_ee(address):
 	serial.flushOutput()
 	serial.flushInput()
-	msg = '\x32'
+	msg = '\x02'
 	msg += dec2hex(address)
 	if serial.isOpen():
 		serial.write(msg)
