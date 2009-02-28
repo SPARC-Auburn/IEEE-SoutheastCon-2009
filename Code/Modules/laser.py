@@ -92,7 +92,7 @@ class LaserRangeFinder:
 			#Threading
 			self.check_for_obj = Event()
 			self.monitor = LaserMonitor(self)
-			monitor.start()
+			self.monitor.start()
 		#End __init__
 		
 	def scan(self, start = None, stop = None, step = None):
@@ -171,19 +171,18 @@ class LaserMonitor(Thread):
 		self.serial = lrf.serial
 		self.check_for_obj = lrf.check_for_obj
 		self.stop = False
-		
-		self.start = 294
-		self.stop = 474
+		self.start_step = 294 # Can't use self.start
+		self.stop_step = 474
 		self.range = 600
 		self.spike = 50
 		self.width = 5
 		
 	def run(self):
-		while not stop:
-			check_for_obj.wait(1)
-			if check_for_obj.isSet():
+		while not self.stop:
+			self.check_for_obj.wait(1)
+			if self.check_for_obj.isSet():
 				# scan
-				data = scan(start, stop, '00')
+				data = scan(self.start_step, self.stop_step, '00')
 				# Cut off things over the range
 				for x in range(len(data)):
 					if data[x] > self.range:
@@ -191,13 +190,13 @@ class LaserMonitor(Thread):
 				# Check for spikes
 				spikes = []
 				for x in range(1, len(data)):
-					if abs(data[x] - data[x-1]) > spike:
+					if abs(data[x] - data[x-1]) > self.spike:
 						spikes.append(x)
 				# Check for objects
 				objects = []
 				obj_start = None
 				for x in range(len(spikes)-1):
-					if spikes[x+1] - spikes[x] >= width:
+					if spikes[x+1] - spikes[x] >= self.width:
 						if obj_start is None:
 							obj_start = spikes[x]
 						else:
