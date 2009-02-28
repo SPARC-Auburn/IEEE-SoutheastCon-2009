@@ -165,13 +165,14 @@ class LaserRangeFinder:
 		result = []
 		for x,y in spikes:
 			mid = (x+y)/2
+			log.debug("Object from Laser (r, theta): %d, %d" % (data[mid], mid+self.mstart-384))
 			temp_r, temp_t = self.translate_to_robot(data[mid], mid+self.mstart-384)
 			result.append((temp_r, temp_t))
 		return result
 
 	def translate_to_robot(self, r, t):
-		vlrx = -2.225
-		vlry = 2.47
+		vlrx = 127.47
+		vlry = -141.57
 		t_r = math.radians(t)
 		vlox = math.cos(t_r)*r
 		vloy = math.sin(t_r)*r
