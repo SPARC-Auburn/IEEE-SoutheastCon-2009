@@ -20,6 +20,8 @@ def handleEvent(e, msg):
 		print 'asdf'
 
 def loop():
+	move(.2,0)
+	monitor_lrf()
 	while True:
 		e, msg = get_next_event()
 		handleEvent(e, msg)

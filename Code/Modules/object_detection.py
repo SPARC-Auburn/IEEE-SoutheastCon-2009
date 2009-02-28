@@ -68,7 +68,7 @@ class ObjDetection:
 		# Handel the messge
 		if return_code == 'Micro Switch Triggered':
 			log.debug("Micro switch depressed.")
-			events.queue.put((return_code, msg))
+			events.triggerEvent(return_code, msg)
 		else:
 			self.object = return_code
 			self.msg = msg

@@ -182,7 +182,7 @@ class LaserMonitor(Thread):
 			self.check_for_obj.wait(1)
 			if self.check_for_obj.isSet():
 				# scan
-				data = scan(self.start_step, self.stop_step, '00')
+				data = self.lrf.scan(self.start_step, self.stop_step, '00')
 				# Cut off things over the range
 				for x in range(len(data)):
 					if data[x] > self.range:
@@ -209,11 +209,11 @@ class LaserMonitor(Thread):
 				result = []
 				for x,y in objects:
 					mid = (x+y)/2
-					result.append((data[mid], mid+start))
+					result.append((data[mid], mid+self.start_step))
 				if result != []:
-					events.triggerEvent('LRF Object Detected', '0'+result)
+					events.triggerEvent('LRF Object Detected', '0'+str(result))
 					log.debug("Object(s) Detected by LRF: %s" % str(result))
-					check_for_obj.clear()
+					self.lrf.check_for_obj.clear()
 		return
 		
 	def shutdown(self):
