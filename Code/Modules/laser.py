@@ -26,6 +26,8 @@ except NameError:
 import events
 # Threading
 from threading import Event, Thread
+# Math
+import math
 # Psyco
 try:
 	import psyco
