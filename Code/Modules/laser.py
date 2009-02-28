@@ -90,9 +90,10 @@ class LaserRangeFinder:
 			except Exception as e:
 				log.error("Unabled to open the serial port %s: %s" % (self.serial_port, e))
 			#Threading
-			self.check_for_obj = Event()
+			self.monitor_event = Event()
 			self.monitor = LaserMonitor(self)
 			self.monitor.start()
+			self.set_monitor_settings()
 		#End __init__
 		
 	def scan(self, start = None, stop = None, step = None):
@@ -134,16 +135,48 @@ class LaserRangeFinder:
 			
 		# Return the resulting list of distances
 		return result
+		
+	def check_for_obj(self):
+		data = scan()[self.mstart:self.mstop]
+		
+		for x in range(len(data)):
+			if data[x] > self.mrange:
+				data[x] = 0
+		
+		potential_spikes = []
+		for x in range(1, len(data)):
+			if abs(data[x] - data[x-1]) > self.mspike:
+				potential_spikes.append(x)
+		
+		spikes = []
+		s1 = None
+		for x in range(len(potential_spikes)-1):
+			if potential_spikes[x+1] - potential_spikes[x] >= self.mwidth:
+				if s1 is None:
+					s1 = potential_spikes[x]
+				else:
+					spikes.append((s1, potential_spikes[x]))
+					s1 = None
+		if s1 != None:
+			spikes.append((s1, potential_spikes[len(potential_spikes)-1]))
+			s1 = None
+		
+		result = []
+		for x,y in spikes:
+			mid = (x+y)/2
+			result.append((data[mid], mid+self.mstart))
+		return result
 
-	def monitor_settings(self, start = 294, stop = 474, range = 600, spike = 50, width = 5):
-		self.monitor.start = start
-		self.monitor.stop = stop
-		self.monitor.range = range
-		self.monitor.spike = spike
-		self.monitor.width = width
+
+	def set_monitor_settings(self, start = 294, stop = 474, range = 600, spike = 50, width = 5):
+		self.mstart = start
+		self.mstop = stop
+		self.mrange = range
+		self.mspike = spike
+		self.mwidth = width
 		
 	def monitor_obstacles(self):
-		self.check_for_obj.set()
+		self.monitor_event.set()
 	
 	def clear(self):
 		"""This function clears all input/output buffers from the serial device."""
@@ -154,6 +187,7 @@ class LaserRangeFinder:
 			self.serial.flushInput()
 		
 	def shutdown(self):
+		log.info("Laser Range Finder shutting down.")
 		if not enabled:
 			return
 		if self.serial.isOpen():
@@ -168,53 +202,19 @@ class LaserMonitor(Thread):
 		Thread.__init__(self)
 		self.name = 'Laser Monitor'
 		self.lrf = lrf
-		self.serial = lrf.serial
-		self.check_for_obj = lrf.check_for_obj
 		self.stop = False
-		self.start_step = 294 # Can't use self.start
-		self.stop_step = 474
-		self.range = 600
-		self.spike = 50
-		self.width = 5
 		
 	def run(self):
 		while not self.stop:
-			self.check_for_obj.wait(1)
-			if self.check_for_obj.isSet():
-				# scan
-				data = self.lrf.scan(self.start_step, self.stop_step, '00')
-				# Cut off things over the range
-				for x in range(len(data)):
-					if data[x] > self.range:
-						data[x] = 0
-				# Check for spikes
-				spikes = []
-				for x in range(1, len(data)):
-					if abs(data[x] - data[x-1]) > self.spike:
-						spikes.append(x)
-				# Check for objects
-				objects = []
-				obj_start = None
-				for x in range(len(spikes)-1):
-					if spikes[x+1] - spikes[x] >= self.width:
-						if obj_start is None:
-							obj_start = spikes[x]
-						else:
-							objects.append((obj_start, spikes[x]))
-							obj_start = None
-				if obj_start != None:
-					objects.append((obj_start, spikes[len(spikes)-1]))
-					obj_start = None
-				
-				result = []
-				for x,y in objects:
-					mid = (x+y)/2
-					result.append((data[mid], mid+self.start_step))
-				if result != []:
-					events.triggerEvent('LRF Object Detected', '0'+str(result))
-					log.debug("Object(s) Detected by LRF: %s" % str(result))
-					self.lrf.check_for_obj.clear()
+			lrf.monitor_event.wait(1)
+			if lrf.monitor_event.isSet():
+				objects = lrf.check_for_obj()
+				if objects != []:
+					log.debug("LRF Detected Object(s): %s" % str(objects))
+					events.triggerEvent('LRF Detected Object', objects)
+					lrf.monitor_event.clear()
 		return
+					
 		
 	def shutdown(self):
 		self.stop = True
