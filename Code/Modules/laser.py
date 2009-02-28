@@ -137,7 +137,7 @@ class LaserRangeFinder:
 		return result
 		
 	def check_for_obj(self):
-		data = scan()[self.mstart:self.mstop]
+		data = self.scan()[self.mstart:self.mstop]
 		
 		for x in range(len(data)):
 			if data[x] > self.mrange:
@@ -206,13 +206,13 @@ class LaserMonitor(Thread):
 		
 	def run(self):
 		while not self.stop:
-			lrf.monitor_event.wait(1)
-			if lrf.monitor_event.isSet():
-				objects = lrf.check_for_obj()
+			self.lrf.monitor_event.wait(1)
+			if self.lrf.monitor_event.isSet():
+				objects = self.lrf.check_for_obj()
 				if objects != []:
 					log.debug("LRF Detected Object(s): %s" % str(objects))
 					events.triggerEvent('LRF Detected Object', objects)
-					lrf.monitor_event.clear()
+					self.lrf.monitor_event.clear()
 		return
 					
 		
