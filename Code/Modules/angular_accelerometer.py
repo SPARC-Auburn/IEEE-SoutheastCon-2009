@@ -90,6 +90,15 @@ class AngularAccelerometer:
 			
 	def shutdown(self):
 		pass
+		
+	def dec2hex(self, dec):
+		'''
+			Converts a given decimal number to hex.
+			'''
+		hex = '%X' % dec
+		if len(hex) < 2: #Prevents Odd-length error with decode.
+			hex = '0'+hex
+		return hex.decode("hex")
 			
 	def get_angle(self):
 		self.angle = 0
@@ -106,7 +115,7 @@ class AngularAccelerometer:
 		self.passive = False
 		self.direction = None
 		self.angle_reached.clear()
-		d = mc.dec2hex(delta)
+		d = self.dec2hex(delta)
 		mc.send(command_codes['Monitor Angle']+d)
 		while not self.angle_reached.isSet():
 			self.angle_reached.wait(1)
@@ -117,7 +126,7 @@ class AngularAccelerometer:
 	def monitor_angle_passive(self, delta):
 		self.passive = True
 		self.direction = None
-		d = mc.dec2hex(delta)
+		d = self.dec2hex(delta)
 		mc.send(command_codes['Monitor Angle']+d)
 		return
 		
