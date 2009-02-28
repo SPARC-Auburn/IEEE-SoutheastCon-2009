@@ -172,7 +172,7 @@ class LaserRangeFinder:
 
 	def translate_to_robot(self, r, t):
 		vlrx = 127.47
-		vlry = -141.57
+		vlry = 120.65
 		t_r = math.radians(t)
 		vlox = math.cos(t_r)*r
 		vloy = math.sin(t_r)*r
