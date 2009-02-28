@@ -73,14 +73,14 @@ class AngularAccelerometer:
 			self.angle_got.set()
 		elif return_code == 'Left':
 			log.debug("Angle change completed in the LEFT direction.")
-			if not passive:
+			if not self.passive:
 				self.direction = 'Left'
 				self.angle_reached.set()
 			else:
 				events.triggerEvent(return_code, msg)
 		elif return_code == 'Right':
 			log.debug("Angle change completed in the RIGHT direction.")
-			if not passive:
+			if not self.passive:
 				self.direction = 'Right'
 				self.angle_reached.set()
 			else:

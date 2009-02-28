@@ -112,7 +112,7 @@ class LaserRangeFinder:
 			step = self.step
 		result = []
 		# Generate the command
-		command = 'G'+self.start+self.stop+self.step+'\r'
+		command = 'G'+start+stop+step+'\r'
 		
 		# Send the command
 		self.serial.write(command)
@@ -165,7 +165,7 @@ class LaserRangeFinder:
 		result = []
 		for x,y in spikes:
 			mid = (x+y)/2
-			log.debug("Object from Laser (r, theta): %d, %d" % (data[mid], mid+self.mstart-384))
+			log.debug("Object from Laser (r, theta): %d, %d" % (data[mid-1], (mid+self.mstart-384)/3))
 			temp_r, temp_t = self.translate_to_robot(data[mid], mid+self.mstart-384)
 			result.append((temp_r, temp_t))
 		return result
@@ -173,13 +173,13 @@ class LaserRangeFinder:
 	def translate_to_robot(self, r, t):
 		vlrx = 127.47
 		vlry = 120.65
-		t_r = math.radians(t)
-		vlox = math.cos(t_r)*r
-		vloy = math.sin(t_r)*r
+		t_r = math.radians(t/3)
+		vloy = math.cos(t_r)*r
+		vlox = math.sin(t_r)*r
 		vrox = vlrx + vlox
 		vroy = vlry + vloy
 		# convert back to polar
-		theta = math.atan(vroy/vrox)
+		theta = math.atan(vrox/vroy)
 		theta = math.degrees(theta)
 		magnatude = math.sqrt(math.pow(vroy, 2) + math.pow(vrox, 2))
 		return magnatude, theta
