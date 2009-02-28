@@ -137,7 +137,7 @@ void low_isr (void)
 //				TXString("\r\n");
 //			#endif
 					
-			if(arsVariation > 4 || arsVariation < -4 )
+			if(arsVariation > 6 || arsVariation < -6 )
 			{
 				arsVariationAccumulator += arsVariation;
 				adc_pointer = 0;
