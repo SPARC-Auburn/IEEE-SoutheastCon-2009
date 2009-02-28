@@ -35,7 +35,8 @@ return_codes = {'\x60':'Angle: ',
 				'\x62':'Right'}
 				
 command_codes = {'Get Angle':'\x60',
-				 'Monitor Angle':'\x61'}
+				 'Monitor Angle':'\x61',
+				 'Zero Angle':'\x62'}
 
 # Static Functions #
 def init():
@@ -110,6 +111,7 @@ class AngularAccelerometer:
 		while not self.angle_reached.isSet():
 			self.angle_reached.wait(1)
 		# Angle returned
+		self.angle = self.get_angle()
 		return self.angle
 		
 	def monitor_angle_passive(self, delta):
@@ -118,3 +120,6 @@ class AngularAccelerometer:
 		d = mc.dec2hex(delta)
 		mc.send(command_codes['Monitor Angle']+d)
 		return
+		
+	def zero_angle(self):
+		mc.send(command_codes['Zero Angle'])

@@ -116,6 +116,19 @@ def corner_detection():
 def line_detection():
 	ant_array.line_detection()
 	
+# Angular Accelerometer
+def get_angle():
+	return aa.get_angle()
+	
+def watch_for_angle(angle):
+	aa.monitor_angle_passive(angle)
+
+def turn_to_angle(angle):
+	return aa.monitor_angle(angle)
+	
+def zero_angle():
+	aa.zero_angle()
+	
 # Events
 def wait_for_event():
         events.wait_for_event()
@@ -238,6 +251,10 @@ import antenna_array
 antenna_array.init()
 ant_array = antenna_array.get_object()
 # Angular Rate
+import angular_accelerometer
+angular_accelerometer.init()
+aa = angular_accelerometer.get_object()
+zero_angle()
 
 
 signal.signal(signal.SIGINT, shutdown_signal)
