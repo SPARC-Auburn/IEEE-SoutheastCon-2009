@@ -170,14 +170,16 @@ class LaserRangeFinder:
 		return result
 
 	def translate_to_robot(self, r, t):
-		vlrx = -127.47
-		vlry = 141.57
-		vlox = math.cos(t)*r
-		vloy = math.sin(t)*r
+		vlrx = -2.225
+		vlry = 2.47
+		t_r = math.radians(t)
+		vlox = math.cos(t_r)*r
+		vloy = math.sin(t_r)*r
 		vrox = vlrx + vlox
 		vroy = vlry + vloy
 		# convert back to polar
 		theta = math.atan(vroy/vrox)
+		theta = math.degrees(theta)
 		magnatude = math.sqrt(math.pow(vroy, 2) + math.pow(vrox, 2))
 		return magnatude, theta
 
