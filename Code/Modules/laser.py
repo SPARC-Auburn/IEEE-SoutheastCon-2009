@@ -132,10 +132,9 @@ class LaserRangeFinder:
 				i += 1
 				result.append(dist)
 			line = self.serial.readline()
-			
 		# Return the resulting list of distances
 		return result
-		
+				
 	def check_for_obj(self):
 		data = self.scan()[self.mstart:self.mstop]
 		
@@ -164,9 +163,21 @@ class LaserRangeFinder:
 		result = []
 		for x,y in spikes:
 			mid = (x+y)/2
-			result.append((data[mid], mid+self.mstart))
+			temp_r, temp_t = self.translate_to_robot(data[mid], mid+self.mstart-384)
+			result.append((temp_r, temp_t))
 		return result
 
+	def translate_to_robot(self, r, t):
+		vlrx = -127.47
+		vlry = 141.57
+		vlox = math.cos(t)*r
+		vloy = math.sin(t)*r
+		vrox = vlrx + vlox
+		vroy = vlry + vloy
+		# convert back to polar
+		theta = math.atan(vroy/vrox)
+		magnatude = math.sqrt(math.pow(vroy, 2) + math.pow(vrox, 2))
+		return magnatude, theta
 
 	def set_monitor_settings(self, start = 294, stop = 474, range = 600, spike = 50, width = 5):
 		self.mstart = start
