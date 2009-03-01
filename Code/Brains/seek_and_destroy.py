@@ -12,17 +12,29 @@ from time import sleep
 
 # Control Code #
 
+stop = False
+
 def handleEvent(e, msg):
 	if e == 'LRF Object Detected':
 		move(0, 0)
-		sys.exit(0)
+		r, t = msg[0]
+		speed = 0.2
+		if t < 0:
+			speed *= -1
+		turn(t, speed)
+		stop = True
 	elif e == 'Micro Switch Triggered':
 		print 'asdf'
+
+def turn(angle, speed):
+	move(0, speed)
+	turn_to_angle(angle)
+	move(0,0)
 
 def loop():
 	move(.2,0)
 	monitor_lrf()
-	while True:
+	while not stop:
 		e, msg = get_next_event()
 		handleEvent(e, msg)
 		
@@ -33,4 +45,3 @@ if __name__ == '__main__':
 		pass
 	finally:
 		shutdown()
-		sys.exit()

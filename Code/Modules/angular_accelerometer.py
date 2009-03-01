@@ -120,8 +120,7 @@ class AngularAccelerometer:
 		while not self.angle_reached.isSet():
 			self.angle_reached.wait(1)
 		# Angle returned
-		self.angle = self.get_angle()
-		return self.angle
+		return
 		
 	def monitor_angle_passive(self, delta):
 		self.passive = True
