@@ -95,7 +95,7 @@ class AngularAccelerometer:
 		'''
 			Converts a given decimal number to hex.
 			'''
-		hex = '%X' % dec
+		hex = '%X' % abs(dec)
 		if len(hex) < 2: #Prevents Odd-length error with decode.
 			hex = '0'+hex
 		return hex.decode("hex")
