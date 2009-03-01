@@ -165,9 +165,10 @@ class LaserRangeFinder:
 		result = []
 		for x,y in spikes:
 			mid = (x+y)/2
-			log.debug("Object from Laser (r, theta): %d, %d" % (data[mid-1], (mid+self.mstart-384)/3))
-			temp_r, temp_t = self.translate_to_robot(data[mid], mid+self.mstart-384)
-			result.append((temp_r, temp_t))
+			if data[mid-1] > 0:
+				log.debug("Object from Laser (r, theta): %d, %d" % (data[mid-1], (mid+self.mstart-384)/3))
+				temp_r, temp_t = self.translate_to_robot(data[mid-1], mid+self.mstart-384)
+				result.append((temp_r, temp_t))
 		return result
 
 	def translate_to_robot(self, r, t):
@@ -181,8 +182,8 @@ class LaserRangeFinder:
 		# convert back to polar
 		theta = math.atan(vrox/vroy)
 		theta = math.degrees(theta)
-		magnatude = math.sqrt(math.pow(vroy, 2) + math.pow(vrox, 2))
-		return magnatude, theta
+		magnitude = math.sqrt(math.pow(vroy, 2) + math.pow(vrox, 2))
+		return magnitude, theta
 
 	def set_monitor_settings(self, angle = 30, range = 600, spike = 50, width = 5):
 		self.mstart = 384-(angle*3)
