@@ -241,7 +241,7 @@ sorter_center()
 gripper_servo = sc.get_object('Gripper Servo')
 gripper_close()
 spinner_servo = sc.get_object('Spinner Servo')
-spinner_servo.move(-1.0)
+spinner_servo.move(0)
 # Object Detection
 import object_detection
 object_detection.init()
