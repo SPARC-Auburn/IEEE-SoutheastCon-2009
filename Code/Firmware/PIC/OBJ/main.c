@@ -20,7 +20,7 @@
 #include "eealloc.h"
 
 unsigned int pulseDuration = 0;
-unsigned int distance[] = {50,50,50};
+unsigned int distance[] = {0,0};
 int sonarIndex = 0;
 int i;
 
@@ -29,11 +29,8 @@ unsigned int switchCount = 0;
 // Variables that are stored in the EEPROM
 unsigned int switch_threshold;
 unsigned int sonar_divider;
-unsigned int thresholdFrontFront;
-unsigned int thresholdFrontBack;
-unsigned int thresholdBack;
-
-
+unsigned int thresholdSonar;
+unsigned int thresholdIR;
 
 volatile struct proc_status ProcStatus = {0,0};
 unsigned char current_proc = 0;
@@ -100,8 +97,6 @@ void main (void)
 	initQueue();
 	
 	TRISAbits.TRISA4 = 1;		// set pin 6 as input for microswitch
-	
-	ADCON1 = 0X0F;				// make sure all pins function as digital
 		
 	OpenTimer0( TIMER_INT_OFF & //initialize timer0 for: - interupt disabled
             T0_16BIT &           //					 	 - 16 bit timer
@@ -209,8 +204,7 @@ void main (void)
 		}
 		
 		// *** Handle execution loop. *** //
-		
-		// If calibration needs to be run
+
 		if(ProcStatus.sonar_poll_enabled) 
 		{
 			poll_sonar();
@@ -218,14 +212,15 @@ void main (void)
 		}
 		
 		//If microswitch is engaged then send respective value
-		if(PORTAbits.RA4)
+		if(PORTAbits.RA4 == 1)
 		{
 			if(switchCount == switch_threshold)
 			{
 				TXChar(0x70);
 				TXString("\x0A\x0D");
 				switchCount++;
-			} else if (switchCount < switch_threshold)
+			} 
+			else if (switchCount < switch_threshold)
 			{
 				switchCount++;
 			}	
@@ -243,29 +238,18 @@ void Refresh_EEPROM(void)
 {
 	switch_threshold = ((int)Read_b_eep(EE_SWITCH_THRESHOLD_H) << 8) | (Read_b_eep(EE_SWITCH_THRESHOLD_L));
 	sonar_divider = ((int)Read_b_eep(EE_SONAR_DIVIDER_H) << 8) | (Read_b_eep(EE_SONAR_DIVIDER_L));
-	thresholdFrontFront = ((int)Read_b_eep(EE_FF_THRESHOLD_H) << 8) | (Read_b_eep(EE_FF_THRESHOLD_L));
-	thresholdFrontBack = ((int)Read_b_eep(EE_FB_THRESHOLD_H) << 8) | (Read_b_eep(EE_FB_THRESHOLD_L));
-	thresholdBack = ((int)Read_b_eep(EE_BACK_THRESHOLD_H) << 8) | (Read_b_eep(EE_BACK_THRESHOLD_L));
+	thresholdSonar = ((int)Read_b_eep(EE_THRESHOLD_SONAR_H) << 8) | (Read_b_eep(EE_THRESHOLD_SONAR_L));
+	thresholdIR = ((int)Read_b_eep(EE_THRESHOLD_IR_H) << 8) | (Read_b_eep(EE_THRESHOLD_IR_L));
 }	
 
 void poll_sonar(void)
-{
-								//start the 1st sonar measurement
-		sonarIndex = 0;		
-
-								//start 2nd sonar measurement
-		sonarIndex++;			
-		
+{					
 		TRISAbits.TRISA1 = 0; 	//set pin 3 to output for Parallax triggering sequence
-
 		PORTAbits.RA1 = 0;		//bring pin 3 low
 		Delay10TCYx(7);			//delay for ~2 microseconds
-
 		PORTAbits.RA1 = 1;  	//bring pin 3 high
 		Delay10TCYx(16);		//delay for ~5 microseconds
-
 		PORTAbits.RA1 = 0;		//bring pin 3 low
-
 		TRISAbits.TRISA1 = 1; 	//set pin 3 to input for pulse readin
 		
 		while(PORTAbits.RA1 == 0)
@@ -279,88 +263,51 @@ void poll_sonar(void)
 		{
 								//wait for the Parallax to bring pin 3 low
 		}
-								//read the value in Timer0
 		pulseDuration = ReadTimer0();
+		distance[0] = pulseDuration;						
 
-								//divide the microseconds by 58 to convert to centimeters
-		distance[sonarIndex] = pulseDuration;						
-
-								//start the 3rd sonar measurement
-		sonarIndex++;
-
-		TRISAbits.TRISA2 = 0; 	//set pin 4 to output for Parallax triggering sequence
-
-		PORTAbits.RA2 = 0;		//bring pin 4 low
-		Delay10TCYx(7);			//delay for ~2 microseconds
-
-		PORTAbits.RA2 = 1;  	//bring pin 4 high
-		Delay10TCYx(16);		//delay for ~5 microseconds
-
-		PORTAbits.RA2 = 0;		//bring pin 4 low
-
-		TRISAbits.TRISA2 = 1; 	//set pin 4 to input for pulse readin
+		/* ===== IR Reading ===== */
 		
-		while(PORTAbits.RA2 == 0)
-		{	
-								//wait for the Parallax to bring pin 4 high				
-		}
-		
-		WriteTimer0( 0 );		//reset Timer0
+		ConvertADC();         // Start conversion
+  		while( BusyADC() );   // Wait for completion
+  		distance[1] = ReadADC();   // Read result
 
-		while(PORTAbits.RA2 == 1)
+		
+		
+		if(distance[0] < thresholdSonar && distance[1] < thresholdIR)
 		{
-								//wait for the Parallax to bring pin 4 low
-		}
-								//read the value in Timer0
-		pulseDuration = ReadTimer0();
-
-								//divide the microseconds by 58 to convert to centimeters
-		distance[sonarIndex] = pulseDuration;						
-		
-
-		if(distance[1] < thresholdFrontBack && distance[2] < thresholdFrontFront)
-		{
-			TXChar(SONAR_PLASTIC);	//send code for "Plastic Bottle"
+			TXChar(SONAR_GLASS);	//send code for "Plastic Bottle"
+			TXChar(' ');
+			TXDec_Int(distance[0]);
 			TXChar(' ');
 			TXDec_Int(distance[1]);
-			TXChar(' ');
-			TXDec_Int(distance[2]);
 			TXString("\x0D\x0A");			
-
+		}
+		else if(distance[0] < thresholdSonar && distance[1] > thresholdIR)
+		{
+			TXChar(SONAR_PLASTIC);	//send code for "Glass Bottle"
+			TXChar(' ');
+			TXDec_Int(distance[0]);
+			TXChar(' ');
+			TXDec_Int(distance[1]);
+			TXString("\x0D\x0A");	
+		}
+		else if(distance[0] > thresholdSonar && distance[1] > thresholdIR)
+		{
+			TXChar(SONAR_ALUMINUM);	//send code for "Aluminum Can"
+			TXChar(' ');
+			TXDec_Int(distance[0]);
+			TXChar(' ');
+			TXDec_Int(distance[1]);
+			TXString("\x0D\x0A");	
 		}
 		else
 		{
-			if(distance[1] < thresholdFrontBack && distance[2] > thresholdFrontFront)
-			{
-				TXChar(SONAR_GLASS);	//send code for "Glass Bottle"
-				TXChar(' ');
-				TXDec_Int(distance[1]);
-				TXChar(' ');
-				TXDec_Int(distance[2]);
-				TXString("\x0D\x0A");	
-			}
-			else
-			{
-				if(distance[1] > thresholdFrontBack && distance[2] > thresholdFrontFront)
-				{
-					TXChar(SONAR_ALUMINUM);	//send code for "Aluminum Can"
-					TXChar(' ');
-					TXDec_Int(distance[1]);
-					TXChar(' ');
-					TXDec_Int(distance[2]);
-					TXString("\x0D\x0A");	
-				}
-				else
-				{
-					TXChar(SONAR_ERROR);	//send code for "Error - FrontFront Sonar is triggered, but FrontBack is not"
-					TXChar(' ');
-					TXDec_Int(distance[1]);
-					TXChar(' ');
-					TXDec_Int(distance[2]);
-					TXString("\x0D\x0A");	
-				}	
-			}			
-		}
-								
-	
+			TXChar(SONAR_ERROR);	//send code for "Error - FrontFront Sonar is triggered, but FrontBack is not"
+			TXChar(' ');
+			TXDec_Int(distance[0]);
+			TXChar(' ');
+			TXDec_Int(distance[1]);
+			TXString("\x0D\x0A");	
+		}						
 }	

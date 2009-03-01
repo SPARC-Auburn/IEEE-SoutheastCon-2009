@@ -9,6 +9,8 @@ int Init (void)
 	Init_Oscillator();
 	Init_Interrupts();
 	Init_USART();
+	Init_ADC();
+	
 	
 	TRISB = 0x00;
 	LATB = 0x01; // Turn on a little status LED;
@@ -67,3 +69,18 @@ void Init_USART(void)
 	
 }
 
+void Init_ADC(void){
+	TRISAbits.TRISA0 = 1;	// Set the first 3 bits to input
+	TRISAbits.TRISA1 = 1;
+	TRISAbits.TRISA2 = 1;
+	
+	TRISAbits.TRISA4 = 1;	// Set pin 6 to switch input
+	
+	OpenADC(        ADC_FOSC_32             &
+					ADC_RIGHT_JUST          &
+					ADC_12_TAD,
+					ADC_CH0					&
+	                ADC_REF_VDD_VSS			&
+	                ADC_INT_OFF,
+	                ADC_1ANA  );
+}	
