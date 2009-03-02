@@ -2,10 +2,22 @@
 import logging, socket, types, os, string, cPickle, struct, time, re
 from stat import ST_DEV, ST_INO
 import logging, logging.handlers
-import socket
+import socket, sys
+sys.path.append("../../Modules")
+import events
 
 HOST = '127.0.0.1'			# Loopback
 PORT = 50007				# Random port
+
+
+def formatEvent(component, attribute, values): 
+	n = [component, attribute] 
+	n.extend([str(x) for x in values]) 
+	return n 
+	 	         
+def toStringFormat(component, attribute, values): 
+	formatList = formatEvent(component, attribute, values) 
+	return ":".join(formatList) 
 
 class Host:
 	def __init__(self, host, port, wait_time = 0.05):
