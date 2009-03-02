@@ -22,7 +22,7 @@ socketHandler = logging.handlers.SocketHandler('localhost',
 hdlrConsole = logging.StreamHandler('/dev/stdout')
 # # don't bother with a formatter, since a socket handler sends the event as
 # # an unformatted pickle
-serverHandler = Networking.LoggingServerHandler('', PORT)
+serverHandler = Networking.LoggingServerHandler('127.0.0.1', PORT)
 # format = logging.Formatter("%(asctime)s - %(component)s - %(attribute)s - %(value)s")
 # serverHandler.setFormatter(format)
 rootLogger.addHandler(serverHandler)

@@ -10,6 +10,7 @@ import math
 Open, Closed = range(2)
 On, Off = range(2)
 Connected, Disconnected = range(2)
+Nothing, Center, Left, Right = range(4)
 
 # A list of functions for component initialization and update
 # init functions are for unchanging graphics and 
@@ -52,11 +53,16 @@ def update_Component_LRF(robot):
 Hall Effect Sensor Component
 
 '''
+
 def init_Component_HES(master, robot):
 	hes = robot.HES
 	hes.canvas = Canvas(master, width=200, height=200)
-	hes.img_scale = PhotoImage(file = "ScaleZ_P1.gif")
 	master.add(hes.canvas)
+	
+	hes.x, hes.y = GeomObject(), GeomObject()
+	hes.x.orig, hes.y.orig = 150, 50
+	hes.x.chg, hes.y.chg = -200, 400
+	hes.x.ofsA, hes.y.ofsA = 0, 0
 	
 	update_Component_HES(robot)
 	
@@ -65,19 +71,59 @@ def update_Component_HES(robot):
 	hes.canvas.delete("all")
 	hes.canvas.create_text(80, 10, text='Hall Effect Sensors', font=('verdana', 10, 'bold'))
 	
-	robot_chassis = Rhombus(100, 100, 150, 75, -100)
-	hes.canvas.create_polygon(robot_chassis.coord, fill="gray50")
+	if hes.GuideLine == Left:
+		hes.x.ofsA = -30
+	elif hes.GuideLine == Right:
+		hes.x.ofsA = 30
 	
-	pos = [[180, 110],[40, 165],[130, 165]]	
-	# A loop to create 3 Hall Effect guages and their 0.0 to 1.0 scales
-	for s in range(3):
-		hes.canvas.create_image(pos[s][0]-20, pos[s][1]-40, image=hes.img_scale)
-		bar_y = Rhombus(pos[s][0], pos[s][1], 10, -80*hes.Sensor[s])
-		bar_x = Rhombus(pos[s][0]+10, pos[s][1], 4, -80*hes.Sensor[s], 0, -3)
-		bar_z = Rhombus(pos[s][0], pos[s][1]-80*hes.Sensor[s], 10, -3, 4)
-		hes.canvas.create_polygon(bar_y.coord, fill="lightblue", width=1, outline="black")
-		hes.canvas.create_polygon(bar_x.coord, fill="lightblue", width=1, outline="black")
-		hes.canvas.create_polygon(bar_z.coord, fill="lightblue", width=1, outline="black")
+	x, y = hes.x, hes.y
+	x.p, y.p = hes.x.orig, hes.y.orig
+	# robot_chassis = Rhombus(100, 100, 150, 75, -100)
+	# hes.canvas.create_polygon(robot_chassis.coord, fill="gray50")
+	
+	# Draw lines for readings from dog fence
+	if hes.GuideLine != Nothing:
+		hes.canvas.create_line(x.p+x.ofsA, y.p, x.p+x.chg+x.ofsA, y.p+y.chg, width=2, fill="red")
+		
+	if hes.BorderLine == Center:
+		hes.canvas.create_line(x.p+x.ofsA, y.p, x.p+200, y.p, width=2, fill="red")
+		if hes.GuideLine == Nothing:
+			hes.canvas.create_line(x.p+x.ofsA, y.p, x.p-200, y.p, width=2, fill="red")
+	elif hes.GuideLine != Nothing:
+		hes.canvas.create_line(x.p+x.ofsA, y.p, x.p-x.chg+x.ofsA, y.p-y.chg, width=2, fill="red")
+		
+	# Draw dashed lines to show when robot is centered
+	hes.canvas.create_line(x.p, y.p, x.p+x.chg, y.p+y.chg, dash=(10, 6), width=2)
+	hes.canvas.create_line(x.p, y.p, x.p+200, y.p, dash=(10, 6), width=2)
+	
+	
+
+# def init_Component_HES(master, robot):
+	# hes = robot.HES
+	# hes.canvas = Canvas(master, width=200, height=200)
+	# hes.img_scale = PhotoImage(file = "ScaleZ_P1.gif")
+	# master.add(hes.canvas)
+	
+	# update_Component_HES(robot)
+	
+# def update_Component_HES(robot):
+	# hes = robot.HES
+	# hes.canvas.delete("all")
+	# hes.canvas.create_text(80, 10, text='Hall Effect Sensors', font=('verdana', 10, 'bold'))
+	
+	# robot_chassis = Rhombus(100, 100, 150, 75, -100)
+	# hes.canvas.create_polygon(robot_chassis.coord, fill="gray50")
+	
+	# pos = [[180, 110],[40, 165],[130, 165]]	
+	# # A loop to create 3 Hall Effect guages and their 0.0 to 1.0 scales
+	# for s in range(3):
+		# hes.canvas.create_image(pos[s][0]-20, pos[s][1]-40, image=hes.img_scale)
+		# bar_y = Rhombus(pos[s][0], pos[s][1], 10, -80*hes.Sensor[s])
+		# bar_x = Rhombus(pos[s][0]+10, pos[s][1], 4, -80*hes.Sensor[s], 0, -3)
+		# bar_z = Rhombus(pos[s][0], pos[s][1]-80*hes.Sensor[s], 10, -3, 4)
+		# hes.canvas.create_polygon(bar_y.coord, fill="lightblue", width=1, outline="black")
+		# hes.canvas.create_polygon(bar_x.coord, fill="lightblue", width=1, outline="black")
+		# hes.canvas.create_polygon(bar_z.coord, fill="lightblue", width=1, outline="black")
 
 '''
 # Sorter Component
@@ -87,20 +133,31 @@ def init_Component_Sorter(master, robot):
 	sort = robot.Sorter
 	sort.canvas = Canvas(master, width=200, height=150)
 	sort.img_sorter = PhotoImage(file = "SorterOptions.gif")
-	sort.img_selection = PhotoImage(file = "SorterSelectionFinal.gif")
+	#////////////////////////////////////////////////////////////////
+	#////////////////////////////////////////////////////////////////
+	sort.img_selection = PhotoImage(file = "sorterSelection3.gif")
+	sort.img_object = PhotoImage(file = "objectSelection.gif")
+	#////////////////////////////////////////////////////////////////
+	#////////////////////////////////////////////////////////////////
 	master.add(sort.canvas)
 	
 	update_Component_Sorter(robot)
 	
 def update_Component_Sorter(robot):
-	sort = robot.Sorter
+	sort, grip = robot.Sorter, robot.Gripper
 	sort.canvas.delete("all")
 	sort.canvas.create_text(80, 10, text='Sorter Component', font=('verdana', 10, 'bold'))
 	
-	offset = 34 * sort.Position - 34
-	
-	sort.canvas.create_image(100, 100, image=sort.img_sorter)
-	sort.canvas.create_image(100+offset, 100, image=sort.img_selection)
+	offset_sort = 34 * sort.Position - 34
+	offset_grip = 34 * grip.Object - 34
+	#////////////////////////////////////////////////////////////////
+	#////////////////////////////////////////////////////////////////
+	sort.canvas.create_image(100, 86, image=sort.img_sorter)
+	sort.canvas.create_image(100+offset_sort, 80, image=sort.img_selection)
+	if grip.Object != -1:
+		sort.canvas.create_image(100+offset_grip, 80, image=sort.img_object)
+	#////////////////////////////////////////////////////////////////
+	#////////////////////////////////////////////////////////////////
 
 '''
 Gripper Component
@@ -109,8 +166,12 @@ def init_Component_Gripper(master, robot):
 	grip = robot.Gripper
 	grip.x, grip.y = GeomObject(), GeomObject()
 	grip.x.orig, grip.y.orig = 90, 50
-	grip.x.chg, grip.y.chg = 10, -10
-	grip.x.end, grip.y.end = 0.8*grip.x.chg, 0.8*grip.y.chg
+	#////////////////////////////////////////////////////////////////
+	#////////////////////////////////////////////////////////////////
+	grip.x.chg, grip.y.chg = 40, -40
+	grip.x.end, grip.y.end = 40, -40
+	#////////////////////////////////////////////////////////////////
+	#////////////////////////////////////////////////////////////////
 	grip.x.ofsA, grip.y.ofsA = 8, 2
 	grip.x.ofsB, grip.y.ofsB = 23, 38
 	grip.x.w, grip.y.h = 30, 40
@@ -136,31 +197,35 @@ def update_Component_Gripper(robot):
 		x.ofsA, y.ofsA = 6, 5
 		x.ofsB, y.ofsB = 5, 37
 		grip.canvas.create_polygon(x.p+x.ofsA, y.p+y.ofsA,
-		x.p+x.ofsA-(4*x.chg),  y.p+y.ofsA-(4*y.chg),
-		x.p+x.ofsB-(4*x.chg),  y.p+y.ofsB-(4*y.chg),
+		x.p+x.ofsA-x.chg,  y.p+y.ofsA-y.chg,
+		x.p+x.ofsB-x.chg,  y.p+y.ofsB-y.chg,
 		x.p+x.ofsB,  y.p+y.ofsB,
 		fill="grey60")
 		
 		x.p, y.p = x.p+x.ofsB, y.p+y.ofsB
-		grip.canvas.create_line(x.p, y.p, x.p-(4*x.chg), y.p-(4*y.chg), width=1)
+		grip.canvas.create_line(x.p, y.p, x.p-x.chg, y.p-y.chg, width=1)
 	
 	# 4 cylinders
 	x.p, y.p = x.orig, y.orig
+	x.p, y.p = x.p-x.chg, y.p-y.chg
 	color = ["#8080e0", "#8080c8", "#8080a2", "#808080"]
 	
 	n = 0
-	for sensor in grip.Sensor:
-		if sensor == On:
-			grip.canvas.create_oval(x.p+x.end, y.p+y.end, x.p+x.w+x.end, y.p+y.h+y.end, fill=color[n], width=1)
-			grip.canvas.create_polygon(x.p+x.ofsA, y.p+y.ofsA,
-			x.p+x.ofsA+x.end,  y.p+y.ofsA+y.end,
-			x.p+x.ofsB+x.end,  y.p+y.ofsB+y.end,
-			x.p+x.ofsB,  y.p+y.ofsB,
-			fill=color[n])
-			grip.canvas.create_oval(x.p, y.p, x.p+x.w, y.p+y.h, fill=color[n], width=1)
-			
-		x.p, y.p = x.p-x.chg, y.p-y.chg
-		n += 1	
+	# for sensor in grip.Sensor:
+	#////////////////////////////////////////////////////////////////
+	#////////////////////////////////////////////////////////////////
+	if grip.Sensor[0] == On:
+		grip.canvas.create_oval(x.p+x.end, y.p+y.end, x.p+x.w+x.end, y.p+y.h+y.end, fill=color[n], width=1)
+		grip.canvas.create_polygon(x.p+x.ofsA, y.p+y.ofsA,
+		x.p+x.ofsA+x.end,  y.p+y.ofsA+y.end,
+		x.p+x.ofsB+x.end,  y.p+y.ofsB+y.end,
+		x.p+x.ofsB,  y.p+y.ofsB,
+		fill=color[n])
+		grip.canvas.create_oval(x.p, y.p, x.p+x.w, y.p+y.h, fill=color[n], width=1)
+	#////////////////////////////////////////////////////////////////
+	#////////////////////////////////////////////////////////////////
+	# x.p, y.p = x.p-40, y.p+40
+	# n += 1	
 	
 	# Moving gripper piece: Open
 	if grip.Status == Open:
@@ -170,16 +235,16 @@ def update_Component_Gripper(robot):
 		x.ofsA, y.ofsA = x.ofsA, y.ofsA+1
 		x.ofsB, y.ofsB = x.ofsB+10, y.ofsB-16
 		grip.canvas.create_polygon(x.p+x.ofsA, y.p+y.ofsA,
-		x.p+x.ofsA-(4*x.chg),  y.p+y.ofsA-(4*y.chg),
-		x.p+x.ofsB-(4*x.chg),  y.p+y.ofsB-(4*y.chg),
+		x.p+x.ofsA-x.chg,  y.p+y.ofsA-y.chg,
+		x.p+x.ofsB-x.chg,  y.p+y.ofsB-y.chg,
 		x.p+x.ofsB,  y.p+y.ofsB,
 		fill="grey80")
 		
-		x.p, y.p = x.p-(4*x.chg), y.p-(4*y.chg)
+		x.p, y.p = x.p-x.chg, y.p-y.chg
 		grip.canvas.create_arc(x.p,y.p,x.p+x.w+3,y.p+y.h+4,start=0,extent=135,style="chord",fill="grey80",width=1)
 		
 		x.p, y.p = x.orig, y.orig-29
-		grip.canvas.create_line(x.p, y.p, x.p-(4*x.chg), y.p-(4*y.chg), width=1)
+		grip.canvas.create_line(x.p, y.p, x.p-x.chg, y.p-y.chg, width=1)
 	
 	# Top of moving gripper piece
 	if grip.Status == Closed:
@@ -187,16 +252,16 @@ def update_Component_Gripper(robot):
 		x.ofsA, y.ofsA = 6, 5
 		x.ofsB, y.ofsB = 21, 0
 		grip.canvas.create_polygon(x.p+x.ofsA, y.p+y.ofsA,
-		x.p+x.ofsA-(4*x.chg),  y.p+y.ofsA-(4*y.chg),
-		x.p+x.ofsB-(4*x.chg),  y.p+y.ofsB-(4*y.chg),
+		x.p+x.ofsA-x.chg,  y.p+y.ofsA-y.chg,
+		x.p+x.ofsB-x.chg,  y.p+y.ofsB-y.chg,
 		x.p+x.ofsB,  y.p+y.ofsB,
 		fill="grey80")
 	
 		x.p, y.p = x.orig+14, y.orig-8
-		grip.canvas.create_line(x.p, y.p, x.p-(4*x.chg), y.p-(4*y.chg), width=1)
+		grip.canvas.create_line(x.p, y.p, x.p-x.chg, y.p-y.chg, width=1)
 	
 		x.p, y.p = x.orig+7, y.orig-12
-		x.p, y.p = x.p-(4*x.chg), y.p-(4*y.chg)
+		x.p, y.p = x.p-x.chg, y.p-y.chg
 		grip.canvas.create_arc(x.p, y.p, x.p+x.w+3, y.p+y.h+4,start=82,extent=135,style="arc",width=1)
 		# x.p, y.p = x.p-(4*x.chg), y.p-(4*y.chg)
 		grip.canvas.create_arc(x.p, y.p, x.p+x.w+3, y.p+y.h+4,start=90,extent=135,style="chord",fill="grey80",width=1)
@@ -211,17 +276,17 @@ def update_Component_Gripper(robot):
 	x.ofsA, y.ofsA = 19, 0
 	x.ofsB, y.ofsB = 31, 11
 	grip.canvas.create_polygon(x.p+x.ofsA, y.p+y.ofsA,
-	x.p+x.ofsA-(4*x.chg)+3,  y.p+y.ofsA-(4*y.chg)-3,
-	x.p+x.ofsB-(4*x.chg),  y.p+y.ofsB-(4*y.chg),
+	x.p+x.ofsA-x.chg+3,  y.p+y.ofsA-y.chg-3,
+	x.p+x.ofsB-x.chg,  y.p+y.ofsB-y.chg,
 	x.p+x.ofsB,  y.p+y.ofsB,
 	fill="grey80")
 	grip.canvas.create_polygon(x.p+x.ofsA, y.p+y.ofsA,
-	x.p+x.ofsA-(4*x.chg),  y.p+y.ofsA-(4*y.chg),
-	x.p+x.ofsB-(4*x.chg)+3,  y.p+y.ofsB-(4*y.chg)-3,
+	x.p+x.ofsA-x.chg,  y.p+y.ofsA-y.chg,
+	x.p+x.ofsB-x.chg+3,  y.p+y.ofsB-y.chg-3,
 	x.p+x.ofsB,  y.p+y.ofsB,
 	fill="grey80")
 	
-	x.p, y.p = x.p-(4*x.chg), y.p-(4*y.chg)
+	x.p, y.p = x.p-x.chg, y.p-y.chg
 	grip.canvas.create_arc(x.p, y.p, x.p+x.w+3, y.p+y.h+4,start=30,extent=60,style="arc",fill="grey80",width=1)
 	
 	
@@ -231,8 +296,8 @@ def update_Component_Gripper(robot):
 	
 	# Gripper hinge
 	x.p, y.p = x.orig+26, y.orig-12
-	grip.canvas.create_line(x.p, y.p, x.p-(4*x.chg), y.p-(4*y.chg), width=2, fill="grey60")
-	grip.canvas.create_line(x.p, y.p, x.p-(4*x.chg), y.p-(4*y.chg), dash=(4, 4), width=2)
+	grip.canvas.create_line(x.p, y.p, x.p-x.chg, y.p-y.chg, width=2, fill="grey60")
+	grip.canvas.create_line(x.p, y.p, x.p-x.chg, y.p-y.chg, dash=(4, 4), width=2)
 
 '''
 Drive Component

@@ -2,24 +2,10 @@
 import logging, socket, types, os, string, cPickle, struct, time, re
 from stat import ST_DEV, ST_INO
 import logging, logging.handlers
-import socket, sys
-sys.path.append("../../Modules")
-import events
-
+import socket
 
 HOST = '127.0.0.1'			# Loopback
 PORT = 50007				# Random port
-
-def formatEvent(component, attribute, values):
-    n = [component, attribute]
-    
-    n.extend([str(x) for x in values])
-    return n
-	
-def toStringFormat(component, attribute, values):
-	formatList = formatEvent(component, attribute, values)
-	return ":".join(formatList)
-
 
 class Host:
 	def __init__(self, host, port, wait_time = 0.05):
@@ -110,14 +96,12 @@ class LoggingServerHandler(logging.Handler):
         self.sock.listen(5)
         
     def makeConnection(self):
-        #print 'Attempting to make connection'
+        print 'Attempting to make connection'
         try:
             conn, addr = self.sock.accept()
             self.client.append([conn, addr])
-            events.triggerEvent("Dashboard Connected ", addr)
         except:
-            pass
-            #print 'No connection to be made'
+            print 'No connection to be made'
 
     def send(self):
         """
@@ -132,16 +116,15 @@ class LoggingServerHandler(logging.Handler):
         #time yet, or because we have reached the retry time and retried,
         #but are still unable to connect.
         if self.sock:
-            #print len(self.client), ' current connections.'
+            print len(self.client), ' current connections.'
             for thisClient in self.client:
                 try:
                     thisClient[ conn ].send(str(self.record))
                 except socket.error:
-                    #print 'Communication Error'
+                    print 'Communication Error'
                     self.client.remove(thisClient)
-        #else:
-
-            #print 'No working connections'
+        else:
+            print 'No working connections'
 
     def makePickle(self, record):
         """
@@ -166,7 +149,7 @@ class LoggingServerHandler(logging.Handler):
         connection lost. Close the socket so that we can retry on the
         next event.
         """
-        #print 'handleError Function'
+        print 'handleError Function'
         if self.closeOnError and self.sock:
             self.sock.close()
             self.sock = None        #try to reconnect next time
@@ -185,7 +168,7 @@ class LoggingServerHandler(logging.Handler):
         self.record = record
         try:
             s = self.makePickle(record)
-            #print 'Broadcasting: ', record
+            print 'Broadcasting: ', record
             self.send()
         except (KeyboardInterrupt, SystemExit):
             raise
@@ -196,7 +179,7 @@ class LoggingServerHandler(logging.Handler):
         """
         Closes the socket.
         """
-        #print 'Close Function'
+        print 'Close Function'
         if self.sock:
             self.sock.close()
             self.sock = None

@@ -1,21 +1,38 @@
 from Tkinter import *
-#from PIL import Image
-#import Image, ImageTk
+from PIL import Image
+import Image, ImageTk, tkMessageBox
 import copy
 
 from Geometry import *
 from RobotStatus import *
 from InterfaceComponents import *
-from Constants import *
 import Networking
 
-#HOST = '127.0.0.1'			# Loopback
-#PORT = 50007				# Random port
-#updateScrollPosition = False
-ConnectionStatus = Disconnected
+HOST = '227.0.0.1'			# Loopback
+PORT = 50007				# Random port
+updateScrollPosition = False
 
+def terminate():
+    # if tkMessageBox.askokcancel("Quit", "Do you really wish to quit?"):
+    root.destroy()
+		
+
+def connect():
+	# if 
+	try:
+		conn = Networking.Client(HOST, PORT)
+	except:
+		conn = None
+		robot_status.Connection = Disconnected
+		tkMessageBox.showinfo(title=None, message="Unable to connect to host at " + HOST + ".")
+		
+	return conn
+	
+def disconnect():
+	return None
+	
 def test(robot):
-	event = c.get_message()
+	event = conn.get_message()
 	if event != '':
 		msg = event.strip('<>').split(',')
 		msg[-1] = msg[-1].strip('" ')
@@ -55,19 +72,30 @@ def Event_Viewer(master):
 	return text
 
 
-def help_menu():
-    help_btn = Menubutton(menu_frame, text='Help', underline=0)
-    help_btn.pack(side=LEFT, padx="2m")
-    help_btn.menu = Menu(help_btn)
-    help_btn.menu.add_command(label="How To", underline=0)#, command=HowTo)
-    help_btn.menu.add_command(label="About", underline=0)#, command=About)
-    help_btn['menu'] = help_btn.menu
-    return help_btn
+def define_menu(master):
+	basemenu = Menu(master)
+	
+	master.add_cascade(label="File", menu=basemenu)
+	basemenu.add_command(label="Connect to host",command=connect)
+	basemenu.add_command(label="Disconnect from host",command=disconnect)
+	basemenu.add_separator()
+	basemenu.add_command(label="Exit", command=terminate)
+	
+	return basemenu
+    
+	# return help_btn
+	
+	# help_btn = Menubutton(menu_frame, text='Help', underline=0)
+    # help_btn.pack(side=LEFT, padx="2m")
+    # help_btn.menu = Menu(help_btn)
+    # help_btn.menu.add_command(label="How To", underline=0)#, command=HowTo)
+    # help_btn.menu.add_command(label="About", underline=0)#, command=About)
+    # help_btn['menu'] = help_btn.menu
 
 
 
-robot_status = RobotStatus()
-c = Networking.Client(HOST, PORT)
+
+
 
 #-- Create user interface application
 root = Tk()
@@ -79,7 +107,11 @@ text = Event_Viewer(root)
 root.title("Dashboard")
 menu_frame = Frame(root)
 menu_frame.pack(fill=X, side=TOP)
-menu_frame.tk_menuBar(help_menu())
+
+menu = Menu(root)
+root.config(menu=menu)
+define_menu(menu)
+# menu_frame.tk_menuBar(help_menu())
 
 #-- Create the components frame
 component_frame = Frame(root)
@@ -88,11 +120,15 @@ component_frame.pack(fill=X, side=TOP)
 
 m1 = PanedWindow(component_frame,relief="groove",background="grey70")
 m1.pack(fill=BOTH, expand=1)
+# left = Label(m1, text="left pane")
+
 
 column1 = PanedWindow(m1, orient=VERTICAL,relief="groove",background="grey70")
 column2 = PanedWindow(m1, orient=VERTICAL,relief="groove",background="grey70")
 m1.add(column1)
 m1.add(column2)
+
+robot_status = RobotStatus()
 
 init_Component_LRF(column1, robot_status)
 init_Component_HES(column1, robot_status)
@@ -102,12 +138,11 @@ init_Component_Gripper(column2, robot_status)
 init_Component_Drive(column2, robot_status)
 init_Component_Arm(column2, robot_status)
 
-#<<<<<<< .mine
+conn = connect()
 
-#=======
-#>>>>>>> .r351
 while 1:
-	test(robot_status)
+	# if robot_status == Connected:
+		# test(robot_status)
 	root.update()
 	
 	
