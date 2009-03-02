@@ -18,6 +18,8 @@ except NameError:
 	enabled = True
 # Logging
 import logging
+datalog = logging.getLogger("DataLogger")
+
 try:
 	log = logging.getLogger(config['logger_name'])
 except NameError:

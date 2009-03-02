@@ -123,7 +123,7 @@ class LoggingServerHandler(logging.Handler):
                 except socket.error:
                     #print 'Communication Error'
                     self.client.remove(thisClient)
-        else:
+        #else:
             #print 'No working connections'
 
     def makePickle(self, record):
