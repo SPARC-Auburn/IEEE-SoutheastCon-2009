@@ -29,7 +29,7 @@ class Host:
 		
 	def broadcast_event(self, message):
 		self.make_connection()
-		print 'Broadcasting: ', message
+		#print 'Broadcasting: ', message
 		try:
 			self.conn.send(message)
 		except:

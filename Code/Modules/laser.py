@@ -18,7 +18,9 @@ except NameError:
 	enabled = True
 # Logging
 import logging
-datalog = logging.getLogger("DataLogger")
+datalog = logging.getLogger("dash_log")
+#serverHandler = LoggingServerHandler('', PORT)
+#dash_log.addHandler(serverHandler)
 
 try:
 	log = logging.getLogger(config['logger_name'])
@@ -141,6 +143,10 @@ class LaserRangeFinder:
 				
 	def check_for_obj(self):
 		data = self.scan()[self.mstart:self.mstop]
+		array = [self.mstart]
+		array.extend(data)
+		print array
+		datalog.info(toStringFormat('Sorter', 'Position', array))
 		
 		for x in range(len(data)):
 			if data[x] > self.mrange:
@@ -185,7 +191,7 @@ class LaserRangeFinder:
 		theta = math.atan(vrox/vroy)
 		theta = math.degrees(theta)
 		magnitude = math.sqrt(math.pow(vroy, 2) + math.pow(vrox, 2))
-		return magnitude, theta
+		59return magnitude, theta
 
 	def set_monitor_settings(self, angle = 30, range = 600, spike = 50, width = 5):
 		self.mstart = 384-(angle*3)

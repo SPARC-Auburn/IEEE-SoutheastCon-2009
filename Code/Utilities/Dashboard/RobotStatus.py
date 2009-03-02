@@ -70,27 +70,33 @@ class RobotStatus():
         
         
 def updateAttr(robotStatus, compName, attrName, values):
-    if hasattr(robotStatus, compName):
-        compObj = getattr(robotStatus, compName)
-        print 'Success'
-        if hasattr(compObj, attrName):
-            attrObj = getattr(compObj, attrName)
+	if hasattr(robotStatus, compName):
+		compObj = getattr(robotStatus, compName)
+		#print 'Success'
+		if compObj == "LRF":
+			if attrName == "range":
+				start = values[0]
+				for x in range(1,len(values)):
+					robotStatus.LRF.range[ start + x ] = values[x]
+			
+		if hasattr(compObj, attrName):
+			attrObj = getattr(compObj, attrName)
 			
 			# Update the component state
-            if len(values) == 0:
-                print 'Notice: Cannot assign an empty list to an attribute.'
-            elif len(values) == 1:
-                setattr(compObj, attrName, values[0])
-            elif len(values) > 1:
-                setattr(compObj, attrName, values)
+		if len(values) == 0:
+               		print 'Notice: Cannot assign an empty list to an attribute.'
+		elif len(values) == 1:
+			setattr(compObj, attrName, values[0])
+		elif len(values) > 1:
+			setattr(compObj, attrName, values)
 			
 			# Now update the component graphic
-            if hasattr(InterfaceComponents, "update_Component_" + compName):
-                getattr(InterfaceComponents, "update_Component_" + compName)(robotStatus)
-                print 'Success'
-        else:
-            print 'Notice: Attribute:', attrName, ': does not exist on RobotStatus.'
-    else:
-        print 'Notice: Component:', compName, ' does not exist on RobotStatus.'
+		if hasattr(InterfaceComponents, "update_Component_" + compName):
+			getattr(InterfaceComponents, "update_Component_" + compName)(robotStatus)
+			#print 'Success'
+		else:
+			print 'Notice: Attribute:', attrName, ': does not exist on RobotStatus.'
+	else:
+		print 'Notice: Component:', compName, ' does not exist on RobotStatus.'
 
 	
