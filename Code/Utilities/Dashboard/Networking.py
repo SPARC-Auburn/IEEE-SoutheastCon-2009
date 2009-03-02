@@ -96,7 +96,7 @@ class LoggingServerHandler(logging.Handler):
         self.sock.listen(5)
         
     def makeConnection(self):
-        print 'Attempting to make connection'
+        #print 'Attempting to make connection'
         try:
             conn, addr = self.sock.accept()
             self.client.append([conn, addr])
@@ -121,10 +121,10 @@ class LoggingServerHandler(logging.Handler):
                 try:
                     thisClient[ conn ].send(str(self.record))
                 except socket.error:
-                    print 'Communication Error'
+                    #print 'Communication Error'
                     self.client.remove(thisClient)
         else:
-            print 'No working connections'
+            #print 'No working connections'
 
     def makePickle(self, record):
         """
@@ -149,7 +149,7 @@ class LoggingServerHandler(logging.Handler):
         connection lost. Close the socket so that we can retry on the
         next event.
         """
-        print 'handleError Function'
+        #print 'handleError Function'
         if self.closeOnError and self.sock:
             self.sock.close()
             self.sock = None        #try to reconnect next time
@@ -179,7 +179,7 @@ class LoggingServerHandler(logging.Handler):
         """
         Closes the socket.
         """
-        print 'Close Function'
+        #print 'Close Function'
         if self.sock:
             self.sock.close()
             self.sock = None

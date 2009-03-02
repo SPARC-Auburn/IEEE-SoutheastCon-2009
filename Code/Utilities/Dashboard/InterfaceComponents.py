@@ -1,3 +1,4 @@
+from Constants import *
 from Tkinter import *
 from Geometry import *
 from RobotStatus import *
@@ -7,10 +8,10 @@ import copy
 import math
 
 
-Open, Closed = range(2)
-On, Off = range(2)
-Connected, Disconnected = range(2)
-Nothing, Center, Left, Right = range(4)
+#Open, Closed = range(2)
+#On, Off = range(2)
+#Connected, Disconnected = range(2)
+#Nothing, Center, Left, Right = range(4)
 
 # A list of functions for component initialization and update
 # init functions are for unchanging graphics and 
@@ -207,14 +208,15 @@ def update_Component_Gripper(robot):
 	
 	# 4 cylinders
 	x.p, y.p = x.orig, y.orig
-	x.p, y.p = x.p-x.chg, y.p-y.chg
+	x.p, y.p = x.p-x.chg+10, y.p-y.chg-10
 	color = ["#8080e0", "#8080c8", "#8080a2", "#808080"]
 	
 	n = 0
 	# for sensor in grip.Sensor:
 	#////////////////////////////////////////////////////////////////
 	#////////////////////////////////////////////////////////////////
-	if grip.Sensor[0] == On:
+	
+	if grip.Sensor == On:
 		grip.canvas.create_oval(x.p+x.end, y.p+y.end, x.p+x.w+x.end, y.p+y.h+y.end, fill=color[n], width=1)
 		grip.canvas.create_polygon(x.p+x.ofsA, y.p+y.ofsA,
 		x.p+x.ofsA+x.end,  y.p+y.ofsA+y.end,
@@ -332,7 +334,6 @@ def init_Component_Drive(master, robot):
 def update_Component_Drive(robot):
 	drive = robot.Drive
 	drive.canvas.delete("all")
-	drive.canvas.create_text(80, 10, text='Drive Component', font=('verdana', 10, 'bold'))
 	
 	img_guage, img_arrow = drive.img_speedGuageUp, drive.img_arrowUp
 	offsetArrow, offsetGuage = -80*drive.Left, 0
@@ -351,6 +352,8 @@ def update_Component_Drive(robot):
 	drive.canvas.create_image(40+100, 20+offsetGuage-1, image = img_guage, anchor = NW)
 	drive.canvas.create_image(35+100, offsetArrow+1, image = img_arrow, anchor = NW)
 	drive.canvas.create_image(10+100, 10, image = drive.img_speedScale, anchor = NW)
+
+	drive.canvas.create_text(80, 10, text='Drive Component', font=('verdana', 10, 'bold'))
 
 '''
 Arm Component

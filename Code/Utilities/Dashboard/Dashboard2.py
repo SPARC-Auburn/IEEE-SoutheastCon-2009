@@ -3,13 +3,14 @@ from PIL import Image
 import Image, ImageTk, tkMessageBox
 import copy
 
+from Constants import *
 from Geometry import *
 from RobotStatus import *
 from InterfaceComponents import *
 import Networking
 
-HOST = '227.0.0.1'			# Loopback
-PORT = 50007				# Random port
+#HOST = '127.0.0.1'			# Loopback
+#PORT = 50007				# Random port
 updateScrollPosition = False
 
 def terminate():
@@ -18,7 +19,7 @@ def terminate():
 		
 
 def connect():
-	# if 
+	robot_status.Connection = Connected
 	try:
 		conn = Networking.Client(HOST, PORT)
 	except:
@@ -29,10 +30,13 @@ def connect():
 	return conn
 	
 def disconnect():
+	robot_status.Connection = Disconnected
+	
 	return None
 	
 def test(robot):
 	event = conn.get_message()
+	print event
 	if event != '':
 		msg = event.strip('<>').split(',')
 		msg[-1] = msg[-1].strip('" ')
@@ -82,19 +86,6 @@ def define_menu(master):
 	basemenu.add_command(label="Exit", command=terminate)
 	
 	return basemenu
-    
-	# return help_btn
-	
-	# help_btn = Menubutton(menu_frame, text='Help', underline=0)
-    # help_btn.pack(side=LEFT, padx="2m")
-    # help_btn.menu = Menu(help_btn)
-    # help_btn.menu.add_command(label="How To", underline=0)#, command=HowTo)
-    # help_btn.menu.add_command(label="About", underline=0)#, command=About)
-    # help_btn['menu'] = help_btn.menu
-
-
-
-
 
 
 #-- Create user interface application
@@ -141,8 +132,9 @@ init_Component_Arm(column2, robot_status)
 conn = connect()
 
 while 1:
-	# if robot_status == Connected:
-		# test(robot_status)
+	if robot_status == Connected:
+		print "connected"
+		test(robot_status)
 	root.update()
 	
 	

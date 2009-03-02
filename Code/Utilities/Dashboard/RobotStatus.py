@@ -1,9 +1,5 @@
+from Constants import *
 import InterfaceComponents
-
-Open, Closed = range(2)
-On, Off = range(2)
-Connected, Disconnected = range(2)
-Nothing, Center, Left, Right = range(4)
 
 class Component():
 	def __init__(self):
@@ -40,7 +36,7 @@ class RobotStatus():
 		
 	def resetGripper(self):
 		self.Gripper.Status = Open
-		self.Gripper.Sensor = [On, Off, Off, On]
+		self.Gripper.Sensor = On
 		self.Gripper.Object = 0#Plastic
 		
 	def resetSorter(self):
