@@ -22,10 +22,10 @@ def handleEvent(e, msg):
 		move(0, 0)
 		sleep(0.01)
 		r, t = msg[0]
-		speed = 0.2
+		speed = 0.3
 		if r < 200:
 			spinner_servo.move(-1.0)
-		if t < 0:
+		if t > 0:
 			speed *= -1
 		if t != 0:
 			turn(t, speed)
