@@ -27,6 +27,7 @@ try:
 except NameError:
 	pass
 # Events
+from Networking import *
 import events
 # Threading
 from threading import Event, Thread
