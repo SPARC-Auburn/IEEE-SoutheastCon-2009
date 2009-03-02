@@ -18,7 +18,7 @@ except NameError:
 	enabled = True
 # Logging
 import logging
-datalog = logging.getLogger("dash_log")
+datalog = logging.getLogger("Dash_log")
 #serverHandler = LoggingServerHandler('', PORT)
 #dash_log.addHandler(serverHandler)
 
