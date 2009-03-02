@@ -191,7 +191,7 @@ class LaserRangeFinder:
 		theta = math.atan(vrox/vroy)
 		theta = math.degrees(theta)
 		magnitude = math.sqrt(math.pow(vroy, 2) + math.pow(vrox, 2))
-		59return magnitude, theta
+		return magnitude, theta
 
 	def set_monitor_settings(self, angle = 30, range = 600, spike = 50, width = 5):
 		self.mstart = 384-(angle*3)
