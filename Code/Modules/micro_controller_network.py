@@ -109,7 +109,7 @@ class MicroController:
 		if type(msg) is list:
 			self.send_list_of_bytes(msg)
 		else:
-			self.serial.write(msg)
+			self.send_list_of_bytes([msg])
 	
 	def send_list_of_bytes(self, msg):
 		'''
@@ -132,6 +132,9 @@ class MicroController:
 			self.serial.write(message+'\r')
 		self.send_lock.release()
 		return
+		
+	def reset(self):
+		self.send('\x30')
 		
 	def shutdown(self):
 		self.log.info("Micro Controller %s is shutting down.", self.name)
