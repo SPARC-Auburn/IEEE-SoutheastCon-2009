@@ -193,7 +193,7 @@ logging.config.fileConfig(loggingConfigFile)
 log = logging.getLogger('Robot')
 brain_log = logging.getLogger('Brain')
 dash_log = logging.getLogger('Dash_Log')
-#dash_log.propagate = False
+dash_log.propagate = False
 serverHandler = LoggingServerHandler('', PORT)
 dash_log.addHandler(serverHandler)
 log.debug("Using logging config file %s" % loggingConfigFile.name)
