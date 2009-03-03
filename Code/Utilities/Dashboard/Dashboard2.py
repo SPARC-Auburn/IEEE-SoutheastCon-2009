@@ -21,7 +21,10 @@ def terminate():
 def connect():
 	robot_status.Connection = Connected
 	try:
-		conn = Networking.Client(HOST, PORT)
+		conn = Networking.Client('111.1.1.1', PORT)
+		print 'Connection established to host ' + HOST + '.'
+		text.insert(END, 'Connection established to host ' + HOST + '.')
+		text.insert(END, "\n")
 	except:
 		conn = None
 		robot_status.Connection = Disconnected
@@ -36,8 +39,8 @@ def disconnect():
 	
 def test(robot):
 	event = conn.get_message()
-	print event
 	if event != '':
+		print event
 		msg = event.strip('<>').split(',')
 		msg[-1] = msg[-1].strip('" ')
 		eventDataStr = msg[-1].split(':')
@@ -132,9 +135,9 @@ init_Component_Arm(column2, robot_status)
 conn = connect()
 
 while 1:
-	if robot_status == Connected:
-		print "connected"
-		test(robot_status)
+	#if robot_status == Connected:
+		#print "connected"
+	test(robot_status)
 	root.update()
 	
 	
