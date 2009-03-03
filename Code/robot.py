@@ -33,8 +33,6 @@ import configs
 # Events
 import events
 
-#serverHandler = LoggingServerHandler('', PORT)
-
 # Functions #
 # These functions should be mostly 'pass through' functions.
 # Which basically means that it allows functions to be called
@@ -196,6 +194,7 @@ dash_log = logging.getLogger('Dash_Log')
 dash_log.propagate = False
 serverHandler = LoggingServerHandler('', PORT)
 dash_log.addHandler(serverHandler)
+dash_log.critical("Loaded Dash Log.")
 log.debug("Using logging config file %s" % loggingConfigFile.name)
 
 # Start Configurations

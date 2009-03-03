@@ -18,14 +18,15 @@ except NameError:
 	enabled = True
 # Logging
 import logging
-datalog = logging.getLogger("Dash_log")
-
+datalog = logging.getLogger("Dashboard")
+datalog.propagate = False
 try:
 	log = logging.getLogger(config['logger_name'])
 except NameError:
 	pass
-# Events
+# Networking for dashboard
 from Networking import *
+# Events
 import events
 # Threading
 from threading import Event, Thread
@@ -144,7 +145,7 @@ class LaserRangeFinder:
 		data = self.scan()[self.mstart:self.mstop]
 		array = [self.mstart]
 		array.extend(data)
-		datalog.info(toStringFormat('Sorter', 'Position', array))
+		#datalog.info(toStringFormat('Sorter', 'Position', array))
 		
 		for x in range(len(data)):
 			if data[x] > self.mrange:
