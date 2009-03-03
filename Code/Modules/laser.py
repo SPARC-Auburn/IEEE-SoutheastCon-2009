@@ -19,8 +19,6 @@ except NameError:
 # Logging
 import logging
 datalog = logging.getLogger("Dash_log")
-#serverHandler = LoggingServerHandler('', PORT)
-#dash_log.addHandler(serverHandler)
 
 try:
 	log = logging.getLogger(config['logger_name'])
@@ -146,7 +144,6 @@ class LaserRangeFinder:
 		data = self.scan()[self.mstart:self.mstop]
 		array = [self.mstart]
 		array.extend(data)
-		print array
 		datalog.info(toStringFormat('Sorter', 'Position', array))
 		
 		for x in range(len(data)):
