@@ -123,6 +123,9 @@ def watch_for_angle(angle):
 
 def turn_to_angle(angle):
 	return aa.monitor_angle(angle)
+
+def calibrate_ars():
+	aa.calibrate_ars()
 	
 def zero_angle():
 	aa.zero_angle()

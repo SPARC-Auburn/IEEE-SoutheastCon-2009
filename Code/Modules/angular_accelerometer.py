@@ -31,12 +31,13 @@ mc = micro_controller_network.get_object(mc_name)
 
 # Static Variables
 return_codes = {'\x60':'Angle: ',
-				'\x61':'Left',
-				'\x62':'Right'}
+		'\x61':'Left',
+		'\x62':'Right'}
 				
 command_codes = {'Get Angle':'\x60',
-				 'Monitor Angle':'\x61',
-				 'Zero Angle':'\x62'}
+		 'Monitor Angle':'\x61',
+		 'Zero Angle':'\x62',
+		 'Calibrate ARS':'\x63'}
 
 # Static Functions #
 def init():
@@ -129,5 +130,9 @@ class AngularAccelerometer:
 		mc.send(command_codes['Monitor Angle']+d)
 		return
 		
+	def calibrate_ars(self):
+		mc.send(command_codes['Calibrate ARS'])
+		sleep(0.01)
+
 	def zero_angle(self):
 		mc.send(command_codes['Zero Angle'])
