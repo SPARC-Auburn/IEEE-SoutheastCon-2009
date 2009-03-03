@@ -110,10 +110,12 @@ class LoggingServerHandler(logging.Handler):
     def makeConnection(self):
         #print 'Attempting to make connection'
         try:
-            conn, addr = self.sock.accept()
-            self.client.append([conn, addr])
+		conn, addr = self.sock.accept()
+		self.client.append([conn, addr])
+		print 'New connection established. ' + len(client) + ' current connections.'
         except:
-            print 'No connection to be made'
+		pass
+		#print 'No connection to be made'
 
     def send(self):
         """
