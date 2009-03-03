@@ -29,10 +29,19 @@ unsigned long startButtonCount = 0;
 unsigned int startButtonIndicator = 0;
 
 // Variables that are stored in the EEPROM
-unsigned int switch_threshold;
-unsigned int sonar_divider;
-unsigned int thresholdSonar;
-unsigned int thresholdIR;
+unsigned int ch_switch_threshold;
+unsigned int on_switch_threshold;
+unsigned int threshold_Sonar_Object;
+unsigned int threshold_IR_Object;
+unsigned int threshold_Sonar_Plastic_Low;
+unsigned int threshold_Sonar_Plastic_High;
+unsigned int threshold_IR_Plastic_Low;
+unsigned int threshold_IR_Plastic_High;
+unsigned int threshold_Sonar_Glass_Low;
+unsigned int threshold_Sonar_Glass_High;
+unsigned int threshold_IR_Glass_Low;
+unsigned int threshold_IR_Glass_High;
+unsigned int object_checks;
 
 volatile struct proc_status ProcStatus = {0,0};
 unsigned char current_proc = 0;
@@ -42,9 +51,6 @@ unsigned char current_parameters[32];
 int EEP_count = -1;
 union int_byte EEP_address;
 unsigned char EEP_offset = 0;
-
-
-
 
 #pragma config OSC = IRCIO67,WDT = OFF, MCLRE = ON
 
@@ -99,7 +105,6 @@ void main (void)
 	Refresh_EEPROM();
 	Init();	
 	initQueue();
-	
 	
 	TRISAbits.TRISA4 = 1;		// set pin 6 as input for microswitch
 	TRISAbits.TRISA5 = 1;		// set pin 7 as input for start button
@@ -220,7 +225,22 @@ void main (void)
 
 		if(ProcStatus.sonar_poll_enabled) 
 		{
-			poll_sonar();
+			unsigned char cycles = 0;
+			unsigned char temp_readings;
+			
+			while(cycles < object_checks)
+			{
+				temp_readings += poll_sonar();
+			}	
+			temp_readings = temp_readings / object_checks;
+			
+			TXChar(temp_readings);
+			TXChar(' ');
+			TXDec_Int(distance[0]);
+			TXChar(' ');
+			TXDec_Int(distance[1]);
+			TXString("\x0A\x0D");
+			
 			ProcStatus.sonar_poll_enabled = 0;
 		}
 		
@@ -231,7 +251,7 @@ void main (void)
 			
 			if(PORTAbits.RA5)				//if the start button is engaged
 			{
-				if(startButtonCount == 20) 	//if the start button counter equals 20
+				if(startButtonCount == on_switch_threshold) 	//if the start button counter equals threshold
 				{	
 					startButtonCount++;
 									
@@ -251,7 +271,7 @@ void main (void)
 						startButtonIndicator = 0;	
 					}	
 				}
-				else if(startButtonCount < 20)
+				else if(startButtonCount < on_switch_threshold)
 				{
 					startButtonCount++;
 				}	
@@ -268,13 +288,13 @@ void main (void)
 		//If microswitch is engaged then send respective value
 		if(PORTAbits.RA4)
 		{
-			if(switchCount == switch_threshold)
+			if(switchCount == ch_switch_threshold)
 			{
 				TXChar(0x70);
 				TXString("\x0A\x0D");
 				switchCount++;
 			} 
-			else if(switchCount < switch_threshold)
+			else if(switchCount < ch_switch_threshold)
 			{
 				switchCount++;
 			}	
@@ -290,13 +310,22 @@ void main (void)
 
 void Refresh_EEPROM(void)
 {
-	switch_threshold = ((int)Read_b_eep(EE_SWITCH_THRESHOLD_H) << 8) | (Read_b_eep(EE_SWITCH_THRESHOLD_L));
-	sonar_divider = ((int)Read_b_eep(EE_SONAR_DIVIDER_H) << 8) | (Read_b_eep(EE_SONAR_DIVIDER_L));
-	thresholdSonar = ((int)Read_b_eep(EE_THRESHOLD_SONAR_H) << 8) | (Read_b_eep(EE_THRESHOLD_SONAR_L));
-	thresholdIR = ((int)Read_b_eep(EE_THRESHOLD_IR_H) << 8) | (Read_b_eep(EE_THRESHOLD_IR_L));
+	ch_switch_threshold = 						((int)Read_b_eep(CH_SWITCH_THRESHOLD_H) << 8) 	| (Read_b_eep(CH_SWITCH_THRESHOLD_L));
+	on_switch_threshold = 						((int)Read_b_eep(ON_SWITCH_THRESHOLD_H) << 8) 	| (Read_b_eep(ON_SWITCH_THRESHOLD_L));
+	threshold_Sonar_Object = 					((int)Read_b_eep(SONAR_OBJECT_H) << 8) 			| (Read_b_eep(SONAR_OBJECT_L));
+	threshold_IR_Object = 						((int)Read_b_eep(IR_OBJECT_H) << 8) 			| (Read_b_eep(IR_OBJECT_L));
+	threshold_Sonar_Plastic_Low = 				((int)Read_b_eep(SONAR_PLASTIC_LOW_H) << 8) 	| (Read_b_eep(SONAR_PLASTIC_LOW_L));
+	threshold_Sonar_Plastic_High = 				((int)Read_b_eep(SONAR_PLASTIC_HIGH_H) << 8) 	| (Read_b_eep(SONAR_PLASTIC_HIGH_L));
+	threshold_IR_Plastic_Low = 					((int)Read_b_eep(IR_PLASTIC_LOW_H) << 8) 		| (Read_b_eep(IR_PLASTIC_LOW_L));
+	threshold_IR_Plastic_High = 				((int)Read_b_eep(IR_PLASTIC_HIGH_H) << 8) 		| (Read_b_eep(IR_PLASTIC_HIGH_L));
+	threshold_Sonar_Glass_Low = 				((int)Read_b_eep(SONAR_GLASS_LOW_H) << 8) 		| (Read_b_eep(SONAR_GLASS_LOW_L));
+	threshold_Sonar_Glass_High = 				((int)Read_b_eep(SONAR_GLASS_HIGH_H) << 8) 		| (Read_b_eep(SONAR_GLASS_HIGH_L));
+	threshold_IR_Glass_Low = 					((int)Read_b_eep(IR_GLASS_LOW_H) << 8) 			| (Read_b_eep(IR_GLASS_LOW_L));
+	threshold_IR_Glass_High	=					((int)Read_b_eep(IR_GLASS_HIGH_H) << 8) 		| (Read_b_eep(IR_GLASS_HIGH_L));
+	object_checks = 							((int)Read_b_eep(OBJECT_CHECKS_H) << 8) 		| (Read_b_eep(OBJECT_CHECKS_L));
 }	
 
-void poll_sonar(void)
+unsigned char poll_sonar(void)
 {					
 		TRISAbits.TRISA1 = 0; 	//set pin 3 to output for Parallax triggering sequence
 		PORTAbits.RA1 = 0;		//bring pin 3 low
@@ -320,9 +349,6 @@ void poll_sonar(void)
 		
 		pulseDuration = ReadTimer0();
 		distance[0] = pulseDuration/4;	
-		
-		
-							
 
 		/* ===== IR Reading ===== */
 		
@@ -330,42 +356,26 @@ void poll_sonar(void)
   		while( BusyADC() );   // Wait for completion
   		distance[1] = ReadADC();   // Read result
 
+		if(distance[0] < threshold_Sonar_Object && distance[1] < threshold_IR_Object)	// If it's under the threshold, then it's either plastic or glass
+		{
+			if(distance[0] > threshold_Sonar_Plastic_Low && distance[0] < threshold_Sonar_Plastic_High) // If sonar is within range for plastic
+			{
+				if(distance[1] > threshold_IR_Plastic_Low && distance[1] < threshold_IR_Plastic_Low)	// If IR is within range for plastic
+				{
+					return SONAR_PLASTIC;
+				}	
+			}
+			
+			if(distance[0] > threshold_Sonar_Glass_Low && distance[0] < threshold_Sonar_Glass_High)
+			{
+				if(distance[1] > threshold_IR_Glass_Low && distance[1] < threshold_IR_Glass_High)
+				{
+					return SONAR_GLASS;	
+				}		
+			}
+	
+			return SONAR_ERROR;			
+		}
 		
-		
-		if(distance[0] < thresholdSonar && distance[1] < thresholdIR)
-		{
-			TXChar(SONAR_GLASS);	//send code for "Plastic Bottle"
-			TXChar(' ');
-			TXDec_Int(distance[0]);
-			TXChar(' ');
-			TXDec_Int(distance[1]);
-			TXString("\x0D\x0A");			
-		}
-		else if(distance[0] < thresholdSonar && distance[1] > thresholdIR)
-		{
-			TXChar(SONAR_PLASTIC);	//send code for "Glass Bottle"
-			TXChar(' ');
-			TXDec_Int(distance[0]);
-			TXChar(' ');
-			TXDec_Int(distance[1]);
-			TXString("\x0D\x0A");	
-		}
-		else if(distance[0] > thresholdSonar && distance[1] > thresholdIR)
-		{
-			TXChar(SONAR_ALUMINUM);	//send code for "Aluminum Can"
-			TXChar(' ');
-			TXDec_Int(distance[0]);
-			TXChar(' ');
-			TXDec_Int(distance[1]);
-			TXString("\x0D\x0A");	
-		}
-		else
-		{
-			TXChar(SONAR_ERROR);	//send code for "Error - FrontFront Sonar is triggered, but FrontBack is not"
-			TXChar(' ');
-			TXDec_Int(distance[0]);
-			TXChar(' ');
-			TXDec_Int(distance[1]);
-			TXString("\x0D\x0A");	
-		}						
+		return SONAR_ALUMINUM;							
 }	
