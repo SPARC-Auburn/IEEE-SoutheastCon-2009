@@ -9,6 +9,7 @@
 #define 	GET_ANGLE_OP			0x60
 #define		ZERO_ANGLE_OP			0x62
 #define		MONITOR_ANGLE_OP		0x61
+#define		CALIBRATE_ARS_OP		0x63
 
 #define		INT_ANGLE				0X60
 

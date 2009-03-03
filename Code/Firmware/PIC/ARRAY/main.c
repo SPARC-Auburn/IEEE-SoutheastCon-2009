@@ -373,6 +373,13 @@ void main (void)
 						parameter_count = 0;
 					}
 					break;
+				case CALIBRATE_ARS_OP:
+					INTCONbits.GIEL = 0; //low priority interrupts disable
+					INTCONbits.GIEH = 0; //high priority interrupt disable
+					cal_ars();					
+					INTCONbits.GIEL = 1; //low priority interrupts enable	
+					INTCONbits.GIEH = 1; //high priority interrupt enable
+					
 				default:
 					ProcStatus.ProcessInProgress = 0;
 					break;

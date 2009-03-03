@@ -263,8 +263,12 @@ void poll_sonar(void)
 		{
 								//wait for the Parallax to bring pin 3 low
 		}
+		
 		pulseDuration = ReadTimer0();
-		distance[0] = pulseDuration;						
+		distance[0] = pulseDuration/4;	
+		
+		
+							
 
 		/* ===== IR Reading ===== */
 		
