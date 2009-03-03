@@ -21,7 +21,7 @@ def terminate():
 def connect():
 	robot_status.Connection = Connected
 	try:
-		conn = Networking.Client('111.1.1.1', PORT)
+		conn = Networking.Client(HOST, PORT)
 		#print 'Connection established to host ' + HOST + '.'
 		text.insert(END, 'Connection established to host ' + HOST + '.')
 		text.insert(END, "\n")
