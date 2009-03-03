@@ -3,13 +3,14 @@
 #define		EEPROM_RD_OP			0x32
 
 #define		POLL_SONAR_OP			0x60		// `
+#define		START_BUTTON_OP			0x61
 
 #define		SONAR_NO_OBJECT			0x71		// q
 #define		SONAR_PLASTIC			0x74		// t
 #define		SONAR_GLASS				0x73
 #define		SONAR_ALUMINUM			0x72
 #define		SONAR_ERROR				0x75
-
+#define		START_BUTTON_TRIGGERED  0x76
 
 
 //#define		LINE_FOLLOW_OP			0x11

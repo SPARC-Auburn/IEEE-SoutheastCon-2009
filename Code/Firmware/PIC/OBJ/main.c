@@ -24,7 +24,9 @@ unsigned int distance[] = {0,0};
 int sonarIndex = 0;
 int i;
 
-unsigned int switchCount = 0;
+unsigned long switchCount = 0;
+unsigned long startButtonCount = 0;
+unsigned int startButtonIndicator = 0;
 
 // Variables that are stored in the EEPROM
 unsigned int switch_threshold;
@@ -40,6 +42,8 @@ unsigned char current_parameters[32];
 int EEP_count = -1;
 union int_byte EEP_address;
 unsigned char EEP_offset = 0;
+
+
 
 
 #pragma config OSC = IRCIO67,WDT = OFF, MCLRE = ON
@@ -96,7 +100,12 @@ void main (void)
 	Init();	
 	initQueue();
 	
+	
 	TRISAbits.TRISA4 = 1;		// set pin 6 as input for microswitch
+	TRISAbits.TRISA5 = 1;		// set pin 7 as input for start button
+	TRISAbits.TRISA7 = 0;       // set pin 9 as output for the start button LED
+	
+	PORTAbits.RA7 = 1;    	//turn off LED for Pushbutton
 		
 	OpenTimer0( TIMER_INT_OFF & //initialize timer0 for: - interupt disabled
             T0_16BIT &           //					 	 - 16 bit timer
@@ -197,6 +206,10 @@ void main (void)
 					ProcStatus.sonar_poll_enabled = 1;
 					ProcStatus.ProcessInProgress = 0;					
 					break;
+				case START_BUTTON_OP:
+					ProcStatus.start_button_enabled = 1;
+					ProcStatus.ProcessInProgress = 0;
+					break;					
 				default:
 					ProcStatus.ProcessInProgress = 0;
 					break;
@@ -211,8 +224,49 @@ void main (void)
 			ProcStatus.sonar_poll_enabled = 0;
 		}
 		
+		
+		if(ProcStatus.start_button_enabled)
+		{
+			PORTAbits.RA7 = 0;					//turn on LED for Pushbutton
+			
+			if(PORTAbits.RA5)				//if the start button is engaged
+			{
+				if(startButtonCount == 20) 	//if the start button counter equals 20
+				{	
+					startButtonCount++;
+									
+					TXChar(0x76);
+					TXString("\x0A\x0D");
+					
+					//  ***  Toggle Start Button LED ***
+					
+					if(startButtonIndicator == 0)
+					{
+						PORTAbits.RA7 = 1;    	//turn off LED for Pushbutton
+						startButtonIndicator = 1;
+					}
+					else if(startButtonIndicator == 1)
+					{
+						PORTAbits.RA7 = 0;    	//turn on LED for Pushbutton
+						startButtonIndicator = 0;	
+					}	
+				}
+				else if(startButtonCount < 20)
+				{
+					startButtonCount++;
+				}	
+			}
+			else
+			{
+				startButtonCount = 0;	
+				
+			}	
+				
+		}	
+			
+		
 		//If microswitch is engaged then send respective value
-		if(PORTAbits.RA4 == 1)
+		if(PORTAbits.RA4)
 		{
 			if(switchCount == switch_threshold)
 			{
@@ -220,7 +274,7 @@ void main (void)
 				TXString("\x0A\x0D");
 				switchCount++;
 			} 
-			else if (switchCount < switch_threshold)
+			else if(switchCount < switch_threshold)
 			{
 				switchCount++;
 			}	
