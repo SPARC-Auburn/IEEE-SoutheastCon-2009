@@ -24,7 +24,6 @@ from Networking import *
 import signal
 # Time
 from time import *
-#print "arguments", sys.argv
 # Logging
 import logging
 import logging.config
@@ -103,6 +102,12 @@ def spinner_stop():
 # Object Detection
 def check_obj():
 	obj_detection.check_obj()
+
+def turn_start_led_on():
+	object_detection.turn_start_led_on()
+
+def program_running():
+	return not object_detection.stop_program
 
 # Antenna Array
 def line_follow():

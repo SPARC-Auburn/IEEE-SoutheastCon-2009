@@ -37,9 +37,11 @@ return_codes = {'\x70':'Micro Switch Triggered',
 				'\x72':'Can',
 				'\x73':'Glass',
 				'\x74':'Plastic',
-				'\x75':'Detection Error'}
+				'\x75':'Detection Error',
+		'\x76':'Start Button Pressed'}
 				
-command_codes = {'Check Object':'\x60'}
+command_codes = {'Check Object':'\x60',
+		 'Start Button Glow':'\x61'}
 
 # Static Functions #
 def init():
@@ -60,15 +62,22 @@ class ObjDetection:
 	def __init__(self):
 		self.return_codes = return_codes
 		self.obj_detected = Event()
+		self.start_button_event = Event()
 		self.obj_detected.clear()
+		self.start_button_event.clear()
 		self.object = None
 		self.msg = ''
+		self.stop_program = True
 		
 	def notify(self, return_code, msg):
 		# Handel the messge
 		if return_code == 'Micro Switch Triggered':
 			log.debug("Micro switch depressed.")
 			events.triggerEvent(return_code, msg)
+		elif return_code == 'Start Button Pressed':
+			log.debug("Start Button depressed.")
+			self.stop_program = True
+			self.start_button_event.set()
 		else:
 			self.object = return_code
 			self.msg = msg
@@ -86,7 +95,15 @@ class ObjDetection:
 		log.debug("Object check returned: %s" % self.object)
 		return self.object
 		
+	def wait_for_start(self):
+		self.start_button_event.wait()
+		self.stop_program = False
+
+	def turn_start_led_on(self):
+		mc.send(command_codes['Start Button Glow'])
+
 	def shutdown(self):
 		pass
 		
 		
+
