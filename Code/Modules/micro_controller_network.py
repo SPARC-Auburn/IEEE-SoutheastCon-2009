@@ -157,9 +157,12 @@ class debug(Thread):
 	def run(self):
 		input = ''
 		while not self.stop:
-			if self.serial.isOpen():
-				input = self.serial.readline()
-			self.processInput(input)
+			try:
+				if self.serial.isOpen():
+					input = self.serial.readline()
+				self.processInput(input)
+			except Exception as e:
+				self.mc.log.error("Recieved exception in thread %s: %s" % (self.name, e))
 			
 	def shutdown(self):
 		self.stop = True

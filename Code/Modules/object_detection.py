@@ -38,7 +38,7 @@ return_codes = {'\x70':'Micro Switch Triggered',
 				'\x73':'Glass',
 				'\x74':'Plastic',
 				'\x75':'Detection Error',
-		'\x76':'Start Button Pressed'}
+				'\x76':'Start Button Pressed'}
 				
 command_codes = {'Check Object':'\x60',
 		 'Start Button Glow':'\x61'}
@@ -75,7 +75,7 @@ class ObjDetection:
 			log.debug("Micro switch depressed.")
 			events.triggerEvent(return_code, msg)
 		elif return_code == 'Start Button Pressed':
-			log.debug("Start Button depressed.")
+			log.info("Start Button depressed.")
 			self.stop_program = True
 			self.start_button_event.set()
 		else:

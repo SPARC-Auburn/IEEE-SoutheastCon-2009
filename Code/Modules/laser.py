@@ -214,10 +214,12 @@ class LaserRangeFinder:
 		log.info("Laser Range Finder shutting down.")
 		if not enabled:
 			return
-		if self.serial.isOpen():
-			self.serial.close()
 		self.monitor.shutdown()
 		self.monitor.join()
+		if self.serial.isOpen():
+			self.serial.flushInput()
+			self.serial.flushOutput()
+			self.serial.close()
 		
 		
 		
@@ -230,13 +232,16 @@ class LaserMonitor(Thread):
 		
 	def run(self):
 		while not self.stop:
-			self.lrf.monitor_event.wait(1)
-			if self.lrf.monitor_event.isSet():
-				objects = self.lrf.check_for_obj()
-				if objects != []:
-					log.debug("LRF Detected Object(s): %s" % str(objects))
-					events.triggerEvent('LRF Detected Object', objects)
-					self.lrf.monitor_event.clear()
+			try:
+				self.lrf.monitor_event.wait(1)
+				if self.lrf.monitor_event.isSet():
+					objects = self.lrf.check_for_obj()
+					if objects != []:
+						log.debug("LRF Detected Object(s): %s" % str(objects))
+						events.triggerEvent('LRF Detected Object', objects)
+						self.lrf.monitor_event.clear()
+			except Exception as e:
+				log.error("Recieved Exception in thread %s: %s" % (self.name, e))
 		return
 					
 		

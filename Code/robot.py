@@ -181,7 +181,14 @@ def critical(msg):
 	brain_log.critical(msg)
 	
 # Misc Functions
+def register_shutdown_function(func):
+	global shutdown_func
+	shutdown_func = func
+
 def shutdown_signal(signal, frame):
+	global shutdown_func
+	if shutdown_func != None:
+		shutdown_func()
 	shutdown()
 	
 def shutdown():
@@ -269,7 +276,9 @@ angular_accelerometer.init()
 aa = angular_accelerometer.get_object()
 zero_angle()
 
-
+# Shutdown Signals etc...
+global shutdown_func
+shutdown_func = None
 signal.signal(signal.SIGINT, shutdown_signal)
 
 # Done
