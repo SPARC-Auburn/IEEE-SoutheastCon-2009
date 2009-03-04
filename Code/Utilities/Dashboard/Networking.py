@@ -116,6 +116,7 @@ class LoggingServerHandler(logging.Handler):
 		#print 'New connection established. ' + len(client) + ' current connections.'
         except:
 		pass
+	
 		#print 'No connection to be made'
 
     def send(self):
@@ -125,7 +126,7 @@ class LoggingServerHandler(logging.Handler):
         This function allows for partial sends which can happen when the
         network is busy.
         """
-        print "Start of send()"
+        #print "Start of send()"
         self.makeConnection()
         #self.sock can be None either because we haven't reached the retry
         #time yet, or because we have reached the retry time and retried,
@@ -181,10 +182,10 @@ class LoggingServerHandler(logging.Handler):
         If there was a problem with the socket, re-establishes the
         socket.
         """
-	if len(self.client) > 0:
-		print "Sending: "+str(record)
-		self.client[0].send(str(self.record))
-	print 'nClients = '+str(len(self.client))
+	#if len(self.client) > 0:
+		#print "Sending: "+str(record)
+		#self.client[0].send(str(self.record))
+	#print 'nClients = '+str(len(self.client))
         self.record = record
         try:
             #s = self.makePickle(record)
