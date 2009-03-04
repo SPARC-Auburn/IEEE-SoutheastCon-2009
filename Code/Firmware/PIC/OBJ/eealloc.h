@@ -33,6 +33,3 @@
 
 #define	IR_GLASS_HIGH_H				0x0016
 #define	IR_GLASS_HIGH_L				0x0017
-
-#define OBJECT_CHECKS_H				0x0018
-#define OBJECT_CHECKS_L				0x0019

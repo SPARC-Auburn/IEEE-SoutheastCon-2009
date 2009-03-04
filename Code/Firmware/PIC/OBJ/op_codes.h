@@ -1,6 +1,6 @@
 #define 	RESET_OP				0x30
-#define 	EEPROM_WR_OP			0x31
-#define		EEPROM_RD_OP			0x32
+#define 	EEPROM_WR_OP			0x01
+#define		EEPROM_RD_OP			0x02
 
 #define		POLL_SONAR_OP			0x60		// `
 #define		START_BUTTON_OP			0x61

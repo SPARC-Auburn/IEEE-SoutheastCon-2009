@@ -41,7 +41,6 @@ unsigned int threshold_Sonar_Glass_Low;
 unsigned int threshold_Sonar_Glass_High;
 unsigned int threshold_IR_Glass_Low;
 unsigned int threshold_IR_Glass_High;
-unsigned int object_checks;
 
 volatile struct proc_status ProcStatus = {0,0};
 unsigned char current_proc = 0;
@@ -225,22 +224,7 @@ void main (void)
 
 		if(ProcStatus.sonar_poll_enabled) 
 		{
-			unsigned char cycles = 0;
-			unsigned char temp_readings;
-			
-			while(cycles < object_checks)
-			{
-				temp_readings += poll_sonar();
-			}	
-			temp_readings = temp_readings / object_checks;
-			
-			TXChar(temp_readings);
-			TXChar(' ');
-			TXDec_Int(distance[0]);
-			TXChar(' ');
-			TXDec_Int(distance[1]);
-			TXString("\x0A\x0D");
-			
+			poll_sonar();	
 			ProcStatus.sonar_poll_enabled = 0;
 		}
 		
@@ -322,10 +306,9 @@ void Refresh_EEPROM(void)
 	threshold_Sonar_Glass_High = 				((int)Read_b_eep(SONAR_GLASS_HIGH_H) << 8) 		| (Read_b_eep(SONAR_GLASS_HIGH_L));
 	threshold_IR_Glass_Low = 					((int)Read_b_eep(IR_GLASS_LOW_H) << 8) 			| (Read_b_eep(IR_GLASS_LOW_L));
 	threshold_IR_Glass_High	=					((int)Read_b_eep(IR_GLASS_HIGH_H) << 8) 		| (Read_b_eep(IR_GLASS_HIGH_L));
-	object_checks = 							((int)Read_b_eep(OBJECT_CHECKS_H) << 8) 		| (Read_b_eep(OBJECT_CHECKS_L));
 }	
 
-unsigned char poll_sonar(void)
+void poll_sonar(void)
 {					
 		TRISAbits.TRISA1 = 0; 	//set pin 3 to output for Parallax triggering sequence
 		PORTAbits.RA1 = 0;		//bring pin 3 low
@@ -356,26 +339,37 @@ unsigned char poll_sonar(void)
   		while( BusyADC() );   // Wait for completion
   		distance[1] = ReadADC();   // Read result
 
-		if(distance[0] < threshold_Sonar_Object && distance[1] < threshold_IR_Object)	// If it's under the threshold, then it's either plastic or glass
+		if(distance[0] < threshold_Sonar_Object)	// If it's under the threshold, then it's either plastic or glass
 		{
 			if(distance[0] > threshold_Sonar_Plastic_Low && distance[0] < threshold_Sonar_Plastic_High) // If sonar is within range for plastic
 			{
 				if(distance[1] > threshold_IR_Plastic_Low && distance[1] < threshold_IR_Plastic_Low)	// If IR is within range for plastic
 				{
-					return SONAR_PLASTIC;
+					TXChar(SONAR_PLASTIC);
+					TXChar(' ');
+					TXDec_Int(distance[0]);
+					TXChar(' ');
+					TXDec_Int(distance[1]);
+					TXString("\x0D\x0A");
 				}	
 			}
-			
-			if(distance[0] > threshold_Sonar_Glass_Low && distance[0] < threshold_Sonar_Glass_High)
+			else
 			{
-				if(distance[1] > threshold_IR_Glass_Low && distance[1] < threshold_IR_Glass_High)
-				{
-					return SONAR_GLASS;	
-				}		
-			}
-	
-			return SONAR_ERROR;			
+				TXChar(SONAR_GLASS);
+				TXChar(' ');
+				TXDec_Int(distance[0]);
+				TXChar(' ');
+				TXDec_Int(distance[1]);
+				TXString("\x0D\x0A");		
+			}		
 		}
-		
-		return SONAR_ALUMINUM;							
+		else
+		{
+			TXChar(SONAR_ALUMINUM);
+			TXChar(' ');
+			TXDec_Int(distance[0]);
+			TXChar(' ');
+			TXDec_Int(distance[1]);
+			TXString("\x0D\x0A");
+		}						
 }	

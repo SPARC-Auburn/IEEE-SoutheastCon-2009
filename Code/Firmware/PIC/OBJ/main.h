@@ -9,7 +9,7 @@ void 	low_vec  		(void);
 void 	low_isr  		(void);
 
 void	Refresh_EEPROM	(void);
-unsigned char	poll_sonar		(void);
+void	poll_sonar		(void);
 
 
 union int_byte {

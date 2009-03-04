@@ -169,7 +169,7 @@ SOLK=<src>|main.c|init.c|serial.c|queue.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
 ToolArgsString=/o"$(BINDIR_)$(TARGETBASE).cof" /M"$(BINDIR_)$(TARGETBASE).map" /W
 TraceCmdString=
-DebugOptions=/z__MPLAB_DEBUG=1
+DebugOptions=/z__MPLAB_DEBUG=1 /z__MPLAB_DEBUGGER_PICKIT2=1 /z__ICD2RAM=1
 [File013]
 Location=C:\Documents and Settings\SPaRC\Desktop\subversion\Code\Firmware\PIC\OBJ\Object Detection.hex
 Folder=Output
@@ -182,7 +182,7 @@ SOLK=<src>|main.c|init.c|serial.c|queue.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
 ToolArgsString=/o"$(BINDIR_)$(TARGETBASE).cof" /M"$(BINDIR_)$(TARGETBASE).map" /W
 TraceCmdString=
-DebugOptions=/z__MPLAB_DEBUG=1
+DebugOptions=/z__MPLAB_DEBUG=1 /z__MPLAB_DEBUGGER_PICKIT2=1 /z__ICD2RAM=1
 [File014]
 Location=C:\SVN\Code\Firmware\PIC\OBJ\Object Detection.cof
 Folder=Output
