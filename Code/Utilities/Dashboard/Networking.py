@@ -113,7 +113,7 @@ class LoggingServerHandler(logging.Handler):
 		conn, addr = self.sock.accept()
 		conn.send('Connection established: ' + HOST + ':' + PORT)
 		self.client.append([conn, addr])
-		print 'New connection established. ' + len(client) + ' current connections.'
+		#print 'New connection established. ' + len(client) + ' current connections.'
         except:
 		pass
 		#print 'No connection to be made'
