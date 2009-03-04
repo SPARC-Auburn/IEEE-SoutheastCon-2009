@@ -181,7 +181,7 @@ class LoggingServerHandler(logging.Handler):
         If there was a problem with the socket, re-establishes the
         socket.
         """
-	print "Sending: "+record
+	print "Sending: "+str(record)
         self.record = record
         try:
             #s = self.makePickle(record)
