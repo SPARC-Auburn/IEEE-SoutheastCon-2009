@@ -101,7 +101,7 @@ def spinner_stop():
 
 # Object Detection
 def check_obj():
-	obj_detection.check_obj()
+	return obj_detection.check_obj()
 
 def turn_start_led_on():
 	object_detection.turn_start_led_on()
