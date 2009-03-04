@@ -125,13 +125,13 @@ class LoggingServerHandler(logging.Handler):
         This function allows for partial sends which can happen when the
         network is busy.
         """
-        
+        print "Start of send()"
         self.makeConnection()
         #self.sock can be None either because we haven't reached the retry
         #time yet, or because we have reached the retry time and retried,
         #but are still unable to connect.
         if self.sock:
-            #print len(self.client), ' current connections.'
+            print len(self.client), ' current connections.'
 		#print "Broadcast: "+record
             for thisClient in self.client:
                 try:
