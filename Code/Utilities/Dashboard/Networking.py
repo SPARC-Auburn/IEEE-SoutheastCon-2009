@@ -185,7 +185,6 @@ class LoggingServerHandler(logging.Handler):
 		print "Sending: "+str(record)
 		self.client[0].send(str(self.record))
         self.record = record
-	thisClient[ conn ].send(str(self.record))
         try:
             #s = self.makePickle(record)
             #print 'Broadcasting: ', record
