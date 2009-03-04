@@ -132,6 +132,7 @@ class LoggingServerHandler(logging.Handler):
         #but are still unable to connect.
         if self.sock:
             #print len(self.client), ' current connections.'
+		print "Broadcast: "+record
             for thisClient in self.client:
                 try:
                     thisClient[ conn ].send(str(self.record))
@@ -180,6 +181,7 @@ class LoggingServerHandler(logging.Handler):
         If there was a problem with the socket, re-establishes the
         socket.
         """
+	print "Sending: "+record
         self.record = record
         try:
             #s = self.makePickle(record)
