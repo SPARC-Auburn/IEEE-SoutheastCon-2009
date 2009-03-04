@@ -95,8 +95,8 @@ class ObjDetection:
 		log.debug("Object check returned: %s" % self.object)
 		return self.object
 		
-	def wait_for_start(self):
-		self.start_button_event.wait()
+	def wait_for_start(self, timeout = None):
+		self.start_button_event.wait(timeout)
 		self.stop_program = False
 
 	def turn_start_led_on(self):

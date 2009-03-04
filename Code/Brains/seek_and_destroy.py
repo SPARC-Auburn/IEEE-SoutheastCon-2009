@@ -9,10 +9,13 @@
 import brain
 from robot import *
 from time import sleep
-from threading import Timer
+from threading import Timer, Event
 import traceback, sys
 
 #  Setup  #
+# Event
+global program_stopped_event
+program_stopped_event = Event()
 # Global variables
 global speed, direction_speed, lrf_refresh_rate, run_time, spinner_speed
 speed = 0.4
@@ -51,7 +54,9 @@ def handleEvent(e, msg):
 
 # Refreshes the LRF monitor thread
 def remonitor(t):
-	global lrf_refresh_rate
+	global lrf_refresh_rate, program_stopped_event
+	if program_stopped_event.isSet():
+		return
 	monitor_lrf()
 	t = Timer(lrf_refresh_rate, remonitor, [t])
 	t.start()
@@ -122,7 +127,7 @@ def sort_object():
 # Main loop
 def loop():
 	info("Starting Control Loop")
-	global speed, lrf_refresh_rate, run_time, spinner_speed
+	global speed, lrf_refresh_rate, run_time, spinner_speed, program_stopped_event
 	# Wait for the start button
 	turn_start_led_on()
 	wait_for_start()
@@ -141,12 +146,21 @@ def loop():
 	while program_running():
 		e, msg = get_next_event()
 		handleEvent(e, msg)
-		
-try:
-	loop()
-except Exception as e:
-	print e
-	traceback.print_exc(file = sys.stdout)
-finally:
-	info("Preforming finally conditions")
-	shutdown()
+	info("Exiting Control loop")
+	program_stopped_event.set()
+
+def shutdown_script():
+	global program_stopped_event
+	info("Preforming exit actions")
+	stop_program()
+	program_stopped_event.wait(5)
+	if program_stopped_event.isSet():
+		info("Script stopped.")
+	else:
+		error("Scripted timed out stopping.")
+
+
+# Register the shutdown function
+register_shutdown_function(shutdown_script)
+# Run the loop		
+loop()

@@ -21,7 +21,9 @@ enabled = config['enabled']
 import logging
 log = logging.getLogger(config['logger_name'])
 # Threading
-from threading import Thread, Lock
+from threading import Thread, Lock, Timer
+# Sleep
+from time import sleep
 # PySerial
 if enabled:
 	try:
@@ -163,6 +165,9 @@ class debug(Thread):
 				self.processInput(input)
 			except Exception as e:
 				self.mc.log.error("Recieved exception in thread %s: %s" % (self.name, e))
+				if self.stop == False:
+					self.serial.close()
+					self.stop = True
 			
 	def shutdown(self):
 		self.stop = True
