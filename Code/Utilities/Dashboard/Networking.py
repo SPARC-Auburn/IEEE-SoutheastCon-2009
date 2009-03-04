@@ -132,7 +132,7 @@ class LoggingServerHandler(logging.Handler):
         #but are still unable to connect.
         if self.sock:
             #print len(self.client), ' current connections.'
-		print "Broadcast: "+record
+		#print "Broadcast: "+record
             for thisClient in self.client:
                 try:
                     thisClient[ conn ].send(str(self.record))
