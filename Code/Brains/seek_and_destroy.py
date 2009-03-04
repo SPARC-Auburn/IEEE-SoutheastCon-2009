@@ -131,6 +131,7 @@ def loop():
 	# Wait for the start button
 	turn_start_led_on()
 	wait_for_start()
+	info("Going...")
 	# Start the game timer
 	stop_timer = Timer(run_time, stop_program)
 	stop_timer.start()
@@ -140,6 +141,7 @@ def loop():
 	lrf_monitor_thread = Timer(lrf_refresh_rate, remonitor, [lrf_monitor_thread])
 	lrf_monitor_thread.start()
 	gripper_open()
+	sleep(0.5)
 	spinner_servo.move(spinner_speed)
 	move(speed, 0)
 	corner_detection()
@@ -164,3 +166,4 @@ def shutdown_script():
 register_shutdown_function(shutdown_script)
 # Run the loop		
 loop()
+shutdown()
