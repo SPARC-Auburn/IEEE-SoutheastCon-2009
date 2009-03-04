@@ -14,13 +14,16 @@ import traceback, sys
 
 #  Setup  #
 # Global variables
-global speed, direction_speed, lrf_refresh_rate
+global speed, direction_speed, lrf_refresh_rate, run_time, spinner_speed
 speed = 0.4
 direction_speed = 0.3
 lrf_refresh_rate = 1
+run_time = 240
+spinner_speed = -0.2
 # Reset all the micros
 for x in micros:
 	x.reset() 
+sleep(1)
 
 # Control Code #
 
@@ -34,10 +37,10 @@ def handleEvent(e, msg):
 		corner_detection()
 	elif e == 'LRF Detected Object':
 		move(0, 0)
-		drive_toward_object(msg[0])
+		r,t = msg[0]
+		drive_toward_object(r, t)
 	elif e == 'Micro Switch Triggered':
 		info("Micro switch depressed, grabbing, stopping.")
-		spinner_servo.move(0)
 		sort_object()
 	elif e == 'Left' or e == 'Right':
 		info("Desired Angle Reached")
@@ -55,13 +58,13 @@ def remonitor(t):
 
 # Starts turning the robot and returns immediately, then triggers an event when the turn is complete
 def turn(angle, s, d_s):
-	info("Turning %f degrees." % angle)
+	debug("Turning %f degrees." % angle)
 	move(s, d_s)
 	watch_for_angle(angle)
 
 # Starts turning the robot and doesn't return control until the turn is completed
 def only_turn(angle, s, d_s):
-	info("Turning %f degrees and waiting." % angle)
+	debug("Turning %f degrees and waiting." % angle)
 	move(s, d_s)
 	turn_to_angle(angle)
 
@@ -77,10 +80,10 @@ def avoid_line():
 # Vears toward an object at r distance, t degrees
 def drive_toward_object(r,t):
 	global speed, direction_speed
-	if r < 100:
-		spinner_servo.move(-1.0)
-	if r > 300:
-		spinner_servo.move(0)
+#	if r < 100:
+#		spinner_servo.move(-1.0)
+#	if r > 300:
+#		spinner_servo.move(0)
 	if t > 0:
 		d_s = direction_speed * -1
 	else:
@@ -113,17 +116,18 @@ def sort_object():
 	arm_down()
 	sleep(1)
 	sorter_center()
-	sleep(4)
+	t = Timer(5, gripper_close)
+	t.start()
 
 # Main loop
 def loop():
 	info("Starting Control Loop")
-	global speed, lrf_refresh_rate
+	global speed, lrf_refresh_rate, run_time, spinner_speed
 	# Wait for the start button
 	turn_start_led_on()
 	wait_for_start()
 	# Start the game timer
-	stop_timer = Timer(120, stop_program)
+	stop_timer = Timer(run_time, stop_program)
 	stop_timer.start()
 	# Start the LRF refresh thread
 	lrf.set_monitor_settings(angle = 60, spike = 100)
@@ -131,9 +135,10 @@ def loop():
 	lrf_monitor_thread = Timer(lrf_refresh_rate, remonitor, [lrf_monitor_thread])
 	lrf_monitor_thread.start()
 	gripper_open()
+	spinner_servo.move(spinner_speed)
 	move(speed, 0)
 	corner_detection()
-	while program_running:
+	while program_running():
 		e, msg = get_next_event()
 		handleEvent(e, msg)
 		
