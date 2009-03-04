@@ -132,7 +132,7 @@ class LoggingServerHandler(logging.Handler):
         #time yet, or because we have reached the retry time and retried,
         #but are still unable to connect.
         if self.sock:
-            print len(self.client), ' current connections.'
+            #print len(self.client), ' current connections.'
 		#print "Broadcast: "+record
             for thisClient in self.client:
                 try:
