@@ -182,7 +182,7 @@ class LoggingServerHandler(logging.Handler):
         """
         self.record = record
         try:
-            s = self.makePickle(record)
+            #s = self.makePickle(record)
             #print 'Broadcasting: ', record
             self.send()
         except (KeyboardInterrupt, SystemExit):
