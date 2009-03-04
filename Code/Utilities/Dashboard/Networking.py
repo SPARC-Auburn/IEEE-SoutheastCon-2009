@@ -184,7 +184,7 @@ class LoggingServerHandler(logging.Handler):
 	if len(self.client) > 0:
 		print "Sending: "+str(record)
 		self.client[0].send(str(self.record))
-	print 'nClients = '+len(self.client)
+	print 'nClients = '+str(len(self.client))
         self.record = record
         try:
             #s = self.makePickle(record)
