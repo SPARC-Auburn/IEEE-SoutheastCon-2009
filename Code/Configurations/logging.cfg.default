@@ -11,7 +11,7 @@ keys=consoleFormatter
 
 ### Loggers ###
 [logger_root]
-level=DEBUG
+level=INFO
 handlers=consoleHandler
 
 [logger_Robot]
