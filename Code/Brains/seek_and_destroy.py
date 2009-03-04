@@ -8,76 +8,87 @@
 
 import brain
 from robot import *
-print "After Robot.py"
 from time import sleep
 from threading import Timer
 import traceback, sys
 
 #  Setup  #
+# Global variables
+global speed, direction_speed, lrf_refresh_rate
+speed = 0.4
+direction_speed = 0.3
+lrf_refresh_rate = 1
+# Reset all the micros
 for x in micros:
 	x.reset() 
 
 # Control Code #
-global stop
-stop = False
 
+# Handels events
 def handleEvent(e, msg):
-	global stop
+	global speed
 	debug("%s - %s" % (str(e), str(msg)))	
 	if e == 'On Corner':
 		avoid_line()
+		clear_events()
+		corner_detection()
 	elif e == 'LRF Detected Object':
 		move(0, 0)
-		sleep(0.01)
-		r, t = msg[0]
-		drive_toward_object(r,t)
+		drive_toward_object(msg[0])
 	elif e == 'Micro Switch Triggered':
-		debug("Micro switch depressed, grabbing, stopping.")
+		info("Micro switch depressed, grabbing, stopping.")
 		spinner_servo.move(0)
 		sort_object()
 	elif e == 'Left' or e == 'Right':
-		debug("Desired Angle Reached")
-		move(.4,0)
-		
+		info("Desired Angle Reached")
+		move(speed, 0)
 	else:
-		print 'else'
-		stop = True
+		error("Unhandled event recieved, stopping.")
+		stop_program()
 
+# Refreshes the LRF monitor thread
 def remonitor(t):
+	global lrf_refresh_rate
 	monitor_lrf()
-	t = Timer(1, remonitor, [t])
+	t = Timer(lrf_refresh_rate, remonitor, [t])
 	t.start()
 
-def turn(angle, speed):
-	debug("Turning to %f at %f speed." % (angle, speed))
-	move(0, speed)
+# Starts turning the robot and returns immediately, then triggers an event when the turn is complete
+def turn(angle, s, d_s):
+	info("Turning %f degrees." % angle)
+	move(s, d_s)
 	watch_for_angle(angle)
 
-def only_turn(angle, speed):
-	debug("Only Turning to %f at %f speed." % (angle, speed))
-	move(0, speed)
-	turn_to_angle(angle)	
+# Starts turning the robot and doesn't return control until the turn is completed
+def only_turn(angle, s, d_s):
+	info("Turning %f degrees and waiting." % angle)
+	move(s, d_s)
+	turn_to_angle(angle)
 
+# Turns the robot 160 degrees to avoid leaving the boundry; clears events
 def avoid_line():
-	only_turn(90,.3)
-	only_turn(90,.3)
+	global speed, direction_speed
+	only_turn(90, 0, direction_speed)
+	only_turn(90, 0, direction_speed)
 	move(0,0)
 	zero_angle()
-	move(.4,0)
-	sleep(0.01)
-	clear_events()
-	corner_detection()
+	move(speed,0)
 
+# Vears toward an object at r distance, t degrees
 def drive_toward_object(r,t):
-	speed = 0.3
+	global speed, direction_speed
 	if r < 100:
 		spinner_servo.move(-1.0)
+	if r > 300:
+		spinner_servo.move(0)
 	if t > 0:
-		speed *= -1
+		d_s = direction_speed * -1
+	else:
+		d_s = direction_speed
 	if t != 0:
-		turn(t, speed)
+		turn(t, speed, d_s)
 
-
+# Stops, checks the object, sorts it, deposits it
 def sort_object():
 	move(0,0)
 	gripper_close()
@@ -102,61 +113,35 @@ def sort_object():
 	arm_down()
 	sleep(1)
 	sorter_center()
+	sleep(4)
 
-def psuedo_sort_object():
-	gripper_close()
-	move(0,0)
-	arm_up()
-	sleep(6)
-	gripper_open()
-	sleep(.5)
-	gripper_close()
-	sleep(.2)
-	gripper_open()
-	sleep(.5)
-	gripper_close()
-	sleep(.2)
-	gripper_open()
-	sleep(.5)
-	gripper_close()
-	arm_down()
-	sleep(6)
-	gripper_open()		
-
-
-def stop_program():
-	global stop
-	stop = True
-
+# Main loop
 def loop():
-	print "Inside Loop"
-	global stop
+	info("Starting Control Loop")
+	global speed, lrf_refresh_rate
+	# Wait for the start button
 	turn_start_led_on()
 	wait_for_start()
+	# Start the game timer
 	stop_timer = Timer(120, stop_program)
 	stop_timer.start()
-	t = None
-	t = Timer(1, remonitor, [t])
-	t.start()
+	# Start the LRF refresh thread
 	lrf.set_monitor_settings(angle = 60, spike = 100)
+	lrf_monitor_thread = None
+	lrf_monitor_thread = Timer(lrf_refresh_rate, remonitor, [lrf_monitor_thread])
+	lrf_monitor_thread.start()
 	gripper_open()
-	move(.4,0)
-	sleep(0.01)
-	move(.4,0)
-	monitor_lrf()
-
-	corner_detection()	 		#call the line_follow() function	
-
-	while not stop:
+	move(speed, 0)
+	corner_detection()
+	while program_running:
 		e, msg = get_next_event()
 		handleEvent(e, msg)
 		
 try:
-	print "Before Loop"
 	loop()
-	print "After Loop"
 except Exception as e:
 	print e
 	traceback.print_exc(file = sys.stdout)
 finally:
+	info("Preforming finally conditions")
 	shutdown()

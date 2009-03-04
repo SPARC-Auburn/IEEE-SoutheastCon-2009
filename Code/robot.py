@@ -109,6 +109,9 @@ def turn_start_led_on():
 def wait_for_start():
 	obj_detection.wait_for_start()
 
+def stop_program():
+	obj_detection.stop_program = True
+
 def program_running():
 	return not obj_detection.stop_program
 
