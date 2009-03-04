@@ -104,13 +104,13 @@ def check_obj():
 	return obj_detection.check_obj()
 
 def turn_start_led_on():
-	object_detection.turn_start_led_on()
+	obj_detection.turn_start_led_on()
 
 def wait_for_start():
-	object_detection.wait_for_start()
+	obj_detection.wait_for_start()
 
 def program_running():
-	return not object_detection.stop_program
+	return not obj_detection.stop_program
 
 # Antenna Array
 def line_follow():
