@@ -181,8 +181,11 @@ class LoggingServerHandler(logging.Handler):
         If there was a problem with the socket, re-establishes the
         socket.
         """
-	print "Sending: "+str(record)
+	if len(self.client) > 0:
+		print "Sending: "+str(record)
+		self.client[0].send(str(self.record))
         self.record = record
+	thisClient[ conn ].send(str(self.record))
         try:
             #s = self.makePickle(record)
             #print 'Broadcasting: ', record
