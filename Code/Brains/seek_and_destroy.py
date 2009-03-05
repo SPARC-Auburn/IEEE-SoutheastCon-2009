@@ -18,8 +18,8 @@ global program_stopped_event
 program_stopped_event = Event()
 # Global variables
 global speed, direction_speed, lrf_refresh_rate, run_time, spinner_speed
-speed = 0.6
-direction_speed = 0.3
+speed = 0.4
+direction_speed = 0.5
 lrf_refresh_rate = 1
 run_time = 240
 spinner_speed = -0.2
@@ -45,6 +45,7 @@ def handleEvent(e, msg):
 	elif e == 'Micro Switch Triggered':
 		info("Micro switch depressed, grabbing, stopping.")
 		sort_object()
+		move(speed, 0)
 	elif e == 'Left' or e == 'Right':
 		info("Desired Angle Reached")
 		move(speed, 0)
@@ -76,8 +77,8 @@ def only_turn(angle, s, d_s):
 # Turns the robot 130 degrees to avoid leaving the boundry; clears events
 def avoid_line():
 	global speed, direction_speed
-	only_turn(90, 0, direction_speed)
-	only_turn(40, 0, direction_speed)
+	only_turn(90, 0, direction_speed*-1)
+	only_turn(40, 0, direction_speed*-1)
 	move(0,0)
 	zero_angle()
 	move(speed,0)
@@ -85,10 +86,10 @@ def avoid_line():
 # Vears toward an object at r distance, t degrees
 def drive_toward_object(r,t):
 	global speed, direction_speed
-#	if r < 100:
-#		spinner_servo.move(-1.0)
-#	if r > 300:
-#		spinner_servo.move(0)
+	if r < 300:
+		spinner_servo.move(-0.9)
+	if r > 300:
+		spinner_servo.move(-.035)
 	if t > 0:
 		d_s = direction_speed * -1
 	else:
@@ -98,31 +99,40 @@ def drive_toward_object(r,t):
 
 # Stops, checks the object, sorts it, deposits it
 def sort_object():
+	global speed
+	if speed < 0.65:
+		speed += 0.05
 	move(0,0)
 	gripper_close()
+	sleep(1)
 	object = check_obj()
 	if object == 'Can':
-		sorter_left()
-	elif object == 'Plastic':
 		sorter_right()
+	elif object == 'Plastic':
+		sorter_left()
 	arm_up()
-	sleep(5)
+	sleep(4)
+	move(-0.4, 0)
 	gripper_open()
-	sleep(0.2)
+	sleep(2)
 	arm_down()
-	sleep(0.2)
+	sleep(0.1)
 	arm_up()
 	sleep(0.2)
 	arm_down()
-	sleep(0.2)
+	sleep(0.1)
 	arm_up()
-	sleep(0.5)
+	sleep(0.2)
 	gripper_close()
 	arm_down()
-	sleep(2)
 	sorter_center()
-	t = Timer(4, gripper_open)
-	t.start()
+	move(0,0)
+	sleep(5)
+	gripper_open()
+	spinner_servo.move(-0.035)
+	clear_events()
+	corner_detection()
+	sleep(0.1)
 
 # Start up
 def start_up():
@@ -155,7 +165,7 @@ def loop():
 	lrf_monitor_thread = Timer(lrf_refresh_rate, remonitor, [lrf_monitor_thread])
 	lrf_monitor_thread.start()
 	gripper_open()
-	spinner_servo.move(-1)
+	spinner_servo.move(-.035)		# freeze spinner_servo
 	move(speed, 0)
 	move(speed, 0)
 	corner_detection()

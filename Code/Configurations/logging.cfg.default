@@ -4,7 +4,7 @@
 keys=root,Robot,Brain,Events,Motor Ctrl,Laser Range Finder,Micro Net,Servo Micro,Servo Ctrl,Obj Micro,Obj Detection,Array Micro,Ant Array,Angular Accel
 
 [handlers]
-keys=consoleHandler
+keys=consoleHandler, FileLog
 
 [formatters]
 keys=consoleFormatter
@@ -91,6 +91,12 @@ level=DEBUG
 handlers=
 qualname=Angular Accel
 propagate=1
+
+[handler_FileLog]
+class=FileHandler
+level=DEBUG
+formatter=consoleFormatter
+args=('robot.log', 'w')
 
 [handler_consoleHandler]
 class=StreamHandler
