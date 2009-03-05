@@ -343,37 +343,32 @@ void poll_sonar(void)
   		while( BusyADC() );   // Wait for completion
   		distance[1] = ReadADC();   // Read result
 
-		if(distance[0] < threshold_Sonar_Object)	// If it's under the threshold, then it's either plastic or glass
-		{
-			if(distance[0] > threshold_Sonar_Plastic_Low && distance[0] < threshold_Sonar_Plastic_High) // If sonar is within range for plastic
-			{
-				if(distance[1] > threshold_IR_Plastic_Low && distance[1] < threshold_IR_Plastic_Low)	// If IR is within range for plastic
-				{
-					TXChar(SONAR_PLASTIC);
-					TXChar(' ');
-					TXDec_Int(distance[0]);
-					TXChar(' ');
-					TXDec_Int(distance[1]);
-					TXString("\x0D\x0A");
-				}	
-			}
-			else
-			{
-				TXChar(SONAR_GLASS);
-				TXChar(' ');
-				TXDec_Int(distance[0]);
-				TXChar(' ');
-				TXDec_Int(distance[1]);
-				TXString("\x0D\x0A");		
-			}		
-		}
-		else
+		if(distance[0] > threshold_Sonar_Object && distance[1] > threshold_IR_Object)	// Checks for can/empty
 		{
 			TXChar(SONAR_ALUMINUM);
 			TXChar(' ');
 			TXDec_Int(distance[0]);
 			TXChar(' ');
 			TXDec_Int(distance[1]);
+			TXString("\x0D\x0A");	
+			return;
+		}
+	
+		if(distance[0] > threshold_Sonar_Plastic_Low && distance[0] < threshold_Sonar_Plastic_High && distance[1] > threshold_IR_Plastic_Low && distance[1] < threshold_IR_Plastic_High) // If sonar is within range for plastic
+		{
+			TXChar(SONAR_PLASTIC);
+			TXChar(' ');
+			TXDec_Int(distance[0]);
+			TXChar(' ');
+			TXDec_Int(distance[1]);
 			TXString("\x0D\x0A");
-		}						
+			return;	
+		}	
+
+		TXChar(SONAR_GLASS);
+		TXChar(' ');
+		TXDec_Int(distance[0]);
+		TXChar(' ');
+		TXDec_Int(distance[1]);
+		TXString("\x0D\x0A");									
 }	
