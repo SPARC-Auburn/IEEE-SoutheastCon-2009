@@ -26,7 +26,7 @@ int i;
 
 unsigned long switchCount = 0;
 unsigned long startButtonCount = 0;
-unsigned int startButtonIndicator = 0;
+unsigned char startButtonIndicator = 0;
 
 // Variables that are stored in the EEPROM
 unsigned int ch_switch_threshold;
@@ -232,17 +232,15 @@ void main (void)
 		if(ProcStatus.start_button_enabled)
 		{
 			PORTAbits.RA7 = 0;					//turn on LED for Pushbutton
-			
+		}	
+		
 			if(PORTAbits.RA5)				//if the start button is engaged
 			{
 				if(startButtonCount == on_switch_threshold) 	//if the start button counter equals threshold
 				{	
 					startButtonCount++;
-									
-					TXChar(0x76);
-					TXString("\x0A\x0D");
 					
-					//  ***  Toggle Start Button LED ***
+					//   Toggle Start Button LED 
 					
 					if(startButtonIndicator == 0)
 					{
@@ -253,7 +251,13 @@ void main (void)
 					{
 						PORTAbits.RA7 = 0;    	//turn on LED for Pushbutton
 						startButtonIndicator = 0;	
-					}	
+					}						
+					
+									
+					TXChar(0x76);
+					TXString("\x0A\x0D");
+					
+					
 				}
 				else if(startButtonCount < on_switch_threshold)
 				{
@@ -266,7 +270,7 @@ void main (void)
 				
 			}	
 				
-		}	
+			
 			
 		
 		//If microswitch is engaged then send respective value
