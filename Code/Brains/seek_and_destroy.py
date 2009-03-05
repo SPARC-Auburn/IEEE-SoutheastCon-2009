@@ -18,7 +18,7 @@ global program_stopped_event
 program_stopped_event = Event()
 # Global variables
 global speed, direction_speed, lrf_refresh_rate, run_time, spinner_speed
-speed = 0.4
+speed = 0.6
 direction_speed = 0.3
 lrf_refresh_rate = 1
 run_time = 240
@@ -73,11 +73,11 @@ def only_turn(angle, s, d_s):
 	move(s, d_s)
 	turn_to_angle(angle)
 
-# Turns the robot 160 degrees to avoid leaving the boundry; clears events
+# Turns the robot 130 degrees to avoid leaving the boundry; clears events
 def avoid_line():
 	global speed, direction_speed
 	only_turn(90, 0, direction_speed)
-	only_turn(90, 0, direction_speed)
+	only_turn(40, 0, direction_speed)
 	move(0,0)
 	zero_angle()
 	move(speed,0)
@@ -108,29 +108,43 @@ def sort_object():
 	arm_up()
 	sleep(5)
 	gripper_open()
+	sleep(0.2)
+	arm_down()
+	sleep(0.2)
+	arm_up()
+	sleep(0.2)
+	arm_down()
+	sleep(0.2)
+	arm_up()
 	sleep(0.5)
-	gripper_close()
-	sleep(0.5)
-	gripper_open()
-	sleep(0.5)
-	gripper_close()
-	sleep(0.5)
-	gripper_open()
-	sleep(1)
 	gripper_close()
 	arm_down()
-	sleep(1)
+	sleep(2)
 	sorter_center()
-	t = Timer(5, gripper_close)
+	t = Timer(4, gripper_open)
 	t.start()
+
+# Start up
+def start_up():
+	gripper_close()
+	sorter_right()
+	arm_up()
+	sleep(3)
+	sorter_center()
+	arm_down()
+	sleep(3)
+	gripper_open()
 
 # Main loop
 def loop():
 	info("Starting Control Loop")
 	global speed, lrf_refresh_rate, run_time, spinner_speed, program_stopped_event
+	gripper_open()
 	# Wait for the start button
 	turn_start_led_on()
 	wait_for_start()
+	start_up()
+	clear_events()
 	info("Going...")
 	# Start the game timer
 	stop_timer = Timer(run_time, stop_program)
@@ -141,8 +155,8 @@ def loop():
 	lrf_monitor_thread = Timer(lrf_refresh_rate, remonitor, [lrf_monitor_thread])
 	lrf_monitor_thread.start()
 	gripper_open()
-	sleep(0.5)
-	spinner_servo.move(spinner_speed)
+	spinner_servo.move(-1)
+	move(speed, 0)
 	move(speed, 0)
 	corner_detection()
 	while program_running():
@@ -154,6 +168,7 @@ def loop():
 def shutdown_script():
 	global program_stopped_event
 	info("Preforming exit actions")
+	move(0,0)
 	stop_program()
 	program_stopped_event.wait(5)
 	if program_stopped_event.isSet():
@@ -166,4 +181,5 @@ def shutdown_script():
 register_shutdown_function(shutdown_script)
 # Run the loop		
 loop()
+print 'here'
 shutdown()
