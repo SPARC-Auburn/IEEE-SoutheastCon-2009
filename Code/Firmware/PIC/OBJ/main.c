@@ -20,29 +20,23 @@
 #include "eealloc.h"
 
 unsigned int pulseDuration = 0;
-unsigned int distance[] = {0,0};
+unsigned int distance[] = {50,50,50};
 int sonarIndex = 0;
 int i;
 
-unsigned long switchCount = 0;
-unsigned long startButtonCount = 0;
-unsigned char startButtonIndicator = 0;
+unsigned int switchCount = 0;
+unsigned int startButtonCount = 0;
 
 // Variables that are stored in the EEPROM
-unsigned int ch_switch_threshold;
 unsigned int on_switch_threshold;
-unsigned int threshold_Sonar_Object;
-unsigned int threshold_IR_Object;
-unsigned int threshold_Sonar_Plastic_Low;
-unsigned int threshold_Sonar_Plastic_High;
-unsigned int threshold_IR_Plastic_Low;
-unsigned int threshold_IR_Plastic_High;
-unsigned int threshold_Sonar_Glass_Low;
-unsigned int threshold_Sonar_Glass_High;
-unsigned int threshold_IR_Glass_Low;
-unsigned int threshold_IR_Glass_High;
+unsigned int ch_switch_threshold;
+unsigned int thresholdFrontFront;
+unsigned int thresholdFrontBack;
+unsigned int thresholdBack;
 
-volatile struct proc_status ProcStatus = {0,0};
+
+
+volatile struct proc_status ProcStatus = {0,0,0};
 unsigned char current_proc = 0;
 unsigned char parameter_count = 0;
 unsigned char current_parameters[32];
@@ -50,6 +44,7 @@ unsigned char current_parameters[32];
 int EEP_count = -1;
 union int_byte EEP_address;
 unsigned char EEP_offset = 0;
+
 
 #pragma config OSC = IRCIO67,WDT = OFF, MCLRE = ON
 
@@ -106,9 +101,8 @@ void main (void)
 	initQueue();
 	
 	TRISAbits.TRISA4 = 1;		// set pin 6 as input for microswitch
-	TRISAbits.TRISA5 = 1;		// set pin 7 as input for start button
-	TRISAbits.TRISA7 = 0;       // set pin 9 as output for the start button LED
-	
+	TRISAbits.TRISA5 = 1;		// set pin 7 as input for start button	TRISAbits.TRISA7 = 0;       // set pin 9 as output for the start button LED	
+	ADCON1 = 0X0F;				// make sure all pins function as digital
 	PORTAbits.RA7 = 1;    	//turn off LED for Pushbutton
 		
 	OpenTimer0( TIMER_INT_OFF & //initialize timer0 for: - interupt disabled
@@ -210,10 +204,10 @@ void main (void)
 					ProcStatus.sonar_poll_enabled = 1;
 					ProcStatus.ProcessInProgress = 0;					
 					break;
-				case START_BUTTON_OP:
-					ProcStatus.start_button_enabled = 1;
+				case START_BUTTON_OP:					
+					ProcStatus.start_button_enabled = 1;					
 					ProcStatus.ProcessInProgress = 0;
-					break;					
+					break;									
 				default:
 					ProcStatus.ProcessInProgress = 0;
 					break;
@@ -221,59 +215,40 @@ void main (void)
 		}
 		
 		// *** Handle execution loop. *** //
-
+		
+		// If calibration needs to be run
 		if(ProcStatus.sonar_poll_enabled) 
 		{
-			poll_sonar();	
+			poll_sonar();
 			ProcStatus.sonar_poll_enabled = 0;
 		}
 		
-		
 		if(ProcStatus.start_button_enabled)
 		{
-			PORTAbits.RA7 = 0;					//turn on LED for Pushbutton
-		}	
-		
-			if(PORTAbits.RA5)				//if the start button is engaged
-			{
-				if(startButtonCount == on_switch_threshold) 	//if the start button counter equals threshold
-				{	
-					startButtonCount++;
-					
-					//   Toggle Start Button LED 
-					
-					if(startButtonIndicator == 0)
-					{
-						PORTAbits.RA7 = 1;    	//turn off LED for Pushbutton
-						startButtonIndicator = 1;
-					}
-					else if(startButtonIndicator == 1)
-					{
-						PORTAbits.RA7 = 0;    	//turn on LED for Pushbutton
-						startButtonIndicator = 0;	
-					}						
-					
-									
-					TXChar(0x76);
-					TXString("\x0A\x0D");
-					
-					
-				}
-				else if(startButtonCount < on_switch_threshold)
-				{
-					startButtonCount++;
-				}	
+			PORTAbits.RA7 = 0;
+		}
+
+		if(PORTAbits.RA5)//if the start button is engaged			
+		{				
+			if(startButtonCount == on_switch_threshold) 	//if the start button counter equals threshold				
+			{						
+				startButtonCount++; 										
+				PORTAbits.RA7 = ~(PORTAbits.RA7);					
+			
+				TXChar(0x76);
+				TXString("\x0A\x0D");
 			}
-			else
+			else if(startButtonCount < on_switch_threshold)
 			{
-				startButtonCount = 0;	
-				
-			}	
-				
-			
-			
-		
-		//If microswitch is engaged then send respective value
+				startButtonCount++;
+			}
+		}
+		else
+		{
+			startButtonCount = 0;
+		}
+
+															//If microswitch is engaged then send respective value
 		if(PORTAbits.RA4)
 		{
 			if(switchCount == ch_switch_threshold)
@@ -281,8 +256,7 @@ void main (void)
 				TXChar(0x70);
 				TXString("\x0A\x0D");
 				switchCount++;
-			} 
-			else if(switchCount < ch_switch_threshold)
+			} else if (switchCount < ch_switch_threshold)
 			{
 				switchCount++;
 			}	
@@ -298,28 +272,30 @@ void main (void)
 
 void Refresh_EEPROM(void)
 {
-	ch_switch_threshold = 						((int)Read_b_eep(CH_SWITCH_THRESHOLD_H) << 8) 	| (Read_b_eep(CH_SWITCH_THRESHOLD_L));
-	on_switch_threshold = 						((int)Read_b_eep(ON_SWITCH_THRESHOLD_H) << 8) 	| (Read_b_eep(ON_SWITCH_THRESHOLD_L));
-	threshold_Sonar_Object = 					((int)Read_b_eep(SONAR_OBJECT_H) << 8) 			| (Read_b_eep(SONAR_OBJECT_L));
-	threshold_IR_Object = 						((int)Read_b_eep(IR_OBJECT_H) << 8) 			| (Read_b_eep(IR_OBJECT_L));
-	threshold_Sonar_Plastic_Low = 				((int)Read_b_eep(SONAR_PLASTIC_LOW_H) << 8) 	| (Read_b_eep(SONAR_PLASTIC_LOW_L));
-	threshold_Sonar_Plastic_High = 				((int)Read_b_eep(SONAR_PLASTIC_HIGH_H) << 8) 	| (Read_b_eep(SONAR_PLASTIC_HIGH_L));
-	threshold_IR_Plastic_Low = 					((int)Read_b_eep(IR_PLASTIC_LOW_H) << 8) 		| (Read_b_eep(IR_PLASTIC_LOW_L));
-	threshold_IR_Plastic_High = 				((int)Read_b_eep(IR_PLASTIC_HIGH_H) << 8) 		| (Read_b_eep(IR_PLASTIC_HIGH_L));
-	threshold_Sonar_Glass_Low = 				((int)Read_b_eep(SONAR_GLASS_LOW_H) << 8) 		| (Read_b_eep(SONAR_GLASS_LOW_L));
-	threshold_Sonar_Glass_High = 				((int)Read_b_eep(SONAR_GLASS_HIGH_H) << 8) 		| (Read_b_eep(SONAR_GLASS_HIGH_L));
-	threshold_IR_Glass_Low = 					((int)Read_b_eep(IR_GLASS_LOW_H) << 8) 			| (Read_b_eep(IR_GLASS_LOW_L));
-	threshold_IR_Glass_High	=					((int)Read_b_eep(IR_GLASS_HIGH_H) << 8) 		| (Read_b_eep(IR_GLASS_HIGH_L));
+	ch_switch_threshold = 			((int)Read_b_eep(CH_SWITCH_THRESHOLD_H) << 8) 	| (Read_b_eep(CH_SWITCH_THRESHOLD_L));
+	on_switch_threshold = 			((int)Read_b_eep(ON_SWITCH_THRESHOLD_H) << 8) 	| (Read_b_eep(ON_SWITCH_THRESHOLD_L));
+	thresholdFrontFront = 			((int)Read_b_eep(EE_FF_THRESHOLD_H) << 8) | (Read_b_eep(EE_FF_THRESHOLD_L));
+	thresholdFrontBack = 			((int)Read_b_eep(EE_FB_THRESHOLD_H) << 8) | (Read_b_eep(EE_FB_THRESHOLD_L));
 }	
 
 void poll_sonar(void)
-{					
+{
+								//start the 1st sonar measurement
+		sonarIndex = 0;		
+
+								//start 2nd sonar measurement
+		sonarIndex++;			
+		
 		TRISAbits.TRISA1 = 0; 	//set pin 3 to output for Parallax triggering sequence
+
 		PORTAbits.RA1 = 0;		//bring pin 3 low
 		Delay10TCYx(7);			//delay for ~2 microseconds
+
 		PORTAbits.RA1 = 1;  	//bring pin 3 high
 		Delay10TCYx(16);		//delay for ~5 microseconds
+
 		PORTAbits.RA1 = 0;		//bring pin 3 low
+
 		TRISAbits.TRISA1 = 1; 	//set pin 3 to input for pulse readin
 		
 		while(PORTAbits.RA1 == 0)
@@ -333,42 +309,64 @@ void poll_sonar(void)
 		{
 								//wait for the Parallax to bring pin 3 low
 		}
-		
+								//read the value in Timer0
 		pulseDuration = ReadTimer0();
-		distance[0] = pulseDuration/4;	
 
-		/* ===== IR Reading ===== */
+								//divide the microseconds by 58 to convert to centimeters
+		distance[sonarIndex] = pulseDuration;						
+
+								//start the 3rd sonar measurement
+		sonarIndex++;
+
+		TRISAbits.TRISA2 = 0; 	//set pin 4 to output for Parallax triggering sequence
+
+		PORTAbits.RA2 = 0;		//bring pin 4 low
+		Delay10TCYx(7);			//delay for ~2 microseconds
+
+		PORTAbits.RA2 = 1;  	//bring pin 4 high
+		Delay10TCYx(16);		//delay for ~5 microseconds
+
+		PORTAbits.RA2 = 0;		//bring pin 4 low
+
+		TRISAbits.TRISA2 = 1; 	//set pin 4 to input for pulse readin
 		
-		ConvertADC();         // Start conversion
-  		while( BusyADC() );   // Wait for completion
-  		distance[1] = ReadADC();   // Read result
-
-		if(distance[0] > threshold_Sonar_Object && distance[1] > threshold_IR_Object)	// Checks for can/empty
-		{
-			TXChar(SONAR_ALUMINUM);
-			TXChar(' ');
-			TXDec_Int(distance[0]);
-			TXChar(' ');
-			TXDec_Int(distance[1]);
-			TXString("\x0D\x0A");	
-			return;
+		while(PORTAbits.RA2 == 0)
+		{	
+								//wait for the Parallax to bring pin 4 high				
 		}
-	
-		if(distance[0] > threshold_Sonar_Plastic_Low && distance[0] < threshold_Sonar_Plastic_High && distance[1] > threshold_IR_Plastic_Low && distance[1] < threshold_IR_Plastic_High) // If sonar is within range for plastic
+		
+		WriteTimer0( 0 );		//reset Timer0
+
+		while(PORTAbits.RA2 == 1)
 		{
-			TXChar(SONAR_PLASTIC);
-			TXChar(' ');
-			TXDec_Int(distance[0]);
+								//wait for the Parallax to bring pin 4 low
+		}
+								//read the value in Timer0
+		pulseDuration = ReadTimer0();
+
+								//divide the microseconds by 58 to convert to centimeters
+		distance[sonarIndex] = pulseDuration;						
+		
+
+		if(distance[1] < thresholdFrontBack && distance[2] < thresholdFrontFront)
+		{
+			TXChar(SONAR_GLASS);	//send code for "Plastic Bottle"
 			TXChar(' ');
 			TXDec_Int(distance[1]);
-			TXString("\x0D\x0A");
-			return;	
-		}	
+			TXChar(' ');
+			TXDec_Int(distance[2]);
+			TXString("\x0D\x0A");			
 
-		TXChar(SONAR_GLASS);
-		TXChar(' ');
-		TXDec_Int(distance[0]);
-		TXChar(' ');
-		TXDec_Int(distance[1]);
-		TXString("\x0D\x0A");									
+		}
+		else
+		{
+			TXChar(SONAR_ALUMINUM);	//send code for "Plastic Bottle"
+			TXChar(' ');
+			TXDec_Int(distance[1]);
+			TXChar(' ');
+			TXDec_Int(distance[2]);
+			TXString("\x0D\x0A");
+		}
+								
+	
 }	

@@ -7,6 +7,5 @@
 #include <delays.h>
 #include <math.h>
 #include <eep.h>
-#include <adc.h>
 
 #endif

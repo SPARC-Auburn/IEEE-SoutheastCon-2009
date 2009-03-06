@@ -11,7 +11,6 @@ void 	low_isr  		(void);
 void	Refresh_EEPROM	(void);
 void	poll_sonar		(void);
 
-
 union int_byte {
 	unsigned int lt;
 	unsigned char bt[2];
@@ -19,6 +18,6 @@ union int_byte {
 
 struct proc_status {
 	unsigned ProcessInProgress			:1;
-	unsigned sonar_poll_enabled			:1;	
-	unsigned start_button_enabled  		:1;
+	unsigned sonar_poll_enabled			:1;
+	unsigned start_button_enabled		:1;	
 };

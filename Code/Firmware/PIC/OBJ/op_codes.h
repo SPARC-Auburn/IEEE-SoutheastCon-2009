@@ -4,7 +4,6 @@
 
 #define		POLL_SONAR_OP			0x60		// `
 #define		START_BUTTON_OP			0x61
-
 #define		SONAR_NO_OBJECT			0x71		// q
 #define		SONAR_PLASTIC			0x74		// t
 #define		SONAR_GLASS				0x73
